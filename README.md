@@ -1,0 +1,51 @@
+# 📊 Marketing Analytics Pipeline
+
+This project demonstrates a full end-to-end data engineering workflow for a marketing analytics use case, powered by PySpark, Delta Lake, and the Databricks platform.
+
+We use customer and campaign data (sourced from Kaggle) to extract insights, perform customer segmentation, and explore predictive modelling—all while showcasing best practices in data transformation and Lakehouse architecture.
+
+## 🚀 Project Goals
+
+- Build a scalable ETL pipeline using PySpark and Delta Lake
+- Clean, transform, and enrich marketing data
+- Generate key KPIs: campaign response rates, customer value, and segment profiles
+- Experiment with machine learning models for lead scoring and segmentation
+- Visualise insights using Streamlit or Power BI
+
+## 🧱 Tech Stack
+
+- **Language**: Python
+- **Data Processing**: PySpark, Delta Lake
+- **ML/AI**: scikit-learn, MLflow
+- **Scheduling** (optional): Airflow or Databricks Workflows
+- **Dashboarding**: Streamlit / Power BI
+- **Data Source**: [Kaggle Marketing Data](https://www.kaggle.com/datasets/jackdaoud/marketing-data)
+
+## 📁 Project Structure
+
+```
+marketing-analytics-pipeline/
+├── data/
+│   ├── raw/              # Raw CSVs from Kaggle
+│   └── processed/        # Delta output
+├── notebooks/
+│   └── 01_eda.ipynb      # Exploratory data analysis
+├── pipelines/
+│   ├── extract.py        # Load CSV into Spark
+│   ├── transform.py      # Clean and engineer features
+│   └── load.py           # Save to Delta Lake
+├── models/
+│   └── lead_scoring_model.pkl
+├── dashboards/
+│   └── streamlit_app.py
+├── mlflow/
+├── requirements.txt
+└── README.md
+```
+
+## 🔜 Next Steps
+
+- [ ] Complete ETL pipeline and convert to reusable scripts
+- [ ] Run exploratory analysis on customer behavior
+- [ ] Build segmentation or response model
+- [ ] Deploy dashboard for insights
