@@ -1,4 +1,5 @@
 # 📊 Marketing Analytics Pipeline
+A modular ETL pipeline for marketing data built with PySpark and Delta Lake.
 
 This project demonstrates a full end-to-end data engineering workflow for a marketing analytics use case, powered by PySpark, Delta Lake, and the Databricks platform.
 
@@ -29,7 +30,7 @@ marketing-analytics-pipeline/
 │   ├── raw/              # Raw CSVs from Kaggle
 │   └── processed/        # Delta output
 ├── notebooks/
-│   └── 01_eda.ipynb      # Exploratory data analysis
+│   └── 01_eda.ipynb      # Exploratory Data Analysis with visual insights
 ├── pipelines/
 │   ├── extract.py        # Load CSV into Spark
 │   ├── transform.py      # Clean and engineer features
@@ -45,7 +46,10 @@ marketing-analytics-pipeline/
 
 ## 🔜 Next Steps
 
-- [ ] Complete ETL pipeline and convert to reusable scripts
-- [ ] Run exploratory analysis on customer behavior
+- [x] Complete ETL pipeline and convert to reusable scripts
+- [x] Run exploratory analysis on customer behavior
 - [ ] Build segmentation or response model
 - [ ] Deploy dashboard for insights
+- [ ] Add unit tests for pipeline components
+- [ ] Schedule daily pipeline using Airflow
+- [ ] Containerize with Docker for local + cloud execution
