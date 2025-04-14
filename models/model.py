@@ -4,7 +4,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
 import joblib
 
 # Load cleaned data
@@ -43,6 +43,31 @@ pipeline.fit(X_train, y_train)
 # Evaluate
 y_pred = pipeline.predict(X_test)
 print(classification_report(y_test, y_pred))
+
+# Extra evaluation
+print("✅ Additional Evaluation")
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+
+# Save test predictions
+results = pd.DataFrame({
+    "Actual": y_test,
+    "Predicted": y_pred
+})
+results.to_csv("models/test_predictions.csv", index=False)
+print("📄 Test predictions saved to models/test_predictions.csv")
+
+# Try predicting on a new example
+new_data = pd.DataFrame([{
+    "Age": 35,
+    "Income": 65000,
+    "Education": "Graduate",
+    "Marital_Status": "Single",
+    "TotalSpend": 1200
+}])
+
+new_pred = pipeline.predict(new_data)
+print("🧪 Prediction for new customer:", new_pred[0])
 
 # Save model
 joblib.dump(pipeline, "models/lead_scoring_model.pkl")
