@@ -7,6 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
 import joblib
 import json
+from datetime import datetime
 
 # Load cleaned data
 df = pd.read_csv("data/processed/clean_marketing.csv")  # Assumes you've converted Delta to CSV
@@ -118,6 +119,8 @@ new_data = pd.DataFrame([{
 new_pred = pipeline.predict(new_data)
 print("🧪 Prediction for new customer:", new_pred[0])
 
-# Save model
-joblib.dump(pipeline, "models/lead_scoring_model.pkl")
-print("✅ Model trained and saved.")
+# Versioned model filename with timestamp
+timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+model_filename = f"models/lead_scoring_model_{timestamp}.pkl"
+joblib.dump(pipeline, model_filename)
+print(f"✅ Model trained and saved as {model_filename}")

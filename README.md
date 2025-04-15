@@ -51,6 +51,16 @@ marketing-analytics-pipeline/
 - Hyperparameter tuning via GridSearchCV
 - Versioned model saving (timestamped .pkl files)
 - Evaluation metrics saved to JSON for monitoring
+- Fallback model loading for robustness
+
+## 🖥️ Dashboard Features
+
+- Interactive Streamlit app with sidebar navigation
+- Filter data by income, marital status, and response
+- View dynamic visualizations and summary stats
+- Two-column prediction form for lead scoring
+- Download filtered data as CSV
+- Automatically loads latest trained model
 
 ## 🔜 Next Steps
 
