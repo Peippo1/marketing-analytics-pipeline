@@ -38,7 +38,7 @@ marketing-analytics-pipeline/
 ├── models/
 │   └── lead_scoring_model.pkl
 ├── dashboards/
-│   └── streamlit_app.py
+│   └── streamlit_app.py   # Interactive Streamlit dashboard for data exploration and predictions
 ├── mlflow/
 ├── requirements.txt
 └── README.md
@@ -57,7 +57,7 @@ marketing-analytics-pipeline/
 - [x] Complete ETL pipeline and convert to reusable scripts
 - [x] Run exploratory analysis on customer behavior
 - [x] Build segmentation or response model
-- [ ] Deploy dashboard for insights
+- [x] Deploy dashboard for insights
 - [ ] Add unit tests for pipeline components
 - [ ] Schedule daily pipeline using Airflow
 - [ ] Containerize with Docker for local + cloud execution

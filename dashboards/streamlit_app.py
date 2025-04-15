@@ -3,6 +3,8 @@ import pandas as pd
 import joblib
 import json
 from datetime import datetime
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Set page config
 st.set_page_config(page_title="Marketing Response Dashboard", layout="wide")
@@ -18,6 +20,36 @@ st.write(df.head())
 # Basic stats
 st.markdown("### 🧮 Summary Statistics")
 st.write(df.describe())
+
+# Visualizations
+st.markdown("### 📈 Data Visualizations")
+
+# 1. Distribution of Income
+st.subheader("Income Distribution")
+fig, ax = plt.subplots()
+sns.histplot(df["Income"], bins=30, kde=True, ax=ax)
+st.pyplot(fig)
+
+# 2. Average Total Spend by Marital Status
+st.subheader("Average Total Spend by Marital Status")
+# Reverse one-hot encoding marital status
+marital_cols = [col for col in df.columns if col.startswith("marital_")]
+df["Marital_Status"] = df[marital_cols].idxmax(axis=1).str.replace("marital_", "")
+spend_by_marital = df.groupby("Marital_Status")["MntTotal"].mean().sort_values()
+fig2, ax2 = plt.subplots()
+spend_by_marital.plot(kind="barh", ax=ax2)
+ax2.set_xlabel("Average Total Spend")
+st.pyplot(fig2)
+
+# 3. Response Rate by Education Level
+st.subheader("Response Rate by Education Level")
+education_cols = [col for col in df.columns if col.startswith("education_")]
+df["Education_Level"] = df[education_cols].idxmax(axis=1).str.replace("education_", "")
+response_by_edu = df.groupby("Education_Level")["Response"].mean().sort_values()
+fig3, ax3 = plt.subplots()
+response_by_edu.plot(kind="barh", ax=ax3)
+ax3.set_xlabel("Response Rate")
+st.pyplot(fig3)
 
 # Load latest model (sorted by timestamp in filename)
 import os
