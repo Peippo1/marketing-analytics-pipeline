@@ -17,9 +17,30 @@ df = pd.read_csv("data/processed/clean_marketing.csv")
 st.subheader("📊 Dataset Overview")
 st.write(df.head())
 
+# Sidebar filters
+st.sidebar.header("🔍 Filter Data")
+min_income, max_income = int(df["Income"].min()), int(df["Income"].max())
+income_range = st.sidebar.slider("Income Range", min_income, max_income, (min_income, max_income))
+
+marital_cols = [col for col in df.columns if col.startswith("marital_")]
+df["Marital_Status"] = df[marital_cols].idxmax(axis=1).str.replace("marital_", "")
+marital_options = df["Marital_Status"].unique().tolist()
+selected_marital = st.sidebar.multiselect("Marital Status", marital_options, default=marital_options)
+
+show_respondents_only = st.sidebar.checkbox("Only include respondents (Response = 1)")
+
+# Apply filters
+df_filtered = df[
+    (df["Income"] >= income_range[0]) &
+    (df["Income"] <= income_range[1]) &
+    (df["Marital_Status"].isin(selected_marital))
+]
+if show_respondents_only:
+    df_filtered = df_filtered[df_filtered["Response"] == 1]
+
 # Basic stats
 st.markdown("### 🧮 Summary Statistics")
-st.write(df.describe())
+st.write(df_filtered.describe())
 
 # Visualizations
 st.markdown("### 📈 Data Visualizations")
@@ -27,15 +48,12 @@ st.markdown("### 📈 Data Visualizations")
 # 1. Distribution of Income
 st.subheader("Income Distribution")
 fig, ax = plt.subplots()
-sns.histplot(df["Income"], bins=30, kde=True, ax=ax)
+sns.histplot(df_filtered["Income"], bins=30, kde=True, ax=ax)
 st.pyplot(fig)
 
 # 2. Average Total Spend by Marital Status
 st.subheader("Average Total Spend by Marital Status")
-# Reverse one-hot encoding marital status
-marital_cols = [col for col in df.columns if col.startswith("marital_")]
-df["Marital_Status"] = df[marital_cols].idxmax(axis=1).str.replace("marital_", "")
-spend_by_marital = df.groupby("Marital_Status")["MntTotal"].mean().sort_values()
+spend_by_marital = df_filtered.groupby("Marital_Status")["MntTotal"].mean().sort_values()
 fig2, ax2 = plt.subplots()
 spend_by_marital.plot(kind="barh", ax=ax2)
 ax2.set_xlabel("Average Total Spend")
@@ -44,8 +62,8 @@ st.pyplot(fig2)
 # 3. Response Rate by Education Level
 st.subheader("Response Rate by Education Level")
 education_cols = [col for col in df.columns if col.startswith("education_")]
-df["Education_Level"] = df[education_cols].idxmax(axis=1).str.replace("education_", "")
-response_by_edu = df.groupby("Education_Level")["Response"].mean().sort_values()
+df_filtered["Education_Level"] = df_filtered[education_cols].idxmax(axis=1).str.replace("education_", "")
+response_by_edu = df_filtered.groupby("Education_Level")["Response"].mean().sort_values()
 fig3, ax3 = plt.subplots()
 response_by_edu.plot(kind="barh", ax=ax3)
 ax3.set_xlabel("Response Rate")
