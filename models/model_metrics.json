@@ -1,0 +1,44 @@
+{
+    "best_params": {
+        "classifier__C": 10.0
+    },
+    "cv_score_mean": 0.8633804403811485,
+    "test_accuracy": 0.8752834467120182,
+    "confusion_matrix": [
+        [
+            367,
+            11
+        ],
+        [
+            44,
+            19
+        ]
+    ],
+    "classification_report": {
+        "0": {
+            "precision": 0.8929440389294404,
+            "recall": 0.9708994708994709,
+            "f1-score": 0.9302915082382763,
+            "support": 378.0
+        },
+        "1": {
+            "precision": 0.6333333333333333,
+            "recall": 0.30158730158730157,
+            "f1-score": 0.40860215053763443,
+            "support": 63.0
+        },
+        "accuracy": 0.8752834467120182,
+        "macro avg": {
+            "precision": 0.7631386861313869,
+            "recall": 0.6362433862433863,
+            "f1-score": 0.6694468293879554,
+            "support": 441.0
+        },
+        "weighted avg": {
+            "precision": 0.8558567952728535,
+            "recall": 0.8752834467120182,
+            "f1-score": 0.8557644571381846,
+            "support": 441.0
+        }
+    }
+}

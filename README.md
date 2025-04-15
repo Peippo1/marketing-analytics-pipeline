@@ -44,11 +44,19 @@ marketing-analytics-pipeline/
 └── README.md
 ```
 
+## 🧠 Model Pipeline Features
+
+- Logistic Regression model with scikit-learn
+- 5-fold cross-validation for performance estimation
+- Hyperparameter tuning via GridSearchCV
+- Versioned model saving (timestamped .pkl files)
+- Evaluation metrics saved to JSON for monitoring
+
 ## 🔜 Next Steps
 
 - [x] Complete ETL pipeline and convert to reusable scripts
 - [x] Run exploratory analysis on customer behavior
-- [ ] Build segmentation or response model
+- [x] Build segmentation or response model
 - [ ] Deploy dashboard for insights
 - [ ] Add unit tests for pipeline components
 - [ ] Schedule daily pipeline using Airflow
