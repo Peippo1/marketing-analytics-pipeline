@@ -62,12 +62,45 @@ marketing-analytics-pipeline/
 - Download filtered data as CSV
 - Automatically loads latest trained model
 
+## 🧪 Testing
+
+Unit tests are written using `pytest` and located in the `tests/` directory.
+
+### How to Run Tests
+
+From the project root, run:
+
+```bash
+pytest tests/
+```
+
+## 🐳 Docker Usage
+
+This project is fully containerized using Docker. You can run the entire Streamlit dashboard and pipeline in a reproducible containerized environment.
+
+### Build the Docker Image
+
+```bash
+docker build -t marketing-analytics-app .
+```
+
+### Run the App
+
+```bash
+docker run -p 8501:8501 marketing-analytics-app
+```
+
+Then open your browser and navigate to `http://localhost:8501`.
+
+Make sure you have a trained model saved (e.g. `lead_scoring_model_<timestamp>.pkl`) inside the `models/` directory to enable predictions inside the container.
+
 ## 🔜 Next Steps
 
 - [x] Complete ETL pipeline and convert to reusable scripts
 - [x] Run exploratory analysis on customer behavior
 - [x] Build segmentation or response model
 - [x] Deploy dashboard for insights
-- [ ] Add unit tests for pipeline components
+- [x] Add unit tests for pipeline components
+- [x] Containerize with Docker for local + cloud execution
 - [ ] Schedule daily pipeline using Airflow
 - [ ] Containerize with Docker for local + cloud execution

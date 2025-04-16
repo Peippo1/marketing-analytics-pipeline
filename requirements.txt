@@ -2,4 +2,8 @@ pyspark==3.5.0
 delta-spark==3.0.0
 pandas
 kaggle
-scikit-learn==1.4.1
+scikit-learn==1.6.1
+joblib
+streamlit
+matplotlib
+seaborn

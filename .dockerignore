@@ -1,0 +1,27 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.pyo
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Jupyter notebooks (if not needed in image)
+*.ipynb
+
+# Data files
+data/raw/
+data/interim/
+
+# OS + Editor junk
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
