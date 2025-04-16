@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine
+import pandas as pd
 
 def get_mysql_engine(
     user="marketing_user",
@@ -14,3 +15,13 @@ def get_mysql_engine(
     """
     url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{db}"
     return create_engine(url)
+
+def get_customers_data():
+    """
+    Retrieve the customers_cleaned table from the MySQL database.
+    Returns a pandas DataFrame.
+    """
+    engine = get_mysql_engine()
+    query = "SELECT * FROM customers_cleaned"
+    df = pd.read_sql(query, con=engine)
+    return df

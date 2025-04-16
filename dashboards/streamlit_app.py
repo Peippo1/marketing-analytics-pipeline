@@ -6,6 +6,7 @@ import os
 from datetime import datetime
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scripts.mysql_utils import get_customers_data
 
 # Set page config
 st.set_page_config(page_title="Marketing Response Dashboard", layout="wide")
@@ -29,7 +30,7 @@ selected_marital = st.sidebar.multiselect("Marital Status", marital_options, def
 show_respondents_only = st.sidebar.checkbox("Only include respondents (Response = 1)")
 
 # Sidebar navigation (must come before conditionals)
-page = st.sidebar.radio("🔍 Navigation", ["Overview", "Visualizations", "Predict"])
+page = st.sidebar.radio("🔍 Navigation", ["Overview", "Visualizations", "Predict", "Database View"])
 
 # Apply filters
 df_filtered = df[
@@ -156,3 +157,25 @@ elif page == "Predict":
         st.json(metrics)
     except:
         st.warning("No model_metrics.json found.")
+
+elif page == "Database View":
+    # ----------------------------------------
+    # 📂 Database View Section
+    # ----------------------------------------
+    # This section adds a new page in the dashboard that connects to the MySQL database
+    # and displays the contents of the `customers_cleaned` table in a Streamlit dataframe.
+    
+    st.title("📂 Customers from MySQL")
+
+    # Use a spinner while the data is being fetched
+    with st.spinner("Fetching records from MySQL..."):
+        try:
+            # Load customer data from MySQL using the shared utility function
+            df_db = get_customers_data()
+
+            # Display the dataframe interactively in the app
+            st.dataframe(df_db)
+
+        except Exception as e:
+            # Display a friendly error if the fetch fails
+            st.error(f"Error loading data: {e}")

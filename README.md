@@ -61,6 +61,7 @@ marketing-analytics-pipeline/
 - Two-column prediction form for lead scoring
 - Download filtered data as CSV
 - Automatically loads latest trained model
+- View live customer data from MySQL database
 
 ## 🧪 Testing
 
