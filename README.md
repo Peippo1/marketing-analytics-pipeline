@@ -26,6 +26,8 @@ We use customer and campaign data (sourced from Kaggle) to extract insights, per
 
 ```
 marketing-analytics-pipeline/
+├── api/
+│   └── main.py           # FastAPI service exposing MySQL data as JSON
 ├── data/
 │   ├── raw/              # Raw CSVs from Kaggle
 │   └── processed/        # Delta output
@@ -94,6 +96,23 @@ docker run -p 8501:8501 marketing-analytics-app
 Then open your browser and navigate to `http://localhost:8501`.
 
 Make sure you have a trained model saved (e.g. `lead_scoring_model_<timestamp>.pkl`) inside the `models/` directory to enable predictions inside the container.
+
+## 📡 FastAPI Customer Data API
+
+This project includes a FastAPI service that exposes customer data from MySQL.
+
+### ▶️ How to Run
+
+```bash
+uvicorn api.main:app --reload
+```
+
+- View data: [http://localhost:8000/customers](http://localhost:8000/customers)
+- Swagger docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+### 🔌 Endpoint
+
+- `GET /customers` – Returns the full `customers_cleaned` table from the MySQL database as JSON.
 
 ## 🔜 Next Steps
 
