@@ -1,19 +1,13 @@
 from sqlalchemy import create_engine
 import pandas as pd
+import streamlit as st
 
-def get_mysql_engine(
-    user="marketing_user",
-    password="marketing_pass",
-    host="localhost",
-    port=3307,
-    db="marketing_db"
-):
+def get_mysql_engine():
     """
-    Create and return a SQLAlchemy engine for MySQL.
-
-    This connects to a Docker-hosted MySQL container using the provided credentials.
+    Create and return a SQLAlchemy engine for MySQL using Streamlit Cloud secrets.
     """
-    url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{db}"
+    creds = st.secrets["mysql"]
+    url = f"mysql+pymysql://{creds.user}:{creds.password}@{creds.host}:{creds.port}/{creds.database}"
     return create_engine(url)
 
 def get_customers_data():
