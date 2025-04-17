@@ -20,6 +20,7 @@ We use customer and campaign data (sourced from Kaggle) to extract insights, per
 - **ML/AI**: scikit-learn, MLflow
 - **Scheduling** (optional): Airflow or Databricks Workflows
 - **Dashboarding**: Streamlit / Power BI
+- **Database**: MySQL hosted on Railway (with secure access via `.env` or Streamlit secrets)
 - **Data Source**: [Kaggle Marketing Data](https://www.kaggle.com/datasets/jackdaoud/marketing-data)
 
 ## 📁 Project Structure
@@ -68,7 +69,7 @@ marketing-analytics-pipeline/
 
 ## 🔐 Configuration
 
-- Secrets and environment credentials are stored in `.streamlit/secrets.toml` (excluded from Git).
+- Secrets and environment credentials are stored in `.streamlit/secrets.toml` for Streamlit Cloud and a `.env` file for local development (both excluded from Git).
 - This file is **not tracked** for security purposes and should be created manually:
 
   ```
@@ -77,6 +78,14 @@ marketing-analytics-pipeline/
   user = "your_user"
   password = "your_password"
   database = "your_database"
+  ```
+
+  # .env file for local usage
+  MYSQL_USER=your_username
+  MYSQL_PASSWORD=your_password
+  MYSQL_HOST=your_host
+  MYSQL_PORT=your_port
+  MYSQL_DATABASE=your_database
   ```
 
 - Ensure `.streamlit/secrets.toml` is listed in `.gitignore`.
@@ -129,6 +138,7 @@ uvicorn api.main:app --reload
 ### 🔌 Endpoint
 
 - `GET /customers` – Returns the full `customers_cleaned` table from the MySQL database as JSON.
+- Uses the same `.env` credentials for connecting to Railway-hosted MySQL.
 
 ## 🔜 Next Steps
 
