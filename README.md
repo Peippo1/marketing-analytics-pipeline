@@ -39,8 +39,9 @@ marketing-analytics-pipeline/
 │   └── load.py           # Save to Delta Lake
 ├── models/
 │   └── lead_scoring_model.pkl
-├── dashboards/
-│   └── streamlit_app.py   # Interactive Streamlit dashboard for data exploration and predictions
+├── streamlit_app.py       # Interactive Streamlit dashboard for data exploration and predictions
+├── .streamlit/
+│   └── secrets.toml       # Local credentials for MySQL (excluded from Git)
 ├── mlflow/
 ├── requirements.txt
 └── README.md
@@ -64,6 +65,21 @@ marketing-analytics-pipeline/
 - Download filtered data as CSV
 - Automatically loads latest trained model
 - View live customer data from MySQL database
+
+## 🔐 Configuration
+
+- Secrets and environment credentials are stored in `.streamlit/secrets.toml` (excluded from Git).
+- This file is **not tracked** for security purposes and should be created manually:
+
+  ```
+  [mysql]
+  host = "your_host"
+  user = "your_user"
+  password = "your_password"
+  database = "your_database"
+  ```
+
+- Ensure `.streamlit/secrets.toml` is listed in `.gitignore`.
 
 ## 🧪 Testing
 
@@ -123,4 +139,3 @@ uvicorn api.main:app --reload
 - [x] Add unit tests for pipeline components
 - [x] Containerize with Docker for local + cloud execution
 - [ ] Schedule daily pipeline using Airflow
-- [ ] Containerize with Docker for local + cloud execution
