@@ -24,6 +24,10 @@ print("✅ Cleaned data saved to data/processed/clean_marketing.csv")
 from scripts.mysql_utils import get_mysql_engine
 
 # Write cleaned data to MySQL
-engine = get_mysql_engine()
-df.to_sql("customers_cleaned", con=engine, if_exists="replace", index=False)
-print("✅ Cleaned data written to MySQL: customers_cleaned table")
+try:
+    engine = get_mysql_engine()
+    print(f"🔗 Connecting to DB with: {engine.url}")
+    df.to_sql("customers_cleaned", con=engine, if_exists="replace", index=False)
+    print("✅ Cleaned data written to MySQL: customers_cleaned table")
+except Exception as e:
+    print(f"❌ Failed to write to MySQL: {e}")
