@@ -45,6 +45,8 @@ marketing-analytics-pipeline/
 │   └── secrets.toml       # Local credentials for MySQL (excluded from Git)
 ├── mlflow/
 ├── requirements.txt
+├── airflow/
+│   ├── docker-compose.yaml
 └── README.md
 ```
 
