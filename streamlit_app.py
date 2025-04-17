@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
+import pymysql
 from scripts.mysql_utils import get_customers_data
+import sys  # Added import to avoid module import error
 
 st.set_page_config(page_title="Marketing Dashboard", layout="wide")
 
