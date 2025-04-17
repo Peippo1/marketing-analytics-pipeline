@@ -23,7 +23,3 @@ try:
     st.dataframe(df)
 except Exception as e:
     st.error(f"Failed to load data: {e}")
-
-import subprocess
-installed_packages = subprocess.check_output(["pip", "freeze"]).decode("utf-8")
-st.text(installed_packages)
