@@ -27,7 +27,13 @@ dag = DAG(
 
 # Python function to run the ETL script
 def run_etl():
-    subprocess.run(['python', 'scripts/prepare_data.py'], check=True)
+    result = subprocess.run(
+        ['python', 'scripts/prepare_data.py'],
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    print(result.stdout)
 
 # Define the ETL task
 etl_task = PythonOperator(
