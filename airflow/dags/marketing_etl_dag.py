@@ -1,5 +1,3 @@
-
-
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime, timedelta
@@ -26,14 +24,18 @@ dag = DAG(
 )
 
 # Python function to run the ETL script
+import os
+
 def run_etl():
+    etl_script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../scripts/prepare_data.py'))
     result = subprocess.run(
-        ['python', 'scripts/prepare_data.py'],
+        ['python', etl_script_path],
         capture_output=True,
-        text=True,
-        check=True
+        text=True
     )
-    print(result.stdout)
+    print("STDOUT:\n", result.stdout)
+    print("STDERR:\n", result.stderr)
+    result.check_returncode()
 
 # Define the ETL task
 etl_task = PythonOperator(
