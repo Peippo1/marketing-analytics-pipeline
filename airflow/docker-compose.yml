@@ -23,11 +23,12 @@ services:
         condition: service_healthy
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
       AIRFLOW__WEBSERVER__SECRET_KEY: some_secret_key
       AIRFLOW__WEBSERVER__WORKERS: 1
     volumes:
       - ./dags:/opt/airflow/dags
+      - ./scripts:/opt/scripts
     ports:
       - "8081:8080"
     command: webserver
@@ -40,9 +41,11 @@ services:
         condition: service_healthy
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__WEBSERVER__SECRET_KEY: some_secret_key
     volumes:
       - ./dags:/opt/airflow/dags
+      - ./scripts:/opt/scripts
     command: scheduler
     restart: always
 
@@ -53,9 +56,11 @@ services:
         condition: service_healthy
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__WEBSERVER__SECRET_KEY: some_secret_key
     volumes:
       - ./dags:/opt/airflow/dags
+      - ./scripts:/opt/scripts
     command: bash -c "airflow db migrate && airflow users create --username admin --password admin --firstname Tim --lastname Finch --role Admin --email admin@example.com"
 
 volumes:

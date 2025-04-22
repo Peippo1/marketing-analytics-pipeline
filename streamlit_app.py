@@ -14,7 +14,7 @@ except ModuleNotFoundError as e:
     st.error("❌ Required package 'pymysql' is not installed. Please check your environment.")
     st.stop()
 
-from scripts.mysql_utils import get_customers_data
+from airflow.scripts.mysql_utils import get_customers_data
 
 
 st.title("📊 Marketing Analytics Dashboard")

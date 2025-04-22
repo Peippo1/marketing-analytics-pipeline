@@ -38,6 +38,15 @@ marketing-analytics-pipeline/
 │   ├── extract.py        # Load CSV into Spark
 │   ├── transform.py      # Clean and engineer features
 │   └── load.py           # Save to Delta Lake
+├── airflow/
+│   ├── dags/
+│   │   └── marketing_etl_dag.py  # Scheduled ETL DAG
+│   ├── scripts/          
+│   │   ├── __init__.py
+│   │   ├── mysql_utils.py
+│   │   ├── prepare_data.py
+│   │   └── convert_delta_to_csv.py
+│   ├── docker-compose.yaml
 ├── models/
 │   └── lead_scoring_model.pkl
 ├── streamlit_app.py       # Interactive Streamlit dashboard for data exploration and predictions
@@ -45,8 +54,6 @@ marketing-analytics-pipeline/
 │   └── secrets.toml       # Local credentials for MySQL (excluded from Git)
 ├── mlflow/
 ├── requirements.txt
-├── airflow/
-│   ├── docker-compose.yaml
 └── README.md
 ```
 
@@ -150,4 +157,37 @@ uvicorn api.main:app --reload
 - [x] Deploy dashboard for insights
 - [x] Add unit tests for pipeline components
 - [x] Containerize with Docker for local + cloud execution
-- [ ] Schedule daily pipeline using Airflow
+- [x] Schedule daily pipeline using Airflow (via docker-compose + DAG)
+
+## ⏰ Airflow DAG Scheduling
+
+This project includes an Airflow DAG to run the ETL pipeline on a scheduled basis.
+
+### DAG: `marketing_etl_dag`
+
+- Located in the `airflow/dags/` directory.
+- Runs the full ETL process using Spark scripts.
+- Output is written as Delta Lake files and optionally CSVs to the `data/processed/` directory.
+- Scripts used in the DAG are located in `airflow/scripts/`
+
+### Run with Docker Compose
+
+From the `airflow/` directory, start Airflow using:
+
+```bash
+docker compose up
+```
+
+Then visit the Airflow UI at [http://localhost:8081](http://localhost:8081).
+
+Ensure the DAG is toggled "on" and trigger a manual run to test it.
+
+### Notes
+
+- Logs are available in the Airflow UI per task run.
+- If using multiple Airflow components, ensure all share the same `secret_key` under the `[webserver]` section of `airflow.cfg`.
+
+## ♻️ Housekeeping
+
+- Removed all `__pycache__/` directories to keep repo clean
+- `.gitignore` updated to exclude `__pycache__/` and `.DS_Store` files

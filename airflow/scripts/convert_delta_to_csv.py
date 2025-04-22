@@ -9,10 +9,10 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 # Load Delta table
-df = spark.read.format("delta").load("data/processed/clean_delta/")
+df = spark.read.format("delta").load("../data/processed/clean_delta/")
 
 # Convert and save as CSV
-df.toPandas().to_csv("data/processed/clean_delta.csv", index=False)
+df.toPandas().to_csv("../data/processed/clean_delta.csv", index=False)
 
 print("✅ Converted Delta to CSV.")
 

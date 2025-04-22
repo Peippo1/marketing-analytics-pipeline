@@ -21,7 +21,7 @@ df.to_csv("data/processed/clean_marketing.csv", index=False)
 
 print("✅ Cleaned data saved to data/processed/clean_marketing.csv")
 
-from scripts.mysql_utils import get_mysql_engine
+from mysql_utils import get_mysql_engine
 
 # Write cleaned data to MySQL
 try:

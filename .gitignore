@@ -1,7 +1,8 @@
 .streamlit/secrets.toml
-__pycache__/
-*.pyc
 # Python
+__pycache__/
+**/__pycache__/
+*.pyc
 *.py[cod]
 *.so
 *.egg
