@@ -2,6 +2,11 @@ import streamlit as st
 import pandas as pd
 import sys  # Ensures sys is available before attempting fallback
 
+st.set_page_config(page_title="Marketing Dashboard", layout="wide")
+
+st.write("🧪 Python executable:", sys.executable)
+st.write("🧪 Python path:", sys.path)
+
 # Try importing pymysql and handle the error if it's missing
 try:
     import pymysql
@@ -11,7 +16,6 @@ except ModuleNotFoundError as e:
 
 from scripts.mysql_utils import get_customers_data
 
-st.set_page_config(page_title="Marketing Dashboard", layout="wide")
 
 st.title("📊 Marketing Analytics Dashboard")
 st.markdown("View cleaned customer data pulled live from MySQL.")

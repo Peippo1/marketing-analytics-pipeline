@@ -19,6 +19,7 @@ def get_mysql_engine():
         db = creds["database"]
     except (ImportError, AttributeError, KeyError):
         # Fall back to .env values
+        print("🔍 Falling back to local .env for MySQL credentials...")
         load_dotenv()
         user = os.getenv("MYSQL_USER")
         password = os.getenv("MYSQL_PASSWORD")
