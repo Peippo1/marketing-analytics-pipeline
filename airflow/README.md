@@ -19,12 +19,17 @@ airflow/
    cd airflow
    ```
 
-2. Start Airflow using Docker Compose:
+2. Install pinned and patched dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Start Airflow using Docker Compose:
    ```bash
    docker-compose up -d
    ```
 
-3. Access the Airflow web interface:
+4. Access the Airflow web interface:
    ```
    http://localhost:8080
    ```
@@ -32,16 +37,23 @@ airflow/
    - Username: `airflow`
    - Password: `airflow`
 
-4. Stop services:
+5. Stop services:
    ```bash
    docker-compose down
    ```
 
 ## Notes
 
-- Make sure Docker is running on your machine.
-- DAGs should be placed inside the `dags/` folder.
-- You can define your environment variables in an `.env` file if needed.
+- Ensure Docker is running before launching Airflow.
+- DAGs must be stored inside the `dags/` directory to be recognized by Airflow.
+- A `.env` file is supported for local environment variables (e.g., credentials).
+- We've locked and patched specific Python dependencies to avoid compatibility issues with `proto`, `google-cloud` libraries, and Airflow provider hooks.
+- If you encounter import errors or warnings, double-check `requirements.txt` and ensure the image is rebuilt using:
+  ```bash
+  docker-compose down --volumes
+  docker-compose build --no-cache
+  docker-compose up -d
+  ```
 
 ## Project Dependencies Displaying in App
 
