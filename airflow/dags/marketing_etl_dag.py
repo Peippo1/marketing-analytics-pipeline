@@ -27,7 +27,7 @@ dag = DAG(
 import os
 
 def run_etl():
-    etl_script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../scripts/prepare_data.py'))
+    etl_script_path = '/opt/airflow/scripts/prepare_data.py'
     result = subprocess.run(
         ['python', etl_script_path],
         capture_output=True,
