@@ -27,9 +27,20 @@ dag = DAG(
 import os
 
 def run_etl():
-    etl_script_path = '/opt/airflow/scripts/prepare_data.py'
+    etl_script_path = '/opt/airflow/scripts/marketing_etl.py'
     result = subprocess.run(
         ['python', etl_script_path],
+        capture_output=True,
+        text=True
+    )
+    print("STDOUT:\n", result.stdout)
+    print("STDERR:\n", result.stderr)
+    result.check_returncode()
+
+def train_model():
+    model_script_path = '/opt/airflow/scripts/train_model.py'
+    result = subprocess.run(
+        ['python', model_script_path],
         capture_output=True,
         text=True
     )
@@ -43,3 +54,11 @@ etl_task = PythonOperator(
     python_callable=run_etl,
     dag=dag,
 )
+
+train_model_task = PythonOperator(
+    task_id='train_model_after_etl',
+    python_callable=train_model,
+    dag=dag,
+)
+
+etl_task >> train_model_task
