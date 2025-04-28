@@ -1,125 +1,81 @@
 # 📊 Marketing Analytics Pipeline
-A modular ETL pipeline for marketing data built with PySpark and Delta Lake.
+A modular ETL and Machine Learning pipeline for marketing analytics, built with Pandas, scikit-learn, and orchestrated with Airflow.
 
-This project demonstrates a full end-to-end data engineering workflow for a marketing analytics use case, powered by PySpark, Delta Lake, and the Databricks platform.
-
-We use customer and campaign data (sourced from Kaggle) to extract insights, perform customer segmentation, and explore predictive modelling—all while showcasing best practices in data transformation and Lakehouse architecture.
+This project demonstrates a full end-to-end data engineering and ML workflow for a marketing analytics use case, including ETL, feature engineering, model training, and dashboarding.
 
 ## 🚀 Project Goals
 
-- Build a scalable ETL pipeline using PySpark and Delta Lake
-- Clean, transform, and enrich marketing data
-- Generate key KPIs: campaign response rates, customer value, and segment profiles
-- Experiment with machine learning models for lead scoring and segmentation
-- Visualise insights using Streamlit or Power BI
+- Build a scalable ETL pipeline to clean and enrich marketing data
+- Perform feature engineering for predictive modeling
+- Train and evaluate machine learning models for lead scoring
+- Schedule ETL and model training pipelines with Airflow
+- Visualize insights interactively using Streamlit
 
 ## 🧱 Tech Stack
 
 - **Language**: Python
-- **Data Processing**: Pandas, Scikit-learn (PySpark/Delta Lake planned for future)
-- **ML/AI**: scikit-learn, MLflow
-- **Scheduling** (optional): Airflow or Databricks Workflows
-- **Dashboarding**: Streamlit / Power BI
-- **Database**: MySQL hosted on Railway (with secure access via `.env` or Streamlit secrets)
+- **Data Processing**: Pandas
+- **ML/AI**: scikit-learn
+- **Scheduling**: Airflow (Docker Compose)
+- **Dashboarding**: Streamlit
+- **Database**: MySQL (optional, not required for core pipeline)
 - **Data Source**: [Kaggle Marketing Data](https://www.kaggle.com/datasets/jackdaoud/marketing-data)
 
 ## 📁 Project Structure
 
 ```
 marketing-analytics-pipeline/
-├── api/
-│   └── main.py
 ├── data/
 │   ├── raw/               # Raw zipped marketing data
-│   └── processed/         # Clean processed CSVs
+│   └── processed/         # Cleaned processed CSVs
 ├── etl/
-│   └── marketing_etl.py   # ETL: unzip raw marketing data, clean, add features, save processed data
+│   └── marketing_etl.py   # ETL: unzip, clean, feature engineer, save processed data
 ├── models/
 │   ├── train_model.py     # Model training script
 │   ├── model.py           # Model utilities
 │   └── model_config.yaml  # Model config file
-├── streamlit_app.py       # Interactive dashboard
 ├── airflow/
 │   ├── dags/
-│   │   └── marketing_etl_dag.py
+│   │   ├── marketing_etl_dag.py
+│   │   └── model_training_dag.py
 │   ├── scripts/
-│   │   ├── __init__.py
-│   │   ├── mysql_utils.py
 │   │   ├── prepare_data.py
 │   │   └── convert_delta_to_csv.py
-│   ├── docker-compose.yaml
-├── .streamlit/
-│   └── secrets.toml
+│   └── docker-compose.yaml
+├── streamlit_app.py       # Streamlit dashboard app
 ├── requirements.txt
 └── README.md
 ```
 
-## 🧠 Model Pipeline Features
+## ▶️ Running the Pipeline Locally
 
-- Logistic Regression model with scikit-learn
-- Config-driven pipeline using model_config.yaml
-- 5-fold cross-validation for performance estimation
-- Hyperparameter tuning via GridSearchCV
-- Versioned model saving (timestamped .pkl files)
-- Evaluation metrics saved to JSON for monitoring
-- Fallback model loading for robustness
-- Configuration-driven training using `model_config.yaml` for features, targets, hyperparameters, and model output paths
-- Configurable ETL and model training processes
+### 1. Set up the Environment
 
-## 🖥️ Dashboard Features
+```bash
+pip install -r requirements.txt
+```
 
-- Interactive Streamlit app with sidebar navigation
-- Filter data by income, marital status, and response
-- View dynamic visualizations and summary stats
-- Two-column prediction form for lead scoring
-- Download filtered data as CSV
-- Automatically loads latest trained model
-- View live customer data from MySQL database
+### 2. Run the ETL Process
 
-## 🔐 Configuration
+```bash
+python etl/marketing_etl.py
+```
 
-- Secrets and environment credentials are stored in `.streamlit/secrets.toml` for Streamlit Cloud and a `.env` file for local development (both excluded from Git).
-- This file is **not tracked** for security purposes and should be created manually:
+This will unzip the raw data, clean and enrich it, and save the processed data to `data/processed/clean_marketing.csv`.
 
-  ### Example: .streamlit/secrets.toml
+### 3. Train the Model
 
-  ```
-  [mysql]
-  host = "your_host"
-  user = "your_user"
-  password = "your_password"
-  database = "your_database"
-  ```
+```bash
+python models/train_model.py
+```
 
-  ### Example: .env
+This will train a logistic regression model based on configuration in `models/model_config.yaml` and save the model artifact in `models/`.
 
-  ```
-  MYSQL_USER=your_username
-  MYSQL_PASSWORD=your_password
-  MYSQL_HOST=your_host
-  MYSQL_PORT=your_port
-  MYSQL_DATABASE=your_database
-  ```
+### 4. Visualize with Streamlit (Optional)
 
-  ### Example: model_config.yaml
-
-  ```yaml
-  features:
-    - Age
-    - Income
-    - Marital_Status
-    - ...
-  target_column: Response
-  model_params:
-    penalty: l2
-    solver: lbfgs
-    max_iter: 100
-  output_model_path: models/
-  ```
-
-- The `models/model_config.yaml` file contains configuration settings for model training, including feature selection, target column, model hyperparameters, and output paths. It ensures consistent, reproducible training runs.
-
-- Ensure `.streamlit/secrets.toml` is listed in `.gitignore`.
+```bash
+streamlit run streamlit_app.py
+```
 
 ## 🧪 Testing
 
@@ -199,13 +155,16 @@ Includes basic feature engineering: creation of customer age, tenure, and aggreg
 
 ## ⏰ Airflow DAG Scheduling
 
-This project includes an Airflow DAG to run the ETL pipeline on a scheduled basis.
+This project includes Airflow DAGs to run the ETL and model training pipelines on a scheduled basis.
 
-### DAG: `marketing_etl_dag`
+### DAGs
+
+- `marketing_etl_dag.py`: Runs the ETL process.
+- `model_training_dag.py`: Runs model training using the processed dataset.
 
 - Located in the `airflow/dags/` directory.
-- Runs the full ETL process using Spark scripts.
-- Output is written as Delta Lake files and optionally CSVs to the `data/processed/` directory.
+- Runs the full ETL and model training processes using Pandas scripts.
+- Output is written as CSV files to the `data/processed/` directory.
 - Scripts used in the DAG are located in `airflow/scripts/`
 
 ### Run with Docker Compose
@@ -218,7 +177,7 @@ docker compose up
 
 Then visit the Airflow UI at [http://localhost:8080](http://localhost:8080).
 
-Ensure the DAG is switched 'on' and manually trigger a run for testing.
+Ensure the DAGs are switched 'on' and manually trigger runs for testing.
 - You can also inspect the logs or run tasks manually using the CLI: `docker compose exec airflow-webserver airflow tasks list marketing_etl_dag`
 
 ### Notes
