@@ -33,7 +33,7 @@ marketing-analytics-pipeline/
 │   ├── raw/               # Raw zipped marketing data
 │   └── processed/         # Clean processed CSVs
 ├── etl/
-│   └── marketing_etl.py   # Unzips raw data, cleans, saves processed data
+│   └── marketing_etl.py   # ETL: unzip raw marketing data, clean, add features, save processed data
 ├── models/
 │   ├── train_model.py     # Model training script
 │   ├── model.py           # Model utilities
@@ -176,6 +176,8 @@ uvicorn api.main:app --reload
 - `GET /customers` – Returns the full `customers_cleaned` table from the MySQL database as JSON.
 - Uses the same `.env` credentials for connecting to Railway-hosted MySQL.
 
+Includes basic feature engineering: creation of customer age, tenure, and aggregated spend categories.
+
 ## 🔜 Next Steps
 
 - [x] Complete ETL pipeline and convert to reusable scripts
@@ -185,9 +187,15 @@ uvicorn api.main:app --reload
 - [x] Add unit tests for pipeline components
 - [x] Containerize with Docker for local + cloud execution
 - [x] Schedule daily pipeline using Airflow (via docker-compose + DAG)
-- [x] Build ETL script to process raw marketing data into clean CSV
-- [ ] Expand ETL script for dynamic raw data handling
-- [ ] Automate model training pipeline
+- [x] Expand ETL script for dynamic raw data handling and basic feature engineering
+- [x] Automate model training pipeline
+
+## 🛠️ Future Improvements
+
+- Add CI/CD pipeline for automatic deployment
+- Migrate to full PySpark processing
+- Incorporate model monitoring with MLflow
+- Expand customer segmentation modeling
 
 ## ⏰ Airflow DAG Scheduling
 
