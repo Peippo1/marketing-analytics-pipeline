@@ -1,0 +1,11 @@
+model:
+  type: LogisticRegression  # Model type to be trained
+  hyperparameters:
+    penalty: l2             # Regularization penalty (l1 or l2)
+    C: 1.0                  # Inverse of regularization strength
+    solver: liblinear       # Optimization algorithm
+    max_iter: 100           # Maximum iterations for convergence
+
+training:
+  cv_folds: 5               # Number of cross-validation folds
+  scoring: accuracy         # Metric to optimize during model evaluation

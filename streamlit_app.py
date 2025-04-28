@@ -1,6 +1,11 @@
+import os
+import sys
+
+# Add project root to sys.path for flexible imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
+
 import streamlit as st
 import pandas as pd
-import sys  # Ensures sys is available before attempting fallback
 
 st.set_page_config(page_title="Marketing Dashboard", layout="wide")
 

@@ -48,7 +48,8 @@ marketing-analytics-pipeline/
 │   │   └── convert_delta_to_csv.py
 │   ├── docker-compose.yaml
 ├── models/
-│   └── lead_scoring_model.pkl
+│   ├── lead_scoring_model.pkl   # Saved trained model
+│   └── model_config.yaml        # YAML file for model training configuration
 ├── streamlit_app.py       # Interactive Streamlit dashboard for data exploration and predictions
 ├── .streamlit/
 │   └── secrets.toml       # Local credentials for MySQL (excluded from Git)
@@ -65,6 +66,7 @@ marketing-analytics-pipeline/
 - Versioned model saving (timestamped .pkl files)
 - Evaluation metrics saved to JSON for monitoring
 - Fallback model loading for robustness
+- Configuration-driven training using `model_config.yaml` for features, targets, hyperparameters, and model output paths
 
 ## 🖥️ Dashboard Features
 
@@ -96,6 +98,8 @@ marketing-analytics-pipeline/
   MYSQL_PORT=your_port
   MYSQL_DATABASE=your_database
   ```
+
+- The `models/model_config.yaml` file contains configuration settings for model training, including feature selection, target column, model hyperparameters, and output paths. It ensures consistent, reproducible training runs.
 
 - Ensure `.streamlit/secrets.toml` is listed in `.gitignore`.
 
@@ -135,13 +139,13 @@ Make sure you have a trained model saved (e.g. `lead_scoring_model_<timestamp>.p
 
 This project includes a FastAPI service that exposes customer data from MySQL.
 
-### ▶️ How to Run
+### ▶️ Running the API Server
 
 ```bash
 uvicorn api.main:app --reload
 ```
 
-- View data: [http://localhost:8000/customers](http://localhost:8000/customers)
+- View API data: [http://localhost:8000/customers](http://localhost:8000/customers)
 - Swagger docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ### 🔌 Endpoint
@@ -178,9 +182,10 @@ From the `airflow/` directory, start Airflow using:
 docker compose up
 ```
 
-Then visit the Airflow UI at [http://localhost:8081](http://localhost:8081).
+Then visit the Airflow UI at [http://localhost:8080](http://localhost:8080).
 
-Ensure the DAG is toggled "on" and trigger a manual run to test it.
+Ensure the DAG is switched 'on' and manually trigger a run for testing.
+- You can also inspect the logs or run tasks manually using the CLI: `docker compose exec airflow-webserver airflow tasks list marketing_etl_dag`
 
 ### Notes
 

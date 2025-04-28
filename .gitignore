@@ -1,37 +1,43 @@
-.streamlit/secrets.toml
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 **/__pycache__/
-*.pyc
 *.py[cod]
 *.so
+
+# Distribution / packaging
+build/
+dist/
 *.egg
 *.egg-info/
-dist/
-build/
 
-# Jupyter
-.ipynb_checkpoints/
-
-# Virtual Environments
+# Environment files
+.env
+airflow/.env
 venv/
 env/
 
-# VS Code
-.vscode/
+# Jupyter Notebooks
+.ipynb_checkpoints/
 
-# macOS
-.DS_Store
-
-# Docker and Logs
+# Logs and databases
 *.log
 *.pid
 *.db
 *.sqlite3
 
+# macOS
+.DS_Store
+
+# Docker
+.dockerignore
+
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
-.env
-</file>
+
+# VS Code
+.vscode/
+
+# Streamlit
+.streamlit/secrets.toml
