@@ -25,6 +25,8 @@ def run_marketing_etl():
     # 1. Extract
     print("Starting extraction...")
     zip_path = 'data/raw/marketing-data.zip'
+    if not os.path.exists(zip_path):
+        raise FileNotFoundError(f"Zip file not found at {zip_path}")
     extract_path = 'data/raw/'
 
     # Unzip marketing data
@@ -33,6 +35,9 @@ def run_marketing_etl():
     print("Extraction completed.")
 
     extracted_csv_path = os.path.join(extract_path, 'marketing_data.csv')  # path to extracted CSV
+
+    if not os.path.exists(extracted_csv_path):
+        raise FileNotFoundError(f"Extracted CSV not found at {extracted_csv_path}")
 
     # Load CSV into DataFrame
     df = pd.read_csv(extracted_csv_path)
@@ -69,6 +74,7 @@ def run_marketing_etl():
     processed_data_path = 'data/processed/processed_marketing_data.csv'
     os.makedirs(os.path.dirname(processed_data_path), exist_ok=True)
 
+    print(f"Saving processed data to {processed_data_path}...")
     # Save processed data
     df.to_csv(processed_data_path, index=False)
 
