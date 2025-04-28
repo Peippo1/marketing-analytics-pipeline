@@ -32,12 +32,14 @@ marketing-analytics-pipeline/
 │   └── marketing_etl.py   # ETL: unzip, clean, feature engineer, save processed data
 ├── models/
 │   ├── train_model.py     # Model training script
+│   ├── evaluate_model.py  # Model evaluation script
 │   ├── model.py           # Model utilities
 │   └── model_config.yaml  # Model config file
 ├── airflow/
 │   ├── dags/
 │   │   ├── marketing_etl_dag.py
-│   │   └── model_training_dag.py
+│   │   ├── model_training_dag.py
+│   │   └── model_evaluation_dag.py
 │   ├── scripts/
 │   │   ├── prepare_data.py
 │   │   └── convert_delta_to_csv.py
@@ -71,7 +73,15 @@ python models/train_model.py
 
 This will train a logistic regression model based on configuration in `models/model_config.yaml` and save the model artifact in `models/`.
 
-### 4. Visualize with Streamlit (Optional)
+### 4. Evaluate the Model
+
+```bash
+python models/evaluate_model.py
+```
+
+This will load the trained model and processed dataset, evaluate model performance (accuracy, precision, recall, F1 score), and print the results.
+
+### 5. Visualize with Streamlit (Optional)
 
 ```bash
 streamlit run streamlit_app.py
@@ -161,6 +171,7 @@ This project includes Airflow DAGs to run the ETL and model training pipelines o
 
 - `marketing_etl_dag.py`: Runs the ETL process.
 - `model_training_dag.py`: Runs model training using the processed dataset.
+- `model_evaluation_dag.py`: Runs model evaluation on the trained model.
 
 - Located in the `airflow/dags/` directory.
 - Runs the full ETL and model training processes using Pandas scripts.

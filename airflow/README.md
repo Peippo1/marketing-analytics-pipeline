@@ -8,7 +8,8 @@ This module sets up Apache Airflow to orchestrate scheduled ETL tasks for the Ma
 airflow/
 ├── dags/
 │   ├── marketing_etl_dag.py   # DAG for scheduled ETL tasks (data loading and cleaning)
-│   └── train_model_dag.py     # DAG for scheduled model training
+│   ├── train_model_dag.py     # DAG for scheduled model training
+│   └── model_evaluation_dag.py # DAG for scheduled model evaluation
 ├── docker-compose.yml         # Docker Compose setup for Airflow
 ├── README.md                  # You're here!
 ```
@@ -49,6 +50,7 @@ airflow/
 - DAGs must be stored inside the `dags/` directory to be recognized by Airflow.
 - `marketing_etl_dag.py` handles extraction, transformation, and loading (ETL) of marketing data.
 - `train_model_dag.py` triggers model training on processed marketing datasets.
+- `model_evaluation_dag.py` schedules evaluation of the trained model on the processed marketing dataset.
 - A `.env` file is supported for local environment variables (e.g., credentials).
 - We've locked and patched specific Python dependencies to avoid compatibility issues with `proto`, `google-cloud` libraries, and Airflow provider hooks.
 - If you encounter import errors or warnings, double-check `requirements.txt` and ensure the image is rebuilt using:
