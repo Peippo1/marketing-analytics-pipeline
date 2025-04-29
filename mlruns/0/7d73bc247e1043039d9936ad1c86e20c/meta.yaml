@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/7d73bc247e1043039d9936ad1c86e20c/artifacts
+end_time: 1745947956323
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 7d73bc247e1043039d9936ad1c86e20c
+run_name: marvelous-foal-550
+run_uuid: 7d73bc247e1043039d9936ad1c86e20c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1745947794184
+status: 4
+tags: []
+user_id: localadmin

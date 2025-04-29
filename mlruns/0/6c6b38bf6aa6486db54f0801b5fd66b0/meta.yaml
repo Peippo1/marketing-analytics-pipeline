@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/6c6b38bf6aa6486db54f0801b5fd66b0/artifacts
+end_time: 1745947629053
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6c6b38bf6aa6486db54f0801b5fd66b0
+run_name: beautiful-auk-328
+run_uuid: 6c6b38bf6aa6486db54f0801b5fd66b0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1745947382522
+status: 4
+tags: []
+user_id: localadmin

@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/c494f1df2c3841e4b0f92b4d8a32fbd9/artifacts
+end_time: 1745948206917
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c494f1df2c3841e4b0f92b4d8a32fbd9
+run_name: aged-kit-771
+run_uuid: c494f1df2c3841e4b0f92b4d8a32fbd9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1745947960459
+status: 4
+tags: []
+user_id: localadmin

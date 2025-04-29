@@ -1,5 +1,5 @@
 # 📊 Marketing Analytics Pipeline
-A modular ETL and Machine Learning pipeline for marketing analytics, built with Pandas, scikit-learn, and orchestrated with Airflow.
+A modular ETL and Machine Learning pipeline for marketing analytics, built with Pandas, scikit-learn, MLflow, and orchestrated with Airflow.
 
 This project demonstrates a full end-to-end data engineering and ML workflow for a marketing analytics use case, including ETL, feature engineering, model training, and dashboarding.
 
@@ -15,7 +15,7 @@ This project demonstrates a full end-to-end data engineering and ML workflow for
 
 - **Language**: Python
 - **Data Processing**: Pandas
-- **ML/AI**: scikit-learn
+- **ML/AI**: scikit-learn, MLflow
 - **Scheduling**: Airflow (Docker Compose)
 - **Dashboarding**: Streamlit
 - **Database**: MySQL (optional, not required for core pipeline)
@@ -31,6 +31,9 @@ marketing-analytics-pipeline/
 ├── etl/
 │   └── marketing_etl.py   # ETL: unzip, clean, feature engineer, save processed data
 ├── models/
+│   ├── artifacts/          # Saved trained models (timestamped .pkl)
+│   ├── versioning.py        # Model versioning utilities
+│   ├── run_mlflow_flask.py  # Local MLflow server launcher (Waitress)
 │   ├── train_model.py     # Model training script
 │   ├── evaluate_model.py  # Model evaluation script
 │   ├── model.py           # Model utilities
@@ -63,7 +66,7 @@ pip install -r requirements.txt
 python etl/marketing_etl.py
 ```
 
-This will unzip the raw data, clean and enrich it, and save the processed data to `data/processed/clean_marketing.csv`.
+This will load the raw data from either a CSV (`ifood_df.csv`) or a ZIP file (`ifood_data.zip`), clean and enrich it, and save the processed data to `data/processed/processed_marketing_data.csv`.
 
 ### 3. Train the Model
 
@@ -73,6 +76,15 @@ python models/train_model.py
 
 This will train a logistic regression model based on configuration in `models/model_config.yaml` and save the model artifact in `models/`.
 
+### 3.5. Launch MLflow Tracking Server
+
+```bash
+python run_mlflow_flask.py 5001
+```
+This launches a local MLflow UI to track experiments and models at `http://localhost:5001`.
+
+Make sure to keep this terminal open while training models!
+
 ### 4. Evaluate the Model
 
 ```bash
@@ -80,6 +92,8 @@ python models/evaluate_model.py
 ```
 
 This will load the trained model and processed dataset, evaluate model performance (accuracy, precision, recall, F1 score), and print the results.
+
+Evaluation metrics are now also logged automatically into MLflow for experiment tracking.
 
 ### 5. Visualize with Streamlit (Optional)
 
@@ -162,6 +176,7 @@ Includes basic feature engineering: creation of customer age, tenure, and aggreg
 - Migrate to full PySpark processing
 - Incorporate model monitoring with MLflow
 - Expand customer segmentation modeling
+- Integrate model deployment pipeline via MLflow Registry
 
 ## ⏰ Airflow DAG Scheduling
 
