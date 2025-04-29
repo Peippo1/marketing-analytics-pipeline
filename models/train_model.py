@@ -133,6 +133,24 @@ def main():
             joblib.dump(model, model_output_path)
             print(f"✅ Trained model saved successfully at: {model_output_path}")
 
+            # Save evaluation metrics as JSON alongside the model
+            import json
+
+            metrics_filename = f"trained_model_{timestamp}_metrics.json"
+            metrics_output_path = os.path.join(os.path.dirname(__file__), "artifacts", "models", metrics_filename)
+
+            metrics_dict = {
+                "accuracy": accuracy,
+                "precision": precision,
+                "recall": recall,
+                "f1_score": f1
+            }
+
+            with open(metrics_output_path, "w") as f:
+                json.dump(metrics_dict, f, indent=4)
+
+            print(f"✅ Evaluation metrics saved successfully at: {metrics_output_path}")
+
             mlflow.sklearn.log_model(model, artifact_path="model", input_example=input_example)
 
     except Exception as e:

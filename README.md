@@ -47,7 +47,8 @@ marketing-analytics-pipeline/
 │   │   ├── prepare_data.py
 │   │   └── convert_delta_to_csv.py
 │   └── docker-compose.yaml
-├── streamlit_app.py       # Streamlit dashboard app
+├── dashboard/
+│   └── streamlit_app.py    # Streamlit dashboard with model metrics and CRM sync
 ├── requirements.txt
 └── README.md
 ```
@@ -98,8 +99,10 @@ Evaluation metrics are now also logged automatically into MLflow for experiment 
 ### 5. Visualize with Streamlit (Optional)
 
 ```bash
-streamlit run streamlit_app.py
+streamlit run dashboard/streamlit_app.py
 ```
+
+Launches the interactive dashboard to view model versions, metrics, and score customer files. Includes Google Sheets sync functionality.
 
 ## 🧪 Testing
 
@@ -158,6 +161,22 @@ uvicorn api.main:app --reload
 
 Includes basic feature engineering: creation of customer age, tenure, and aggregated spend categories.
 
+## 🧩 Google Sheets CRM Integration
+
+You can sync scored customer data directly to a Google Sheet from the dashboard.
+
+### 🔑 Setup Instructions
+
+1. Create a Google Cloud service account with Sheets API access
+2. Download the key as JSON and save it to:
+```
+.streamlit/secrets/google_sheets_creds.json
+```
+3. Share the target Google Sheet with the service account email
+4. Use the "Sync to Google Sheets" button in the dashboard to send scored data
+
+The default sheet is named **Scored_Customers**.
+
 ## 🔜 Next Steps
 
 - [x] Complete ETL pipeline and convert to reusable scripts
@@ -169,6 +188,7 @@ Includes basic feature engineering: creation of customer age, tenure, and aggreg
 - [x] Schedule daily pipeline using Airflow (via docker-compose + DAG)
 - [x] Expand ETL script for dynamic raw data handling and basic feature engineering
 - [x] Automate model training pipeline
+- [ ] Add support for CRM push via Salesforce/HubSpot APIs
 
 ## 🛠️ Future Improvements
 
@@ -177,6 +197,7 @@ Includes basic feature engineering: creation of customer age, tenure, and aggreg
 - Incorporate model monitoring with MLflow
 - Expand customer segmentation modeling
 - Integrate model deployment pipeline via MLflow Registry
+- Integrate webhook/CRM actions after model scoring
 
 ## ⏰ Airflow DAG Scheduling
 
