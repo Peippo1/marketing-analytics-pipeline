@@ -1,4 +1,4 @@
-#!/Users/localadmin/Documents/dev/study/data-engineer-projects/marketing-analytics-pipeline/venv/bin/python3
+#!/Users/tim/Documents/GitHub/marketing-analytics-pipeline/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

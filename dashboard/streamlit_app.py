@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import joblib
 import pandas as pd
+from google.oauth2.service_account import Credentials
 
 # Set Streamlit page configuration
 st.set_page_config(page_title="Marketing Analytics Dashboard", layout="wide")
@@ -131,10 +132,9 @@ elif app_mode == "📝 Upload & Score":
                             if st.button("Sync to Google Sheets"):
                                 try:
                                     import gspread
-                                    from oauth2client.service_account import ServiceAccountCredentials
+                                    from google.oauth2.service_account import Credentials
 
-                                    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-                                    creds = ServiceAccountCredentials.from_json_keyfile_name(".streamlit/secrets/google_sheets_creds.json", scope)
+                                    creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"])
                                     client = gspread.authorize(creds)
 
                                     # Create or open spreadsheet
@@ -170,10 +170,9 @@ elif app_mode == "📝 Upload & Score":
                         if st.button("Sync to Google Sheets"):
                             try:
                                 import gspread
-                                from oauth2client.service_account import ServiceAccountCredentials
+                                from google.oauth2.service_account import Credentials
 
-                                scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-                                creds = ServiceAccountCredentials.from_json_keyfile_name(".streamlit/secrets/google_sheets_creds.json", scope)
+                                creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"])
                                 client = gspread.authorize(creds)
 
                                 # Create or open spreadsheet

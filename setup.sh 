@@ -1,0 +1,28 @@
+#!/bin/bash
+
+echo "🔧 Setting up virtual environment with Python 3.11..."
+
+# Ensure pyenv is installed and Python 3.11.9 is available
+if ! pyenv versions | grep -q "3.11.9"; then
+  echo "📦 Installing Python 3.11.9 via pyenv..."
+  pyenv install 3.11.9
+fi
+
+pyenv local 3.11.9
+
+# Create and activate venv
+python -m venv venv
+source venv/bin/activate
+
+echo "📦 Installing requirements..."
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# Check for secrets file
+if [ ! -f ".streamlit/secrets.toml" ]; then
+  echo "⚠️  WARNING: .streamlit/secrets.toml is missing. You must copy it manually to enable Google Sheets integration."
+else
+  echo "🔐 .streamlit/secrets.toml found."
+fi
+
+echo "✅ Environment setup complete."
