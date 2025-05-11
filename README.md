@@ -161,6 +161,23 @@ uvicorn api.main:app --reload
 
 Includes basic feature engineering: creation of customer age, tenure, and aggregated spend categories.
 
+**Note:** The project now supports clean environment setup via the `setup.sh` script.
+
+## ⚙️ Environment Setup (New)
+
+To simplify setup on a new machine, this project includes a `setup.sh` script:
+
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+This will:
+- Ensure Python 3.11.9 is available (via pyenv)
+- Create a virtual environment
+- Install all project dependencies from `requirements.txt`
+- Warn you if the `.streamlit/secrets.toml` file is missing (needed for Google Sheets integration)
+
 ## 🧩 Google Sheets CRM Integration
 
 You can sync scored customer data directly to a Google Sheet from the dashboard.
@@ -168,10 +185,11 @@ You can sync scored customer data directly to a Google Sheet from the dashboard.
 ### 🔑 Setup Instructions
 
 1. Create a Google Cloud service account with Sheets API access
-2. Download the key as JSON and save it to:
+2. Convert the key JSON to TOML format and save it to:
 ```
-.streamlit/secrets/google_sheets_creds.json
+.streamlit/secrets.toml
 ```
+(You can use Streamlit's secrets management with `.streamlit/secrets.toml`)
 3. Share the target Google Sheet with the service account email
 4. Use the "Sync to Google Sheets" button in the dashboard to send scored data
 
