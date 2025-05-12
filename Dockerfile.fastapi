@@ -1,0 +1,16 @@
+
+
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.11
+
+# Set working directory
+WORKDIR /app
+
+# Copy app code
+COPY ./scoring /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expose FastAPI default port
+EXPOSE 8000

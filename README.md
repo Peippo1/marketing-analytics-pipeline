@@ -98,11 +98,32 @@ Evaluation metrics are now also logged automatically into MLflow for experiment 
 
 ### 5. Visualize with Streamlit (Optional)
 
-```bash
-streamlit run dashboard/streamlit_app.py
-```
+You can view the dashboard in your browser using one of two methods:
 
-Launches the interactive dashboard to view model versions, metrics, and score customer files. Includes Google Sheets sync functionality.
+**Option 1: Port Forwarding (Recommended for Local Testing)**
+```bash
+kubectl port-forward service/streamlit-service 8501:8501
+```
+Then visit: [http://localhost:8501](http://localhost:8501)
+
+**Option 2: Ingress with Custom DNS**
+This project also includes Kubernetes Ingress support to expose the dashboard at a friendly URL:
+
+1. Update `/etc/hosts` with:
+   ```
+   127.0.0.1 streamlit.local
+   ```
+
+2. Apply the ingress:
+   ```bash
+   kubectl apply -f k8s/ingress.yaml
+   ```
+
+3. Access the app via: [http://streamlit.local](http://streamlit.local)
+
+_Note: macOS users may need to flush DNS cache or use a `.test` domain instead of `.local`._
+
+Make sure you have a trained model saved (e.g. `lead_scoring_model_<timestamp>.pkl`) inside the `models/` directory to enable predictions inside the dashboard.
 
 ## 🧪 Testing
 
@@ -118,15 +139,15 @@ pytest tests/
 
 ## 🐳 Docker Usage
 
-This project is fully containerized using Docker. You can run the entire Streamlit dashboard and pipeline in a reproducible containerized environment.
+This project is fully containerized using Docker, supporting both the Streamlit dashboard and the FastAPI service. You can run the entire pipeline and dashboard in reproducible containerized environments, or deploy them on Kubernetes.
 
-### Build the Docker Image
+### Build the Streamlit Docker Image
 
 ```bash
 docker build -t marketing-analytics-app .
 ```
 
-### Run the App
+### Run the Streamlit App
 
 ```bash
 docker run -p 8501:8501 marketing-analytics-app
@@ -140,6 +161,80 @@ You can trigger model training manually using:
 ```bash
 python models/train_model.py
 ```
+
+## 🐳 FastAPI Docker Usage
+
+To containerize the FastAPI app with the `Dockerfile.fastapi`, follow these steps:
+
+### Build the FastAPI Docker Image
+
+```bash
+docker build -t fastapi-app:latest -f Dockerfile.fastapi .
+```
+
+### Run the FastAPI App
+
+```bash
+docker run -p 8000:8000 fastapi-app:latest
+```
+
+You can access the FastAPI server at `http://localhost:8000`.
+
+## ☸️ Kubernetes Usage
+
+This project now supports Kubernetes deployment to manage the services for Streamlit and FastAPI.
+
+### 1. Set up Minikube and Kubernetes
+
+Start by setting up Minikube and Kubernetes if you haven’t already:
+
+```bash
+minikube start
+```
+
+Once Minikube is up, you can configure your Kubernetes cluster by running:
+
+```bash
+kubectl config use-context minikube
+```
+
+### 2. Deploy Services on Kubernetes
+
+After setting up Kubernetes, you can deploy both FastAPI and Streamlit services using the following commands:
+
+#### Deploy FastAPI
+
+```bash
+kubectl apply -f k8s/fastapi-deployment.yaml
+kubectl apply -f k8s/fastapi-service.yaml
+```
+
+#### Deploy Streamlit
+
+```bash
+kubectl apply -f k8s/streamlit-deployment.yaml
+kubectl apply -f k8s/streamlit-service.yaml
+```
+
+### 3. Set up Ingress Controller and Ingress
+
+Set up the NGINX Ingress Controller and Ingress to access the FastAPI and Streamlit services externally:
+
+```bash
+kubectl apply -f k8s/ingress.yaml
+```
+
+Ensure you have the correct entries in your `/etc/hosts` file to map to the services:
+
+```bash
+127.0.0.1   fastapi.local
+127.0.0.1   streamlit.local
+```
+
+You should now be able to access the services at:
+
+- **FastAPI**: `http://fastapi.local`
+- **Streamlit**: `http://streamlit.local`
 
 ## 📡 FastAPI Customer Data API
 
@@ -206,6 +301,7 @@ The default sheet is named **Scored_Customers**.
 - [x] Schedule daily pipeline using Airflow (via docker-compose + DAG)
 - [x] Expand ETL script for dynamic raw data handling and basic feature engineering
 - [x] Automate model training pipeline
+- [x] Deploy Streamlit to Kubernetes with working port-forwarding and Ingress setup
 - [ ] Add support for CRM push via Salesforce/HubSpot APIs
 
 ## 🛠️ Future Improvements

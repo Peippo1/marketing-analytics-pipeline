@@ -127,9 +127,8 @@ pyarrow==19.0.1
 pyasn1==0.6.1
 pyasn1_modules==0.4.2
 pycparser==2.21
-pydantic>=1.10.0,<2.0.0
-pydantic-settings==2.8.1
-pydantic_core==2.10.1
+pydantic==2.10.0
+pydantic-core>=2.0.0,<3.0.0
 pydeck==0.9.1
 Pygments==2.16.1
 PyJWT==2.8.0
@@ -150,7 +149,7 @@ requests==2.31.0
 requests-toolbelt==1.0.0
 rfc3339-validator==0.1.4
 rfc3986==1.5.0
-rich==13.6.0
+rich>=12.4.4,<14
 rich-argparse==1.4.0
 rich-toolkit==0.14.1
 rpds-py==0.10.6
