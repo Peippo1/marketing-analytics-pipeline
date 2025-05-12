@@ -1,7 +1,7 @@
 
 
 from fastapi.testclient import TestClient
-from api.main import app  # assuming your FastAPI app is in api/main.py
+from scoring.fastapi_app import app
 
 client = TestClient(app)
 
