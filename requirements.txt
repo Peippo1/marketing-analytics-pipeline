@@ -1,3 +1,8 @@
+# NOTE: This file is retained for backwards compatibility.
+# All dependencies have been split into:
+# - requirements-airflow.txt
+# - requirements-streamlit.txt
+
 aiohttp>=3.9.3
 aiosignal==1.3.1
 alembic==1.12.1
