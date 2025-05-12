@@ -47,7 +47,7 @@ docutils==0.20.1
 email-validator=<2.0
 fastapi==0.115.12
 Flask==2.2.5
-Flask-AppBuilder==4.3.6
+Flask-AppBuilder>=4.3.6
 Flask-Babel==2.0.0
 Flask-Caching==2.1.0
 Flask-JWT-Extended==4.5.3
