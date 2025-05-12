@@ -16,6 +16,8 @@ airflow/.env
 venv/
 .venv/
 env/
+streamlit_env/
+airflow_env/
 
 # Jupyter Notebooks
 .ipynb_checkpoints/
