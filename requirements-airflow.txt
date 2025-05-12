@@ -1,0 +1,7 @@
+
+
+apache-airflow==2.7.3
+flask-appbuilder==4.3.6
+email-validator<2.0
+SQLAlchemy<2.0,>=1.4.28
+alembic>=1.13.1

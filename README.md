@@ -1,6 +1,8 @@
 # 📊 Marketing Analytics Pipeline
 A modular ETL and Machine Learning pipeline for marketing analytics, built with Pandas, scikit-learn, MLflow, and orchestrated with Airflow.
 
+> 📁 Note: This repo now uses split requirements for cleaner environments (`requirements-airflow.txt` and `requirements-streamlit.txt`).
+
 This project demonstrates a full end-to-end data engineering and ML workflow for a marketing analytics use case, including ETL, feature engineering, model training, and dashboarding.
 
 ## 🚀 Project Goals
@@ -58,7 +60,14 @@ marketing-analytics-pipeline/
 ### 1. Set up the Environment
 
 ```bash
+# For core libraries only:
 pip install -r requirements.txt
+
+# For Airflow-specific dependencies:
+pip install -r requirements-airflow.txt
+
+# For Streamlit-specific dependencies:
+pip install -r requirements-streamlit.txt
 ```
 
 ### 2. Run the ETL Process
@@ -272,6 +281,9 @@ This will:
 - Create a virtual environment
 - Install all project dependencies from `requirements.txt`
 - Warn you if the `.streamlit/secrets.toml` file is missing (needed for Google Sheets integration)
+- Installs base dependencies only; Airflow and Streamlit now have their own environment files:
+  - `requirements-airflow.txt`
+  - `requirements-streamlit.txt`
 
 ## 🧩 Google Sheets CRM Integration
 
