@@ -44,7 +44,8 @@ dill>=0.3.6
 dnspython==2.4.2
 docker==7.1.0
 docutils==0.20.1
-email-validator=<2.0
+# email-validator version conflict with Flask-AppBuilder — handled in sub-requirement files
+# email-validator>=2.0  # COMMENTED OUT DUE TO CONFLICT WITH Flask-AppBuilder (<2.0 required)
 fastapi==0.115.12
 Flask==2.2.5
 Flask-AppBuilder>=4.3.6
@@ -399,4 +400,4 @@ waitress==2.1.2
 # yarl==1.9.2
 # zipp==3.17.0
 
-# waitress==2.1.2
+waitress==2.1.2
