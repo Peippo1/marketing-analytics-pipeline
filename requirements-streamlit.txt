@@ -7,4 +7,4 @@ requests==2.32.3
 scikit-learn==1.5.0
 pyarrow==15.0.2
 more-itertools==10.7.0
-email-validator>=2.0
+
