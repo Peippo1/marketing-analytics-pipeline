@@ -52,6 +52,7 @@ jobs:
           python -m venv streamlit_env
           source streamlit_env/bin/activate
           pip install -r requirements-streamlit.txt
+          pip install email-validator>=2.0  # Force install email-validator 2.0+
           pip install pytest
 
       - name: List installed packages
