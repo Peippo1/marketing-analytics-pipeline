@@ -1,0 +1,14 @@
+
+
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    venv,
+    .venv,
+    env,
+    streamlit_env,
+    airflow_env,
+    main_env,
+    */site-packages/*
+max-line-length = 100
