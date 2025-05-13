@@ -59,7 +59,7 @@ jobs:
         run: |
           pip list
 
-      - name: Run FastAPI tests
+      - name: Run FastAPI tests for scoring.main
         run: |
           pytest tests/test_fastapi.py --maxfail=1 --disable-warnings -q
 
@@ -77,7 +77,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker images
+      - name: Build Docker images (root app and FastAPI scoring)
         run: |
           docker build -t marketing-analytics-app .
           docker build -f Dockerfile.fastapi -t fastapi-app .

@@ -31,10 +31,10 @@ services:
       - ./scripts:/opt/airflow/scripts
       - ./data:/opt/airflow/data
       - ./logs:/opt/airflow/logs
-      - ./requirements.txt:/requirements.txt
+      - ./airflow/requirements-airflow.txt:/requirements-airflow.txt
     ports:
       - "8081:8080"
-    command: webserver
+    command: bash -c "pip install -r /requirements-airflow.txt && airflow webserver"
     restart: always
 
   airflow-scheduler:
@@ -53,8 +53,8 @@ services:
       - ./scripts:/opt/airflow/scripts
       - ./data:/opt/airflow/data
       - ./logs:/opt/airflow/logs
-      - ./requirements.txt:/requirements.txt
-    command: scheduler
+      - ./airflow/requirements-airflow.txt:/requirements-airflow.txt
+    command: bash -c "pip install -r /requirements-airflow.txt && airflow scheduler"
     restart: always
 
   airflow-init:
@@ -73,8 +73,8 @@ services:
       - ./scripts:/opt/airflow/scripts
       - ./data:/opt/airflow/data
       - ./logs:/opt/airflow/logs
-      - ./requirements.txt:/requirements.txt
-    command: bash -c "airflow db migrate && airflow users create --username admin --password admin --firstname Tim --lastname Finch --role Admin --email admin@example.com"
+      - ./airflow/requirements-airflow.txt:/requirements-airflow.txt
+    command: bash -c "pip install -r /requirements-airflow.txt && airflow db migrate && airflow users create --username admin --password admin --firstname Tim --lastname Finch --role Admin --email admin@example.com"
 
 volumes:
   postgres-db-volume:
