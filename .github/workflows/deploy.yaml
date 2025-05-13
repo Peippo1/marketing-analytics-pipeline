@@ -47,6 +47,17 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
+      - name: Activate Streamlit Environment
+        run: |
+          python -m venv streamlit_env
+          source streamlit_env/bin/activate
+          pip install -r requirements-streamlit.txt
+          pip install pytest
+
+      - name: List installed packages
+        run: |
+          pip list
+
       - name: Run FastAPI tests
         run: |
           pytest tests/test_fastapi.py --maxfail=1 --disable-warnings -q
