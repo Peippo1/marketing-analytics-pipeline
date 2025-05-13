@@ -10,7 +10,7 @@ delta-spark==3.0.0
 # dnspython is a dependency of email-validator and flask-appbuilder
 dnspython==2.7.0
 # Flask AppBuilder and related dependencies
-email-validator>=1.0,<2.0
+email-validator>=1.0,<3.0
 # FastAPI and related dependencies
 fastapi==0.115.12
 httpx==0.28.1
