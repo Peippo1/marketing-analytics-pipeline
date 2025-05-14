@@ -43,7 +43,7 @@ marketing-analytics-pipeline/
 ├── airflow/
 │   ├── dags/
 │   │   ├── marketing_etl_dag.py
-│   │   ├── model_training_dag.py
+│   │   ├── train_model_dag.py
 │   │   └── model_evaluation_dag.py
 │   ├── scripts/
 │   │   ├── prepare_data.py
@@ -56,6 +56,20 @@ marketing-analytics-pipeline/
 ```
 
 ## ▶️ Running the Pipeline Locally
+
+### 0. 📦 Build and Run with Docker (Airflow)
+
+From the `airflow/` directory, use Docker Compose to run the Airflow environment:
+
+```bash
+cd airflow
+docker compose down --volumes  # optional: clear volumes
+docker compose up --build
+```
+
+Then visit the Airflow UI at: [http://localhost:8081](http://localhost:8081)
+
+Ensure the DAGs appear in the UI and are switched ON.
 
 ### 1. Set up the Environment
 
@@ -149,6 +163,8 @@ pytest tests/
 ## 🐳 Docker Usage
 
 This project is fully containerized using Docker, supporting both the Streamlit dashboard and the FastAPI service. You can run the entire pipeline and dashboard in reproducible containerized environments, or deploy them on Kubernetes.
+
+Note that Streamlit and Airflow environments are built separately. The Airflow environment uses the `airflow/docker-compose.yml` file to manage the scheduler, webserver, and other components.
 
 ### Build the Streamlit Docker Image
 
@@ -333,7 +349,7 @@ This project includes Airflow DAGs to run the ETL and model training pipelines o
 ### DAGs
 
 - `marketing_etl_dag.py`: Runs the ETL process.
-- `model_training_dag.py`: Runs model training using the processed dataset.
+- `train_model_dag.py`: Runs model training using the processed dataset.
 - `model_evaluation_dag.py`: Runs model evaluation on the trained model.
 
 - Located in the `airflow/dags/` directory.

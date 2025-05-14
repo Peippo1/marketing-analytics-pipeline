@@ -7,9 +7,9 @@ This module sets up Apache Airflow to orchestrate scheduled ETL tasks for the Ma
 ```
 airflow/
 ├── dags/
-│   ├── marketing_etl_dag.py   # DAG for scheduled ETL tasks (data loading and cleaning)
-│   ├── train_model_dag.py     # DAG for scheduled model training
-│   └── model_evaluation_dag.py # DAG for scheduled model evaluation
+│   ├── marketing_etl_dag.py   # DAG for scheduled ETL tasks (data extraction, transformation, and loading)
+│   ├── train_model_dag.py     # DAG for scheduled model training on processed marketing datasets
+│   └── model_evaluation_dag.py # DAG for scheduled model evaluation on the processed marketing dataset
 ├── docker-compose.yml         # Docker Compose setup for Airflow
 ├── README.md                  # You're here!
 ```
@@ -21,19 +21,19 @@ airflow/
    cd airflow
    ```
 
-2. Install pinned and patched dependencies:
+2. (Optional) If not using Docker, install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Start Airflow using Docker Compose:
+3. Start Airflow using Docker Compose (rebuild with latest changes):
    ```bash
-   docker-compose up -d
+   docker-compose up --build -d
    ```
 
 4. Access the Airflow web interface:
    ```
-   http://localhost:8080
+   http://localhost:8081
    ```
 
    - Username: `airflow`
@@ -59,6 +59,16 @@ airflow/
   docker-compose build --no-cache
   docker-compose up -d
   ```
+
+## Development Notes
+
+- DAGs must be located in `./airflow/dags/` to be recognized by the container.
+- Ensure your DAG scripts refer to the correct mounted paths:
+  - Use `/opt/airflow/dags/...` for DAG-level scripts.
+  - Use `/opt/models/...` for ML-related model training/evaluation scripts.
+- If DAGs do not appear in the UI:
+  - Ensure the `docker-compose.yml` uses the correct volume path: `./dags:/opt/airflow/dags`
+  - Run `docker-compose down --volumes && docker-compose up --build -d` to force volume remount and container rebuild.
 
 ## Project Dependencies Displaying in App
 
