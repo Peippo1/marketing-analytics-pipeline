@@ -27,7 +27,7 @@ dag = DAG(
 import os
 
 def run_etl():
-    etl_script_path = '/opt/airflow/scripts/marketing_etl.py'
+    etl_script_path = '/opt/airflow/dags/marketing_etl.py'
     result = subprocess.run(
         ['python', etl_script_path],
         capture_output=True,
@@ -38,7 +38,7 @@ def run_etl():
     result.check_returncode()
 
 def train_model():
-    model_script_path = '/opt/airflow/scripts/train_model.py'
+    model_script_path = '/opt/models/train_model.py'
     result = subprocess.run(
         ['python', model_script_path],
         capture_output=True,
