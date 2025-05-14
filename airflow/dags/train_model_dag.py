@@ -42,7 +42,7 @@ with DAG(
     # Task: Run the training script using BashOperator
     train_model = BashOperator(
         task_id="train_model",
-        bash_command=f"python {os.path.join(os.getcwd(), 'models/train_model.py')}",
+        bash_command="python /opt/models/train_model.py",
     )
 
     train_model

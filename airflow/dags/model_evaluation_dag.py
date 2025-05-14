@@ -32,7 +32,7 @@ with DAG(
 
     evaluate_model = BashOperator(
         task_id='evaluate_model',
-        bash_command='cd /opt/airflow && python3 models/evaluate_model.py ',
+        bash_command='python3 /opt/models/evaluate_model.py',
     )
 
     evaluate_model
