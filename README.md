@@ -1,3 +1,35 @@
+
+# 📊 Marketing Analytics Pipeline
+
+
+[![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=Peippo1/marketing-analytics-pipeline)](https://dependabot.com)
+[![Dependency graph](https://img.shields.io/github/dependencies-analyzability/Peippo1/marketing-analytics-pipeline?label=dependency%20graph)](https://github.com/Peippo1/marketing-analytics-pipeline/network/dependencies)
+
+## 🏗️ Architecture Diagram
+
+```mermaid
+flowchart TD
+    A[Marketing Data Source] -->|Raw Data| B[ETL Pipeline (Pandas)]
+    B --> C[Feature Engineering]
+    C --> D[Model Training & Evaluation (scikit-learn, MLflow)]
+    D --> E[Model Artifacts Stored]
+    B --> F[Processed Data]
+    E --> G[Streamlit Dashboard]
+    F --> G
+    G --> H[Google Sheets CRM Sync]
+    D --> I[FastAPI Service]
+    subgraph Kubernetes Cluster
+        G
+        I
+        J[NGINX Ingress Controller]
+    end
+    J -->|Route traffic| G
+    J -->|Route traffic| I
+```
+
+
 # 📊 Marketing Analytics Pipeline
 A modular ETL and Machine Learning pipeline for marketing analytics, built with Pandas, scikit-learn, MLflow, and orchestrated with Airflow.
 
