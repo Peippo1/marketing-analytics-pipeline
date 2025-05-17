@@ -411,3 +411,4 @@ Ensure the DAGs are switched 'on' and manually trigger runs for testing.
 
 - Removed all `__pycache__/` directories to keep repo clean
 - `.gitignore` updated to exclude `__pycache__/` and `.DS_Store` files
+# Test commit to trigger CI/CD workflow
