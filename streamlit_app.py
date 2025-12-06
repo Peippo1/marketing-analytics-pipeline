@@ -8,6 +8,8 @@ import streamlit as st
 import pandas as pd
 
 st.set_page_config(page_title="Marketing Dashboard", layout="wide")
+st.session_state["title_rendered"] = True
+st.sidebar.title("Navigation")
 
 st.write("🧪 Python executable:", sys.executable)
 st.write("🧪 Python path:", sys.path)
@@ -23,6 +25,7 @@ from airflow.scripts.mysql_utils import get_customers_data
 
 
 st.title("📊 Marketing Analytics Dashboard")
+st.session_state["sidebar_initialized"] = True
 st.markdown("View cleaned customer data pulled live from MySQL.")
 
 # Load data

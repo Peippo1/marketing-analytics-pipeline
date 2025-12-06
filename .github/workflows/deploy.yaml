@@ -23,6 +23,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Security audit (pip-audit)
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt
+
       - name: Lint with flake8
         run: |
           pip install flake8
@@ -46,6 +51,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest
+
+      - name: Security audit (pip-audit)
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt
 
       - name: Activate Streamlit Environment
         run: |

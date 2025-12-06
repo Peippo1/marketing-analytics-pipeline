@@ -32,7 +32,10 @@ flowchart TD
 # 📊 Marketing Analytics Pipeline
 A modular ETL and Machine Learning pipeline for marketing analytics, built with Pandas, scikit-learn, MLflow, and orchestrated with Airflow.
 
-> 📁 Note: This repo now uses split requirements for cleaner environments (`requirements-airflow.txt` and `requirements-streamlit.txt`).
+> 📁 Note: Dependencies are split for cleaner environments:
+> - `requirements.txt` → shared, security-reviewed pins used by CI
+> - `requirements-fastapi.txt` / `requirements-streamlit.txt` → service-specific
+> - `airflow/requirements.txt` → extras used inside the Airflow image
 
 This project demonstrates a full end-to-end data engineering and ML workflow for a marketing analytics use case, including ETL, feature engineering, model training, and dashboarding.
 
@@ -410,5 +413,4 @@ Ensure the DAGs are switched 'on' and manually trigger runs for testing.
 
 - Removed all `__pycache__/` directories to keep repo clean
 - `.gitignore` updated to exclude `__pycache__/` and `.DS_Store` files
-
-for CI-CD testing
+- for CI-CD testing

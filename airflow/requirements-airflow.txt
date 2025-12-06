@@ -2,3 +2,10 @@ apache-airflow==2.9.1
 email-validator>=1.0.5,<2.0
 SQLAlchemy<2.0,>=1.4.28
 alembic>=1.13.1
+# Project extras aligned with root pins for DAG utilities
+pandas==2.3.3
+numpy==2.3.5
+pyspark==3.5.4
+delta-spark==3.2.0
+pymysql==1.1.1
+python-dotenv==1.0.1
