@@ -1,12 +1,44 @@
 from pathlib import Path
-from typing import List
+from typing import List, Optional
+import os
 
 import pandas as pd
 from fastapi import FastAPI
 
+from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+
 DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "processed" / "clean_marketing.csv"
 
 app = FastAPI(title="Marketing Scoring API")
+
+
+def _init_tracing() -> Optional[str]:
+    """
+    Initialize OpenTelemetry tracing if explicitly enabled.
+    Safe no-op when OTEL_ENABLED is not set.
+    """
+    if os.getenv("OTEL_ENABLED", "").lower() not in {"1", "true", "yes"}:
+        return None
+
+    endpoint = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318/v1/traces")
+    service_name = os.getenv("OTEL_SERVICE_NAME", "marketing-fastapi")
+
+    resource = Resource.create({"service.name": service_name})
+    provider = TracerProvider(resource=resource)
+    processor = BatchSpanProcessor(OTLPSpanExporter(endpoint=endpoint))
+    provider.add_span_processor(processor)
+    trace.set_tracer_provider(provider)
+
+    FastAPIInstrumentor.instrument_app(app, tracer_provider=provider)
+    return endpoint
+
+
+_init_tracing()
 
 
 @app.get("/health")

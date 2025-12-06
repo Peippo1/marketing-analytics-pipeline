@@ -394,6 +394,19 @@ The Streamlit dashboard now supports pushing the top customers into Salesforce o
 - [x] Automate model training pipeline
 - [x] Deploy Streamlit to Kubernetes with working port-forwarding and Ingress setup
 - [x] Add support for CRM push via Salesforce/HubSpot APIs
+- [ ] Add OpenTelemetry traces/export for FastAPI and Airflow
+
+## 👀 Observability (OpenTelemetry)
+
+We ship optional tracing for the FastAPI scoring service. Enable it by setting:
+
+```
+export OTEL_ENABLED=true
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces  # or your collector
+export OTEL_SERVICE_NAME=marketing-fastapi
+```
+
+When enabled, the app sends spans via OTLP/HTTP. Point the endpoint to your OTLP collector (e.g., OpenTelemetry Collector, Honeycomb, Datadog OTLP, New Relic).
 
 ## 🛠️ Future Improvements
 
