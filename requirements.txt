@@ -201,7 +201,7 @@ WTForms==3.0.1
 yarl==1.9.2
 zipp==3.17.0
 
-waitress==2.1.2
+waitress==3.0.1
 # This file is now split into two specialized requirements files:
 # - requirements-airflow.txt: for Airflow-related dependencies
 # - requirements-streamlit.txt: for Streamlit app dependencies
