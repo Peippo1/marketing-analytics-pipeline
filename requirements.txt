@@ -77,7 +77,7 @@ graphql-relay==3.2.0
 graphviz==0.20.1
 grpcio==1.59.2
 gunicorn==21.2.0
-h11==0.14.0
+h11==0.16.0
 httpcore==0.16.3
 httptools==0.6.4
 httpx>=0.25.0
@@ -278,7 +278,7 @@ waitress==2.1.2
 # graphviz==0.20.1
 # grpcio==1.59.2
 # gunicorn==21.2.0
-# h11==0.14.0
+# h11==0.16.0
 # httpcore==0.16.3
 # httptools==0.6.4
 # httpx>=0.25.0
