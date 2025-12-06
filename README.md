@@ -353,6 +353,22 @@ You can sync scored customer data directly to a Google Sheet from the dashboard.
 
 The default sheet is named **Scored_Customers**.
 
+## 🔗 CRM Push (Salesforce / HubSpot)
+
+The Streamlit dashboard now supports pushing the top customers into Salesforce or HubSpot directly.
+
+### Setup
+
+- Salesforce: set `SALESFORCE_INSTANCE_URL` (e.g., `https://your-domain.my.salesforce.com`) and `SALESFORCE_ACCESS_TOKEN`. Optionally set `SALESFORCE_API_VERSION` (defaults to `v60.0`).
+- HubSpot: set `HUBSPOT_ACCESS_TOKEN`.
+
+### Usage
+
+1. Load the dashboard and ensure customer data is visible.
+2. Pick your CRM in the **CRM Sync** section.
+3. Leave **Dry run** checked to preview the payload without sending, or uncheck to push live.
+4. Click **Push 20 customers to CRM**.
+
 ## 🔜 Next Steps
 
 - [x] Complete ETL pipeline and convert to reusable scripts
@@ -365,7 +381,7 @@ The default sheet is named **Scored_Customers**.
 - [x] Expand ETL script for dynamic raw data handling and basic feature engineering
 - [x] Automate model training pipeline
 - [x] Deploy Streamlit to Kubernetes with working port-forwarding and Ingress setup
-- [ ] Add support for CRM push via Salesforce/HubSpot APIs
+- [x] Add support for CRM push via Salesforce/HubSpot APIs
 
 ## 🛠️ Future Improvements
 
