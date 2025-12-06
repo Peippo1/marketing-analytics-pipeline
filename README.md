@@ -9,20 +9,33 @@
 
 ```mermaid
 flowchart TD
-    A[Marketing Data Source] -->|Raw Data| B[ETL Pipeline (Pandas)]
-    B --> C[Feature Engineering]
-    C --> D[Model Training & Evaluation (scikit-learn, MLflow)]
-    D --> E[Model Artifacts Stored]
-    B --> F[Processed Data]
-    E --> G[Streamlit Dashboard]
+    A["Marketing Data Source"]
+    B["ETL Pipeline (Pandas)"]
+    C["Feature Engineering"]
+    D["Model Training & Evaluation (scikit-learn, MLflow)"]
+    E["Model Artifacts Stored"]
+    F["Processed Data"]
+    G["Streamlit Dashboard"]
+    H["Google Sheets CRM Sync"]
+    I["FastAPI Service"]
+    J["NGINX Ingress Controller"]
+
+    A -->|Raw Data| B
+    B --> C
+    C --> D
+    D --> E
+    B --> F
+    E --> G
     F --> G
-    G --> H[Google Sheets CRM Sync]
-    D --> I[FastAPI Service]
+    G --> H
+    D --> I
+
     subgraph Kubernetes Cluster
         G
         I
-        J[NGINX Ingress Controller]
+        J
     end
+
     J -->|Route traffic| G
     J -->|Route traffic| I
 ```
