@@ -3,7 +3,7 @@
 -r requirements-fastapi.txt
 -r requirements-streamlit.txt
 
-mlflow==3.7.0
+mlflow==3.9.0rc0
 pyarrow==22.0.0
 SQLAlchemy==2.0.44
 python-dotenv==1.0.1
