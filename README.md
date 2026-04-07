@@ -12,6 +12,7 @@ CampaignForge AI is a production-style Python workflow for buyers who want a cre
 - Trains and evaluates a scikit-learn classification model for lead-scoring and campaign analytics style use cases
 - Generates campaign summaries, audience suggestions, copy variants, CTA variants, and image prompts from a structured brief
 - Generates optional concept images from saved campaign prompts with mock mode by default and live provider mode when configured
+- Tracks approval state for generated images, supports regeneration, and exports full campaign bundles as ZIP files
 - Exposes lightweight customer endpoints through FastAPI
 - Presents customer data, GenAI brief outputs, and CRM handoff workflows through Streamlit
 - Includes Airflow, Docker, and Kubernetes assets to support operational and deployment discussions
@@ -29,6 +30,7 @@ CampaignForge AI is a production-style Python workflow for buyers who want a cre
 - ETL scripts, model training, and model evaluation workflow
 - GenAI brief copilot package with mock-first and API-key-gated live modes
 - Optional image generation layer that saves assets and metadata per campaign
+- Workflow controls for campaign history, regeneration, image review, and bundle export
 - FastAPI service and Streamlit dashboard
 - CRM integration examples for Salesforce and HubSpot
 - Google Sheets sync example
@@ -45,6 +47,7 @@ CampaignForge AI is a production-style Python workflow for buyers who want a cre
 - Full Python source code for ETL, model training, evaluation, API delivery, and dashboard presentation
 - GenAI brief-to-copy workflow with saved JSON outputs under `data/generated/`
 - Structured image generation folders under `data/generated/images/<campaign_id>/`
+- Exported campaign ZIP bundles under `data/generated/exports/`
 - Demo data, predictable demo outputs, and Makefile shortcuts
 - FastAPI and Streamlit interfaces for technical and non-technical walkthroughs
 - Docker, Kubernetes, and Airflow assets for packaging and operations discussions
@@ -62,6 +65,7 @@ What those commands do:
 
 - `make demo`: bootstraps the local environment if needed, then runs ETL, model training, evaluation, and the GenAI brief copilot end-to-end using the included sample inputs
 - when dependencies are installed, `make demo` also generates saved concept images in mock mode for the latest campaign brief
+- `make demo` also writes an exportable ZIP bundle for the latest generated campaign
 
 The bundled demo inputs are included under `data/raw/` and `data/demo/`.
 
@@ -78,6 +82,7 @@ That folder contains:
 - the evaluation metrics JSON
 - a `genai/` folder containing the latest saved campaign brief manifest and copy output
 - saved image concept assets and metadata for the latest generated campaign
+- an exported campaign ZIP ready for download or handoff
 - a small readme for quick inspection
 
 If you want to continue the full interactive walkthrough after the demo run:
@@ -111,8 +116,9 @@ Recommended buyer demo flow:
 2. Open `demo_outputs/latest/` and review the generated outputs
 3. Review the generated campaign brief outputs under `demo_outputs/latest/genai/`
 4. Review the saved concept images under `demo_outputs/latest/genai/images/`
-5. Launch the API with `make api`
-6. Launch the dashboard with `make dashboard`
+5. Download or inspect the exported campaign ZIP in `demo_outputs/latest/genai/`
+6. Launch the API with `make api`
+7. Launch the dashboard with `make dashboard`
 
 Useful companion docs:
 
@@ -176,6 +182,7 @@ project-root/
 | Source code | Yes |
 | Local run path | Yes |
 | One-command demo | Yes |
+| Campaign export ZIP | Yes |
 | Docker support | Yes |
 | Dashboard | Yes |
 | API | Yes |
@@ -189,6 +196,7 @@ project-root/
 - Generated outputs such as model artifacts, processed data, and local runtime files are intentionally gitignored.
 - Demo outputs are collected under `demo_outputs/latest/` for predictable review.
 - Generated GenAI artifacts are saved under `data/generated/` and copied into the demo output bundle.
+- Streamlit now includes saved campaign history plus workflow controls for regeneration, image review, and export.
 - `streamlit_app.py` is the single supported dashboard entrypoint for demos and local runs.
 - Local secrets should be supplied through `.env` and `.streamlit/secrets.toml`; start from `.env.example` where applicable.
 - Set `CAMPAIGNFORGE_LLM_PROVIDER=openai` and `OPENAI_API_KEY` only when you want live LLM output; the local default is mock mode.

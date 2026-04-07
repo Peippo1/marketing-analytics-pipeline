@@ -73,6 +73,20 @@ Saved 2 assets in data/generated/images/campaignforge-product-launch-20260407143
 - manifest.json
 ```
 
+## Campaign Export Output
+
+```text
+campaignforge-product-launch-20260407143000.zip
+```
+
+```text
+brief.json
+copy.json
+prompts.json
+manifest.json
+images/
+```
+
 ## CRM Dry-Run Message
 
 ```text

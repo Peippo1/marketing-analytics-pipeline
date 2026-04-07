@@ -8,6 +8,7 @@
 
 - A Python marketing workflow codebase covering ingestion, transformation, modeling, and presentation
 - A GenAI layer that turns campaign briefs into structured copy outputs and concept-image prompts
+- Workflow controls for regeneration, image approvals, campaign history, and export bundles
 - A FastAPI service for exposing customer-facing or internal scoring endpoints
 - A Streamlit dashboard for stakeholder-friendly reporting and CRM workflow demos
 - Airflow DAGs, Dockerfiles, and Kubernetes manifests to support deployment conversations

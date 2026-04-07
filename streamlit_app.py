@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import sys
+from typing import Optional
 
 # Add project root to sys.path for flexible imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
@@ -17,8 +18,8 @@ except ModuleNotFoundError:
     st.stop()
 
 from airflow.scripts.mysql_utils import get_customers_data
-from genai.schemas import CampaignBrief, ImageGenerationRequest
-from genai.service import CampaignBriefService, CampaignImageService
+from genai.schemas import CampaignBrief, CampaignRegenerationRequest, ImageGenerationRequest, ImageReviewRequest
+from genai.service import CampaignBriefService, CampaignExportService, CampaignImageService
 from utils.crm_clients import HubSpotClient, SalesforceClient
 
 
@@ -27,6 +28,7 @@ st.session_state["title_rendered"] = True
 st.session_state["sidebar_initialized"] = True
 campaign_brief_service = CampaignBriefService()
 campaign_image_service = CampaignImageService()
+campaign_export_service = CampaignExportService()
 
 
 def render_styles():
@@ -107,6 +109,36 @@ def build_crm_records(dataframe: pd.DataFrame):
             }
         )
     return records
+
+
+def display_campaign_details(manifest):
+    st.markdown("**Campaign summary**")
+    st.write(manifest.output.campaign_summary)
+
+    st.markdown("**Audience suggestions**")
+    for persona in manifest.output.audience_suggestions:
+        st.markdown(f"- **{persona.name}**: {persona.description}")
+
+    st.markdown("**Channel recommendations**")
+    st.write(", ".join(manifest.output.channel_recommendations))
+
+    for angle in manifest.output.angles:
+        with st.expander(angle.title, expanded=False):
+            st.write(angle.summary)
+            st.markdown(f"**Tone:** {angle.tone}")
+            st.markdown(f"**Channels:** {', '.join(angle.recommended_channels)}")
+            st.markdown("**Headlines**")
+            for headline in angle.headlines:
+                st.markdown(f"- {headline}")
+            st.markdown("**Body copy**")
+            for body_copy in angle.body_copy:
+                st.markdown(f"- {body_copy}")
+            st.markdown("**CTAs**")
+            for cta in angle.ctas:
+                st.markdown(f"- {cta}")
+            st.markdown("**Image prompts**")
+            for prompt in angle.image_prompts:
+                st.code(prompt, language="text")
 
 
 def render_sidebar():
@@ -248,37 +280,68 @@ def render_genai_panel():
     manifest = campaign_brief_service.generate_and_save(brief_model)
     st.success(f"Generated campaign output: {manifest.campaign_id} ({manifest.mode})")
 
-    st.markdown("**Campaign summary**")
-    st.write(manifest.output.campaign_summary)
-
-    st.markdown("**Audience suggestions**")
-    for persona in manifest.output.audience_suggestions:
-        st.markdown(f"- **{persona.name}**: {persona.description}")
-
-    st.markdown("**Channel recommendations**")
-    st.write(", ".join(manifest.output.channel_recommendations))
-
-    for angle in manifest.output.angles:
-        with st.expander(angle.title, expanded=False):
-            st.write(angle.summary)
-            st.markdown(f"**Tone:** {angle.tone}")
-            st.markdown(f"**Channels:** {', '.join(angle.recommended_channels)}")
-            st.markdown("**Headlines**")
-            for headline in angle.headlines:
-                st.markdown(f"- {headline}")
-            st.markdown("**Body copy**")
-            for body_copy in angle.body_copy:
-                st.markdown(f"- {body_copy}")
-            st.markdown("**CTAs**")
-            for cta in angle.ctas:
-                st.markdown(f"- {cta}")
-            st.markdown("**Image prompts**")
-            for prompt in angle.image_prompts:
-                st.code(prompt, language="text")
+    display_campaign_details(manifest)
 
     st.caption(
         f"Saved manifest to {manifest.artifacts.manifest_path} and copy output to {manifest.artifacts.copy_output_path}."
     )
+
+
+def render_campaign_history_panel() -> Optional[object]:
+    st.markdown("---")
+    st.markdown('<div class="section-label">Campaign History</div>', unsafe_allow_html=True)
+    st.subheader("Reload, regenerate, and export saved campaigns")
+    campaigns = campaign_brief_service.list_campaigns()
+    if not campaigns:
+        st.info("No saved campaigns yet.")
+        return None
+
+    campaign_options = {
+        f"{campaign.campaign_id} | {campaign.brief.campaign_name or campaign.brief.product_name or 'Untitled campaign'}": campaign
+        for campaign in campaigns
+    }
+    selected_label = st.selectbox("Saved campaign history", list(campaign_options.keys()))
+    selected_campaign = campaign_options[selected_label]
+    st.caption(f"Created: {selected_campaign.created_at}")
+    if selected_campaign.updated_at:
+        st.caption(f"Last updated: {selected_campaign.updated_at}")
+
+    action_col1, action_col2, action_col3 = st.columns(3)
+    with action_col1:
+        if st.button("Regenerate copy", key=f"regen-copy-{selected_campaign.campaign_id}"):
+            selected_campaign = campaign_brief_service.regenerate(
+                selected_campaign.campaign_id,
+                CampaignRegenerationRequest(scope="copy"),
+            )
+            st.success("Campaign copy regenerated.")
+    with action_col2:
+        if st.button("Regenerate prompts", key=f"regen-prompts-{selected_campaign.campaign_id}"):
+            selected_campaign = campaign_brief_service.regenerate(
+                selected_campaign.campaign_id,
+                CampaignRegenerationRequest(scope="prompts"),
+            )
+            st.success("Campaign prompts regenerated.")
+    with action_col3:
+        if st.button("Build export ZIP", key=f"build-export-{selected_campaign.campaign_id}"):
+            export_path = campaign_export_service.export_campaign(selected_campaign.campaign_id)
+            st.session_state[f"export-path-{selected_campaign.campaign_id}"] = str(export_path)
+            st.success(f"Built export bundle: {export_path.name}")
+
+    export_path_value = st.session_state.get(f"export-path-{selected_campaign.campaign_id}")
+    if export_path_value:
+        export_path = Path(export_path_value)
+        if export_path.exists():
+            with open(export_path, "rb") as handle:
+                st.download_button(
+                    "Download campaign ZIP",
+                    data=handle.read(),
+                    file_name=export_path.name,
+                    mime="application/zip",
+                    key=f"export-{selected_campaign.campaign_id}",
+                )
+
+    display_campaign_details(selected_campaign)
+    return selected_campaign
 
 
 def render_image_generation_panel():
@@ -342,6 +405,29 @@ def render_image_generation_panel():
             else:
                 st.warning(f"Missing asset: {asset.file_path}")
             st.code(asset.prompt, language="text")
+            st.caption(f"Status: {asset.approval_status}")
+            approval_cols = st.columns(3)
+            with approval_cols[0]:
+                if st.button("Approve", key=f"approve-{asset.image_id}"):
+                    latest_manifest = campaign_image_service.review_asset(
+                        selected_campaign.campaign_id,
+                        ImageReviewRequest(image_id=asset.image_id, approval_status="approved"),
+                    )
+                    st.rerun()
+            with approval_cols[1]:
+                if st.button("Reject", key=f"reject-{asset.image_id}"):
+                    latest_manifest = campaign_image_service.review_asset(
+                        selected_campaign.campaign_id,
+                        ImageReviewRequest(image_id=asset.image_id, approval_status="rejected"),
+                    )
+                    st.rerun()
+            with approval_cols[2]:
+                if st.button("Reset", key=f"reset-{asset.image_id}"):
+                    latest_manifest = campaign_image_service.review_asset(
+                        selected_campaign.campaign_id,
+                        ImageReviewRequest(image_id=asset.image_id, approval_status="pending"),
+                    )
+                    st.rerun()
 
 
 def main():
@@ -351,6 +437,7 @@ def main():
     render_hero(dataframe)
     render_dataset_panel(dataframe, load_error)
     render_genai_panel()
+    render_campaign_history_panel()
     render_image_generation_panel()
     render_crm_panel(dataframe, crm_provider, dry_run)
 

@@ -89,3 +89,43 @@ def test_generate_campaign_images():
 def test_get_campaign_images_returns_404_when_missing():
     response = client.get("/genai/campaigns/does-not-exist/images")
     assert response.status_code == 404
+
+
+def test_review_and_export_campaign_workflow():
+    campaign_response = client.post(
+        "/genai/brief",
+        json={
+            "campaign_name": "Workflow API Launch",
+            "product_name": "CampaignForge AI",
+            "brief": "Create a workflow-ready campaign with approval and export support.",
+        },
+    )
+    campaign_id = campaign_response.json()["campaign_id"]
+    angle_id = campaign_response.json()["output"]["angles"][0]["angle_id"]
+
+    regenerate_response = client.post(
+        f"/genai/campaigns/{campaign_id}/regenerate",
+        json={"scope": "copy"},
+    )
+    assert regenerate_response.status_code == 200
+
+    image_response = client.post(
+        "/genai/images",
+        json={
+            "campaign_id": campaign_id,
+            "angle_id": angle_id,
+            "count": 1,
+        },
+    )
+    image_id = image_response.json()["assets"][0]["image_id"]
+
+    review_response = client.post(
+        f"/genai/campaigns/{campaign_id}/images/review",
+        json={"image_id": image_id, "approval_status": "approved"},
+    )
+    assert review_response.status_code == 200
+    assert review_response.json()["assets"][0]["approval_status"] == "approved"
+
+    export_response = client.get(f"/genai/campaigns/{campaign_id}/export")
+    assert export_response.status_code == 200
+    assert export_response.headers["content-type"].startswith("application/zip")

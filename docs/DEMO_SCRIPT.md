@@ -60,6 +60,8 @@ Focus on:
 - hero/dashboard presentation
 - brief copilot output generation
 - image concept gallery for saved campaigns
+- approval/reject workflow on generated concepts
+- campaign ZIP export
 - sample customer dataset panel
 - CRM sync dry-run workflow
 

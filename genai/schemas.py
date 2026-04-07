@@ -48,11 +48,15 @@ class CampaignOutput(BaseModel):
 class SavedArtifact(BaseModel):
     manifest_path: str
     copy_output_path: str
+    brief_path: Optional[str] = None
+    prompts_path: Optional[str] = None
+    export_zip_path: Optional[str] = None
 
 
 class CampaignManifest(BaseModel):
     campaign_id: str
     created_at: str
+    updated_at: Optional[str] = None
     provider: str
     mode: str
     brief: CampaignBrief
@@ -76,14 +80,25 @@ class GeneratedImageAsset(BaseModel):
     mode: str
     file_path: str
     mime_type: str
+    approval_status: str = "pending"
 
 
 class ImageGenerationManifest(BaseModel):
     campaign_id: str
     angle_id: Optional[str] = None
     created_at: str
+    updated_at: Optional[str] = None
     provider: str
     mode: str
     style: str
     prompt: str
     assets: List[GeneratedImageAsset]
+
+
+class CampaignRegenerationRequest(BaseModel):
+    scope: str = Field(default="all", pattern="^(copy|prompts|all)$")
+
+
+class ImageReviewRequest(BaseModel):
+    image_id: str
+    approval_status: str = Field(pattern="^(approved|rejected|pending)$")

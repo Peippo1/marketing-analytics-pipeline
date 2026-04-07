@@ -10,6 +10,7 @@ This list reflects functionality that is already present in the repository.
 - Model evaluation and metrics export
 - GenAI brief copilot for campaign summaries, personas, angles, copy variants, CTA variants, and image prompts
 - Optional image concept generation with saved per-campaign assets and metadata
+- Approval and rejection states for saved generated images
 - FastAPI service with health and customer endpoints
 - Streamlit dashboard for data review and demo presentation
 
@@ -31,6 +32,7 @@ This list reflects functionality that is already present in the repository.
 - One-command local demo path
 - Mock-first local GenAI mode with optional live provider configuration
 - Streamlit gallery flow for selecting saved campaigns, prompts, and generated image concepts
+- Campaign history, regeneration controls, and export ZIP workflow
 - Setup script and Makefile shortcuts
 - Sample raw input data included in the repository
 - Buyer-facing overview and demo documentation

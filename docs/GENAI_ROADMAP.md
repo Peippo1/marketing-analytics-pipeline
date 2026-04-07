@@ -31,16 +31,22 @@ Current scope:
 - mock SVG generation by default for local demos
 - optional OpenAI-compatible live image generation when environment variables are configured
 
-Still planned:
+Now available:
 
-- regenerate and approve/reject flows
+- regenerate controls for copy and prompts
+- approve, reject, and reset states for generated image concepts
 
 ## Phase 3: Workflow Product Polish
 
-Planned next steps:
+CampaignForge AI now also includes:
 
-- exportable campaign packs
+- exportable campaign ZIP bundles
 - saved campaign history and retrieval
+- regeneration controls for copy and prompts
+- approval and rejection states for generated image concepts
+
+Still planned:
+
 - reusable industry templates
 - tone presets and brand guardrails
 - basic auth if hosted
