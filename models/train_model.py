@@ -13,6 +13,7 @@ import os
 import pandas as pd
 import joblib
 import yaml
+from contextlib import nullcontext
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -20,8 +21,6 @@ from sklearn.metrics import accuracy_score
 # Import additional evaluation metrics for comprehensive model evaluation
 from sklearn.metrics import precision_score, recall_score, f1_score
 from datetime import datetime
-import mlflow
-import mlflow.sklearn
 
 # Paths
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "model_config.yaml")
@@ -30,6 +29,19 @@ OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "outputs")
 
 # Ensure output directory exists
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+
+def get_mlflow_client():
+    """
+    Load MLflow lazily so the core training path still works when the optional
+    experiment-tracking dependency is not installed.
+    """
+    try:
+        import mlflow
+        import mlflow.sklearn
+    except ImportError:
+        return None
+    return mlflow
 
 def load_config(config_path):
     """Load model configuration from a YAML file."""
@@ -88,10 +100,17 @@ def main():
         model = get_model(model_type, model_params)
         print(f"✅ Initialized {model_type} model with params: {model_params}")
 
-        mlflow.set_tracking_uri("http://127.0.0.1:5001")
+        mlflow_client = get_mlflow_client()
+        mlflow_enabled = mlflow_client is not None
 
-        with mlflow.start_run():
-            mlflow.log_params(model_params)
+        if mlflow_enabled:
+            mlflow_client.set_tracking_uri("http://127.0.0.1:5001")
+        else:
+            print("ℹ️ MLflow is not installed; continuing without experiment tracking.")
+
+        with mlflow_client.start_run() if mlflow_enabled else nullcontext():
+            if mlflow_enabled:
+                mlflow_client.log_params(model_params)
             model.fit(X_train, y_train)
             print(f"✅ Model training completed.")
 
@@ -115,12 +134,13 @@ def main():
             print(f"Test F1 Score: {f1:.4f}")
 
             # Log evaluation metrics to MLflow for experiment tracking and comparison
-            mlflow.log_metrics({
-                "accuracy": accuracy,
-                "precision": precision,
-                "recall": recall,
-                "f1_score": f1
-            })
+            if mlflow_enabled:
+                mlflow_client.log_metrics({
+                    "accuracy": accuracy,
+                    "precision": precision,
+                    "recall": recall,
+                    "f1_score": f1
+                })
 
             # Step 7: Save the trained model
             # Create a timestamp for the model filename
@@ -151,7 +171,8 @@ def main():
 
             print(f"✅ Evaluation metrics saved successfully at: {metrics_output_path}")
 
-            mlflow.sklearn.log_model(model, artifact_path="model", input_example=input_example)
+            if mlflow_enabled:
+                mlflow_client.sklearn.log_model(model, artifact_path="model", input_example=input_example)
 
     except Exception as e:
         print(f"❌ An error occurred: {e}")

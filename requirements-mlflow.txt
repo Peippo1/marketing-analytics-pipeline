@@ -1,0 +1,4 @@
+# Optional local-only MLflow dependency.
+# Keep this out of the default CI install set until upstream ships a fix for
+# the open jobs endpoint advisory affecting current releases.
+mlflow==3.9.0rc0

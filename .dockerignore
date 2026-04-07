@@ -9,6 +9,11 @@ __pycache__/
 .venv/
 env/
 venv/
+main_env/
+
+# VCS
+.git/
+.github/
 
 # Jupyter notebooks (if not needed in image)
 *.ipynb
@@ -16,6 +21,13 @@ venv/
 # Data files
 data/raw/
 data/interim/
+airflow/data/raw/
+
+# Local artifacts
+mlruns/
+models/artifacts/
+__pycache__/
+tests/
 
 # OS + Editor junk
 .DS_Store

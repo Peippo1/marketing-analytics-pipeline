@@ -16,7 +16,25 @@ spec:
     spec:
       containers:
         - name: fastapi
-          image: tiangolo/uvicorn-gunicorn-fastapi:python3.11
+          image: fastapi-app:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
-
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            capabilities:
+              drop: ["ALL"]
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 20

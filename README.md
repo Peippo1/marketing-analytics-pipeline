@@ -123,6 +123,12 @@ Ensure the DAGs appear in the UI and are switched ON.
 # For core libraries only:
 pip install -r requirements.txt
 
+# For local development and tests:
+pip install -r requirements-dev.txt
+
+# For optional local MLflow tracking:
+pip install -r requirements-mlflow.txt
+
 # For Airflow-specific dependencies:
 pip install -r requirements-airflow.txt
 
@@ -149,11 +155,24 @@ This will train a logistic regression model based on configuration in `models/mo
 ### 3.5. Launch MLflow Tracking Server
 
 ```bash
+pip install -r requirements-mlflow.txt
 python run_mlflow_flask.py 5001
 ```
 This launches a local MLflow UI to track experiments and models at `http://localhost:5001`.
 
 Make sure to keep this terminal open while training models!
+
+Security note: the launcher now binds MLflow to `127.0.0.1` by default and sets `MLFLOW_SERVER_ENABLE_JOB_EXECUTION=false` unless you explicitly override it. This is a temporary hardening step for the open MLflow advisory covering unauthenticated `/ajax-api/3.0/jobs/*` endpoints when job execution is enabled.
+
+If you intentionally need remote access, you must opt in explicitly:
+
+```bash
+MLFLOW_HOST=0.0.0.0 MLFLOW_SERVER_ENABLE_JOB_EXECUTION=true python run_mlflow_flask.py 5001
+```
+
+Only use that override behind trusted network controls, because upstream has not published a patched MLflow release for this advisory yet.
+
+If `mlflow` is not installed, `python models/train_model.py` still works and simply skips experiment tracking.
 
 ### 4. Evaluate the Model
 
@@ -203,8 +222,10 @@ Unit tests are written using `pytest` and located in the `tests/` directory.
 From the project root, run:
 
 ```bash
-pytest tests/
+python -m pytest tests/
 ```
+
+The repository currently targets Python `3.11.11` via `.python-version`, so make sure your local interpreter matches before running the suite.
 
 ## 🐳 Docker Usage
 
@@ -236,7 +257,7 @@ python models/train_model.py
 ## 🐳 FastAPI Docker Usage
 
 To containerize the FastAPI app with the `Dockerfile.fastapi`, follow these steps:
-> 🔁 Note: FastAPI app entrypoint has been renamed to `scoring.main:app` to avoid conflicts with the Streamlit dashboard `main.py`.
+> 🔁 Note: the current FastAPI module path is `scoring.fastapi_app:app`.
 
 ### Build the FastAPI Docker Image
 
@@ -251,6 +272,8 @@ docker run -p 8000:8000 fastapi-app:latest
 ```
 
 You can access the FastAPI server at `http://localhost:8000`.
+
+API documentation routes are disabled by default in the FastAPI app. If you need Swagger locally, start it with `FASTAPI_EXPOSE_DOCS=true`.
 
 ## ☸️ Kubernetes Usage
 
@@ -315,11 +338,11 @@ This project includes a FastAPI service that exposes customer data from MySQL.
 ### ▶️ Running the API Server
 
 ```bash
-uvicorn scoring.main:app --reload
+uvicorn scoring.fastapi_app:app --reload
 ```
 
 - View API data: [http://localhost:8000/customers](http://localhost:8000/customers)
-- Swagger docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+- Swagger docs when explicitly enabled: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ### 🔌 Endpoint
 
@@ -340,7 +363,7 @@ chmod +x setup.sh
 ```
 
 This will:
-- Ensure Python 3.11.9 is available (via pyenv)
+- Ensure Python 3.11.11 is available (via pyenv)
 - Create a virtual environment
 - Install all project dependencies from `requirements.txt`
 - Warn you if the `.streamlit/secrets.toml` file is missing (needed for Google Sheets integration)
