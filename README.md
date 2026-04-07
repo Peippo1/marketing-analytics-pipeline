@@ -43,21 +43,35 @@ The fastest local setup path is:
 
 ```bash
 make setup
-python etl/marketing_etl.py
-make train
-make evaluate
-make api
-make dashboard
+make demo
 ```
 
 What those commands do:
 
 - `make setup`: creates a local environment and installs development dependencies
-- `python etl/marketing_etl.py`: prepares processed marketing data from the sample raw dataset
-- `make train`: trains a model and writes artifacts to `models/artifacts/models/`
-- `make evaluate`: evaluates the latest saved model artifact
-- `make api`: runs the FastAPI app locally
-- `make dashboard`: runs the Streamlit dashboard locally
+- `make demo`: runs ETL, model training, and evaluation end-to-end using the included sample dataset
+
+The bundled demo input is already included under `data/raw/`.
+
+After `make demo`, the most useful outputs are gathered in:
+
+```text
+demo_outputs/latest/
+```
+
+That folder contains:
+
+- the latest trained model artifact
+- the training metrics JSON
+- the evaluation metrics JSON
+- a small readme for quick inspection
+
+If you want to continue the full interactive walkthrough after the demo run:
+
+```bash
+make api
+make dashboard
+```
 
 If you prefer manual setup:
 
@@ -73,11 +87,10 @@ pip install -r requirements-streamlit.txt
 Recommended buyer demo flow:
 
 1. Run `make setup`
-2. Run `python etl/marketing_etl.py`
-3. Run `make train`
-4. Run `make evaluate`
-5. Launch the API with `make api`
-6. Launch the dashboard with `make dashboard`
+2. Run `make demo`
+3. Open `demo_outputs/latest/` and review the generated outputs
+4. Launch the API with `make api`
+5. Launch the dashboard with `make dashboard`
 
 Useful companion docs:
 
@@ -136,6 +149,7 @@ marketing-analytics-pipeline/
 | --- | --- |
 | Source code | Yes |
 | Local run path | Yes |
+| One-command demo | Yes |
 | Docker support | Yes |
 | Dashboard | Yes |
 | API | Yes |
@@ -147,5 +161,6 @@ marketing-analytics-pipeline/
 
 - The repository currently targets Python `3.11.11` via `.python-version`.
 - Generated outputs such as model artifacts, processed data, and local runtime files are intentionally gitignored.
+- Demo outputs are collected under `demo_outputs/latest/` for predictable review.
 - Local secrets should be supplied through `.env` and `.streamlit/secrets.toml`; start from `.env.example` where applicable.
 - The public GitHub repository description should match this README positioning for consistency.

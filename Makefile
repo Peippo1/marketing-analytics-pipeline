@@ -1,9 +1,12 @@
 PYTHON ?= python
 
-.PHONY: setup test train evaluate api dashboard airflow
+.PHONY: setup demo test train evaluate api dashboard run-dashboard airflow
 
 setup:
 	./setup.sh
+
+demo:
+	./run-demo.sh
 
 test:
 	$(PYTHON) -m pytest tests/
@@ -18,6 +21,9 @@ api:
 	uvicorn scoring.fastapi_app:app --reload
 
 dashboard:
+	streamlit run streamlit_app.py
+
+run-dashboard:
 	streamlit run streamlit_app.py
 
 airflow:
