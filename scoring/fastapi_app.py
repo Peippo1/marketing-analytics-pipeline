@@ -20,7 +20,7 @@ def _docs_enabled() -> bool:
 
 
 app = FastAPI(
-    title="Marketing Scoring API",
+    title="CampaignForge AI API",
     docs_url="/docs" if _docs_enabled() else None,
     redoc_url="/redoc" if _docs_enabled() else None,
     openapi_url="/openapi.json" if _docs_enabled() else None,
@@ -36,7 +36,7 @@ def _init_tracing() -> Optional[str]:
         return None
 
     endpoint = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318/v1/traces")
-    service_name = os.getenv("OTEL_SERVICE_NAME", "marketing-fastapi")
+    service_name = os.getenv("OTEL_SERVICE_NAME", "campaignforge-ai-fastapi")
 
     resource = Resource.create({"service.name": service_name})
     provider = TracerProvider(resource=resource)

@@ -1,12 +1,12 @@
-# Project Overview
+# CampaignForge AI Overview
 
 ## Summary
 
-`marketing-analytics-pipeline` is a portfolio-ready analytics application that demonstrates an end-to-end workflow for marketing data operations. It combines ETL, feature engineering, model training, evaluation, API delivery, dashboard presentation, and workflow orchestration in one repository.
+`CampaignForge AI` is a portfolio-ready marketing intelligence application that demonstrates an end-to-end workflow for campaign and customer data operations. It combines ETL, feature engineering, model training, evaluation, API delivery, dashboard presentation, and workflow orchestration in one repository.
 
 ## What A Buyer Gets
 
-- A Python analytics codebase covering ingestion, transformation, modeling, and presentation
+- A Python marketing workflow codebase covering ingestion, transformation, modeling, and presentation
 - A FastAPI service for exposing customer-facing or internal scoring endpoints
 - A Streamlit dashboard for stakeholder-friendly reporting and CRM workflow demos
 - Airflow DAGs, Dockerfiles, and Kubernetes manifests to support deployment conversations
@@ -14,7 +14,7 @@
 
 ## Core Capabilities
 
-- ETL pipeline for cleaning and enriching marketing datasets
+- ETL pipeline for cleaning and enriching campaign and customer datasets
 - Scikit-learn training flow for lead-scoring style classification
 - Model evaluation and artifact generation
 - CRM export examples for Salesforce and HubSpot
@@ -25,7 +25,7 @@
 
 This repository is best positioned as:
 
-- a portfolio-quality analytics engineering sample
+- a portfolio-quality campaign intelligence engineering sample
 - a starter codebase for internal marketing analytics tools
 - a demo project for buyers wanting Python, FastAPI, Streamlit, and Airflow in one package
 
@@ -34,8 +34,8 @@ It is not positioned as a finished SaaS product. Its value is in demonstrating a
 ## Recommended Demo Story
 
 1. Show the project structure and explain the end-to-end architecture.
-2. Run ETL and model training locally with `make train`.
-3. Run model evaluation with `make evaluate`.
+2. Run the one-command demo with `make demo`.
+3. Review `demo_outputs/latest/` to show the saved outputs.
 4. Launch the API with `make api` and show `/health` plus `/customers`.
 5. Launch the dashboard with `make dashboard` and walk through scoring and CRM export flows.
 6. Highlight Docker, Kubernetes, and Airflow assets as operational maturity indicators.

@@ -2,7 +2,7 @@
 
 # 🚀 Kubernetes Deployment Guide
 
-This file documents how to deploy the Marketing Analytics Pipeline using Kubernetes.
+This file documents how to deploy CampaignForge AI using Kubernetes.
 
 ---
 
@@ -14,10 +14,6 @@ The following components are containerized and deployed:
 - **Streamlit**: Hosts the interactive dashboard
 - **MySQL**: Hosted externally (e.g., Railway)
 - **Airflow**: Optional orchestration layer
-- **MLflow**: Optional for model tracking
-
----
-
 ## 🐳 Docker Images
 
 Build local Docker images before deployment:

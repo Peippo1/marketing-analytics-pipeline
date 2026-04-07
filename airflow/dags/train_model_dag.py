@@ -1,7 +1,7 @@
 """
 train_model_dag.py
 
-This DAG schedules and runs the model training pipeline for the marketing analytics project.
+This DAG schedules and runs the model training pipeline for CampaignForge AI.
 It executes the 'train_model.py' script located in the 'models' folder using a BashOperator.
 The DAG is configured to run daily and retries once if a failure occurs.
 

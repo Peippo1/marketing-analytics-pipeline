@@ -5,7 +5,7 @@ set -euo pipefail
 PYTHON_VERSION="3.11.11"
 VENV_DIR="${VENV_DIR:-.venv}"
 
-echo "Setting up marketing-analytics-pipeline..."
+echo "Setting up CampaignForge AI..."
 
 if command -v pyenv >/dev/null 2>&1; then
   if ! pyenv versions --bare | grep -qx "${PYTHON_VERSION}"; then

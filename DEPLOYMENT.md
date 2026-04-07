@@ -1,4 +1,4 @@
-# Deployment Guide
+# CampaignForge AI Deployment Guide
 
 ## Local Setup
 
@@ -59,25 +59,25 @@ make dashboard
 Build the Streamlit image:
 
 ```bash
-docker build -t marketing-analytics-app .
+docker build -t campaignforge-ai-dashboard .
 ```
 
 Run the Streamlit container:
 
 ```bash
-docker run -p 8501:8501 marketing-analytics-app
+docker run -p 8501:8501 campaignforge-ai-dashboard
 ```
 
 Build the FastAPI image:
 
 ```bash
-docker build -t fastapi-app:latest -f Dockerfile.fastapi .
+docker build -t campaignforge-ai-api:latest -f Dockerfile.fastapi .
 ```
 
 Run the FastAPI container:
 
 ```bash
-docker run -p 8000:8000 fastapi-app:latest
+docker run -p 8000:8000 campaignforge-ai-api:latest
 ```
 
 ## Airflow

@@ -1,6 +1,6 @@
 # Airflow ETL Scheduler
 
-This module sets up Apache Airflow to orchestrate scheduled ETL tasks for the Marketing Analytics Pipeline. It includes a sample DAG, a Docker Compose setup, and local configuration guidelines.
+This module sets up Apache Airflow to orchestrate scheduled ETL tasks for CampaignForge AI. It includes a sample DAG, a Docker Compose setup, and local configuration guidelines.
 
 ## Structure
 

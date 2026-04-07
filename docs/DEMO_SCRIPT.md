@@ -10,7 +10,7 @@ Use this script for a short buyer-facing walkthrough of the repository.
 
 Say:
 
-`marketing-analytics-pipeline` is a portfolio-ready analytics demo that combines ETL, model training, evaluation, API delivery, dashboard presentation, and orchestration assets in one repository.
+`CampaignForge AI` is a portfolio-ready campaign intelligence demo that combines ETL, model training, evaluation, API delivery, dashboard presentation, and orchestration assets in one repository.
 
 ### 2. Show the repository structure
 
@@ -26,10 +26,7 @@ Highlight:
 ### 3. Run the core commands
 
 ```bash
-make setup
-python etl/marketing_etl.py
-make train
-make evaluate
+make demo
 ```
 
 Call out:
@@ -37,6 +34,7 @@ Call out:
 - reproducible setup
 - model artifact generation
 - evaluation output saved automatically
+- demo outputs collected under `demo_outputs/latest/`
 
 ### 4. Show the API layer
 
@@ -83,5 +81,5 @@ Mention:
 ## Suggested Buyer Framing
 
 - good fit for portfolio buyers, agencies, or internal analytics teams
-- easy to adapt into a starter internal analytics product
+- easy to adapt into a starter internal campaign intelligence product
 - useful as a showcase of full-stack Python analytics engineering
