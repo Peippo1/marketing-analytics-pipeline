@@ -7,11 +7,11 @@ OUTPUT_DIR="${ROOT_DIR}/demo_outputs/latest"
 PYTHON_BIN="${PYTHON_BIN:-}"
 
 if [[ -z "${PYTHON_BIN}" ]]; then
-  if [[ -x "${ROOT_DIR}/.venv/bin/python" ]]; then
-    PYTHON_BIN="${ROOT_DIR}/.venv/bin/python"
-  else
-    PYTHON_BIN="python"
+  if [[ ! -x "${ROOT_DIR}/.venv/bin/python" ]]; then
+    echo "No local .venv found. Running setup first..."
+    "${ROOT_DIR}/setup.sh"
   fi
+  PYTHON_BIN="${ROOT_DIR}/.venv/bin/python"
 fi
 
 echo "Running marketing analytics demo..."

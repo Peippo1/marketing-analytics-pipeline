@@ -24,12 +24,12 @@ pip install -r requirements-streamlit.txt
 For a quick under-5-minute demo:
 
 ```bash
-make setup
 make demo
 ```
 
 This runs:
 
+- local setup automatically if `.venv` is missing
 - ETL
 - model training
 - model evaluation
