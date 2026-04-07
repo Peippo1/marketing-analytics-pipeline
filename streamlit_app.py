@@ -16,12 +16,15 @@ except ModuleNotFoundError:
     st.stop()
 
 from airflow.scripts.mysql_utils import get_customers_data
+from genai.schemas import CampaignBrief
+from genai.service import CampaignBriefService
 from utils.crm_clients import HubSpotClient, SalesforceClient
 
 
 st.set_page_config(page_title="CampaignForge AI Dashboard", layout="wide")
 st.session_state["title_rendered"] = True
 st.session_state["sidebar_initialized"] = True
+campaign_brief_service = CampaignBriefService()
 
 
 def render_styles():
@@ -203,12 +206,86 @@ def render_crm_panel(dataframe: pd.DataFrame | None, crm_provider: str, dry_run:
             st.error(f"CRM push failed: {exc}")
 
 
+def render_genai_panel():
+    st.markdown("---")
+    st.markdown('<div class="section-label">Brief Copilot</div>', unsafe_allow_html=True)
+    st.subheader("Generate campaign angles, copy variants, and image prompts from a brief")
+    st.caption("This feature runs in mock mode by default for local demos. Set provider environment variables later for live LLM usage.")
+
+    with st.form("genai-brief-form"):
+        campaign_name = st.text_input("Campaign name", value="CampaignForge Product Launch")
+        product_name = st.text_input("Product name", value="CampaignForge AI")
+        target_market = st.text_input("Target market", value="Agencies, freelancers, and startup marketing teams")
+        brief = st.text_area(
+            "Campaign brief",
+            value=(
+                "Launch CampaignForge AI to teams that want a faster way to turn campaign ideas into "
+                "structured messaging, reviewable outputs, and reusable campaign assets."
+            ),
+            height=160,
+        )
+        channels = st.multiselect("Channels", ["LinkedIn", "Instagram", "Meta Ads", "Email", "Landing Page"], default=["LinkedIn", "Email", "Landing Page"])
+        tones = st.multiselect("Tone options", ["Confident", "Practical", "Supportive", "Forward-Looking", "Direct"], default=["Confident", "Practical", "Forward-Looking"])
+        brand_keywords = st.text_input("Brand keywords", value="modern, clean, structured, commercial")
+        submitted = st.form_submit_button("Generate campaign brief outputs", type="primary")
+
+    if not submitted:
+        return
+
+    brief_model = CampaignBrief(
+        campaign_name=campaign_name,
+        product_name=product_name,
+        target_market=target_market,
+        brief=brief,
+        goals=["generate qualified interest", "show a polished end-to-end workflow"],
+        channels=channels,
+        tones=tones,
+        brand_keywords=[keyword.strip() for keyword in brand_keywords.split(",") if keyword.strip()],
+        compliance_notes=["avoid hard performance promises and misleading before-and-after language"],
+    )
+    manifest = campaign_brief_service.generate_and_save(brief_model)
+    st.success(f"Generated campaign output: {manifest.campaign_id} ({manifest.mode})")
+
+    st.markdown("**Campaign summary**")
+    st.write(manifest.output.campaign_summary)
+
+    st.markdown("**Audience suggestions**")
+    for persona in manifest.output.audience_suggestions:
+        st.markdown(f"- **{persona.name}**: {persona.description}")
+
+    st.markdown("**Channel recommendations**")
+    st.write(", ".join(manifest.output.channel_recommendations))
+
+    for angle in manifest.output.angles:
+        with st.expander(angle.title, expanded=False):
+            st.write(angle.summary)
+            st.markdown(f"**Tone:** {angle.tone}")
+            st.markdown(f"**Channels:** {', '.join(angle.recommended_channels)}")
+            st.markdown("**Headlines**")
+            for headline in angle.headlines:
+                st.markdown(f"- {headline}")
+            st.markdown("**Body copy**")
+            for body_copy in angle.body_copy:
+                st.markdown(f"- {body_copy}")
+            st.markdown("**CTAs**")
+            for cta in angle.ctas:
+                st.markdown(f"- {cta}")
+            st.markdown("**Image prompts**")
+            for prompt in angle.image_prompts:
+                st.code(prompt, language="text")
+
+    st.caption(
+        f"Saved manifest to {manifest.artifacts.manifest_path} and copy output to {manifest.artifacts.copy_output_path}."
+    )
+
+
 def main():
     render_styles()
     crm_provider, dry_run = render_sidebar()
     dataframe, load_error = load_customer_data()
     render_hero(dataframe)
     render_dataset_panel(dataframe, load_error)
+    render_genai_panel()
     render_crm_panel(dataframe, crm_provider, dry_run)
 
 

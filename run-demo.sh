@@ -24,14 +24,20 @@ pushd "${ROOT_DIR}" >/dev/null
 "${PYTHON_BIN}" etl/marketing_etl.py
 "${PYTHON_BIN}" models/train_model.py
 "${PYTHON_BIN}" models/evaluate_model.py
+"${PYTHON_BIN}" -m genai.demo --input data/demo/campaign_brief.json
 
 LATEST_MODEL="$(ls -1t models/artifacts/models/trained_model_*.pkl | head -n 1)"
 LATEST_TRAIN_METRICS="$(ls -1t models/artifacts/models/trained_model_*_metrics.json | head -n 1)"
 LATEST_EVAL_METRICS="$(ls -1t models/outputs/*_evaluation.json | head -n 1)"
+LATEST_GENAI_MANIFEST="$(ls -1t data/generated/manifests/*.json | head -n 1)"
+LATEST_GENAI_COPY="$(ls -1t data/generated/copy/*.json | head -n 1)"
 
 cp "${LATEST_MODEL}" "${OUTPUT_DIR}/"
 cp "${LATEST_TRAIN_METRICS}" "${OUTPUT_DIR}/"
 cp "${LATEST_EVAL_METRICS}" "${OUTPUT_DIR}/"
+mkdir -p "${OUTPUT_DIR}/genai"
+cp "${LATEST_GENAI_MANIFEST}" "${OUTPUT_DIR}/genai/"
+cp "${LATEST_GENAI_COPY}" "${OUTPUT_DIR}/genai/"
 
 cat > "${OUTPUT_DIR}/README.txt" <<EOF
 CampaignForge AI Demo Output
@@ -42,11 +48,14 @@ Included files:
 - $(basename "${LATEST_MODEL}")                latest trained model artifact
 - $(basename "${LATEST_TRAIN_METRICS}")        training metrics saved during model training
 - $(basename "${LATEST_EVAL_METRICS}")         evaluation metrics for the latest model
+- genai/$(basename "${LATEST_GENAI_MANIFEST}") saved campaign brief manifest
+- genai/$(basename "${LATEST_GENAI_COPY}")     saved campaign brief copy output
 
 Recommended next steps:
 1. Inspect the JSON metrics files in this folder.
-2. Run 'make api' to launch the FastAPI demo.
-3. Run 'make dashboard' to launch the Streamlit demo.
+2. Inspect the generated campaign brief outputs in the genai/ folder.
+3. Run 'make api' to launch the FastAPI demo.
+4. Run 'make dashboard' to launch the Streamlit demo.
 EOF
 
 popd >/dev/null

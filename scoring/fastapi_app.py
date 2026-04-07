@@ -3,7 +3,7 @@ from typing import List, Optional
 import os
 
 import pandas as pd
-from fastapi import FastAPI, Query, Response
+from fastapi import FastAPI, HTTPException, Query, Response
 
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
@@ -12,7 +12,11 @@ from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
+from genai.schemas import CampaignBrief, CampaignManifest
+from genai.service import CampaignBriefService
+
 DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "processed" / "clean_marketing.csv"
+campaign_brief_service = CampaignBriefService()
 
 
 def _docs_enabled() -> bool:
@@ -86,3 +90,17 @@ def list_customers(limit: int = Query(default=10, ge=1, le=100)) -> List[dict]:
             ]
         )
     return rows.to_dict(orient="records")
+
+
+@app.post("/genai/brief", response_model=CampaignManifest)
+def generate_campaign_brief(brief: CampaignBrief) -> CampaignManifest:
+    """Generate and persist a structured campaign brief output."""
+    return campaign_brief_service.generate_and_save(brief)
+
+
+@app.get("/genai/campaigns/{campaign_id}", response_model=CampaignManifest)
+def get_campaign_output(campaign_id: str) -> CampaignManifest:
+    manifest = campaign_brief_service.load_campaign(campaign_id)
+    if manifest is None:
+        raise HTTPException(status_code=404, detail="Campaign output not found")
+    return manifest

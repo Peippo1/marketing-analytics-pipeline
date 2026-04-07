@@ -33,12 +33,15 @@ This runs:
 - ETL
 - model training
 - model evaluation
+- GenAI brief generation from the bundled sample brief
 
 Demo outputs are collected under:
 
 ```text
 demo_outputs/latest/
 ```
+
+This bundle includes the latest model outputs plus the saved GenAI brief artifacts under `demo_outputs/latest/genai/`.
 
 ## Local App Runs
 
@@ -95,6 +98,9 @@ docker compose up --build
 - Streamlit secrets should be provided through `.streamlit/secrets.toml`
 - Start from `.env.example` for environment variables where applicable
 - CRM and Google Sheets integrations require valid credentials before live use
+- GenAI runs in `mock` mode by default
+- Set `CAMPAIGNFORGE_LLM_PROVIDER=openai` and `OPENAI_API_KEY` to enable live LLM generation
+- `OPENAI_BASE_URL` and `OPENAI_MODEL` are optional overrides for compatible providers
 
 ## Intended Deployment Use
 

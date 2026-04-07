@@ -8,6 +8,7 @@ This list reflects functionality that is already present in the repository.
 - Feature engineering and cleaned dataset generation
 - Scikit-learn model training workflow
 - Model evaluation and metrics export
+- GenAI brief copilot for campaign summaries, personas, angles, copy variants, CTA variants, and image prompts
 - FastAPI service with health and customer endpoints
 - Streamlit dashboard for data review and demo presentation
 
@@ -27,6 +28,7 @@ This list reflects functionality that is already present in the repository.
 ## Demo / Buyer Support
 
 - One-command local demo path
+- Mock-first local GenAI mode with optional live provider configuration
 - Setup script and Makefile shortcuts
 - Sample raw input data included in the repository
 - Buyer-facing overview and demo documentation

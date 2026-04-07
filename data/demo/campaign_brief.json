@@ -1,0 +1,33 @@
+{
+  "campaign_name": "CampaignForge Product Launch",
+  "product_name": "CampaignForge AI",
+  "brief": "Launch CampaignForge AI to agencies, freelancers, and startup marketing teams that want a faster way to turn campaign ideas into structured messaging, reviewable outputs, and reusable campaign assets.",
+  "target_market": "agencies, freelancers, and startup marketing teams",
+  "goals": [
+    "generate qualified interest",
+    "show a polished end-to-end workflow"
+  ],
+  "channels": [
+    "LinkedIn",
+    "Email",
+    "Landing Page"
+  ],
+  "tones": [
+    "Confident",
+    "Practical",
+    "Forward-Looking"
+  ],
+  "brand_keywords": [
+    "modern",
+    "clean",
+    "structured",
+    "commercial"
+  ],
+  "banned_words": [
+    "guaranteed",
+    "instant"
+  ],
+  "compliance_notes": [
+    "avoid hard performance promises and misleading before-and-after language"
+  ]
+}

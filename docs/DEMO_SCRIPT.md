@@ -35,6 +35,7 @@ Call out:
 - model artifact generation
 - evaluation output saved automatically
 - demo outputs collected under `demo_outputs/latest/`
+- generated campaign brief outputs saved under `demo_outputs/latest/genai/`
 
 ### 4. Show the API layer
 
@@ -46,6 +47,7 @@ Then demonstrate:
 
 - `GET /health`
 - `GET /customers`
+- `POST /genai/brief`
 
 ### 5. Show the dashboard
 
@@ -56,6 +58,7 @@ make dashboard
 Focus on:
 
 - hero/dashboard presentation
+- brief copilot output generation
 - sample customer dataset panel
 - CRM sync dry-run workflow
 
