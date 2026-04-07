@@ -42,14 +42,12 @@ This repository is positioned as a reusable code asset for buyers who want a cre
 The fastest local setup path is:
 
 ```bash
-make setup
 make demo
 ```
 
 What those commands do:
 
-- `make setup`: creates a local environment and installs development dependencies
-- `make demo`: runs ETL, model training, and evaluation end-to-end using the included sample dataset
+- `make demo`: bootstraps the local environment if needed, then runs ETL, model training, and evaluation end-to-end using the included sample dataset
 
 The bundled demo input is already included under `data/raw/`.
 
@@ -73,6 +71,13 @@ make api
 make dashboard
 ```
 
+If you prefer to prepare the environment explicitly first, you can still run:
+
+```bash
+make setup
+make demo
+```
+
 If you prefer manual setup:
 
 ```bash
@@ -86,11 +91,10 @@ pip install -r requirements-streamlit.txt
 
 Recommended buyer demo flow:
 
-1. Run `make setup`
-2. Run `make demo`
-3. Open `demo_outputs/latest/` and review the generated outputs
-4. Launch the API with `make api`
-5. Launch the dashboard with `make dashboard`
+1. Run `make demo`
+2. Open `demo_outputs/latest/` and review the generated outputs
+3. Launch the API with `make api`
+4. Launch the dashboard with `make dashboard`
 
 Useful companion docs:
 
