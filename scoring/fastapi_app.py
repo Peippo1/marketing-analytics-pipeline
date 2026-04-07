@@ -3,7 +3,7 @@ from typing import List, Optional
 import os
 
 import pandas as pd
-from fastapi import FastAPI
+from fastapi import FastAPI, Query, Response
 
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
@@ -14,7 +14,17 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "processed" / "clean_marketing.csv"
 
-app = FastAPI(title="Marketing Scoring API")
+
+def _docs_enabled() -> bool:
+    return os.getenv("FASTAPI_EXPOSE_DOCS", "").lower() in {"1", "true", "yes"}
+
+
+app = FastAPI(
+    title="Marketing Scoring API",
+    docs_url="/docs" if _docs_enabled() else None,
+    redoc_url="/redoc" if _docs_enabled() else None,
+    openapi_url="/openapi.json" if _docs_enabled() else None,
+)
 
 
 def _init_tracing() -> Optional[str]:
@@ -41,14 +51,25 @@ def _init_tracing() -> Optional[str]:
 _init_tracing()
 
 
+@app.middleware("http")
+async def add_security_headers(request, call_next):
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-store"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    return response
+
+
 @app.get("/health")
-def health_check() -> dict:
+def health_check(response: Response) -> dict:
     """Simple health endpoint for liveness probes."""
+    response.headers["Cache-Control"] = "no-store"
     return {"status": "ok"}
 
 
 @app.get("/customers")
-def list_customers(limit: int = 10) -> List[dict]:
+def list_customers(limit: int = Query(default=10, ge=1, le=100)) -> List[dict]:
     """
     Return a lightweight customer listing for UI smoke tests.
     Falls back to a few synthetic rows if the local data file is missing.

@@ -11,8 +11,9 @@ st.set_page_config(page_title="Marketing Dashboard", layout="wide")
 st.session_state["title_rendered"] = True
 st.sidebar.title("Navigation")
 
-st.write("🧪 Python executable:", sys.executable)
-st.write("🧪 Python path:", sys.path)
+if os.getenv("STREAMLIT_DEBUG", "").lower() in {"1", "true", "yes"}:
+    st.write("Python executable:", sys.executable)
+    st.write("Python path:", sys.path)
 
 # Try importing pymysql and handle the error if it's missing
 try:

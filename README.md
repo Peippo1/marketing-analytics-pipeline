@@ -267,6 +267,8 @@ docker run -p 8000:8000 fastapi-app:latest
 
 You can access the FastAPI server at `http://localhost:8000`.
 
+API documentation routes are disabled by default in the FastAPI app. If you need Swagger locally, start it with `FASTAPI_EXPOSE_DOCS=true`.
+
 ## ☸️ Kubernetes Usage
 
 This project now supports Kubernetes deployment to manage the services for Streamlit and FastAPI.
@@ -334,7 +336,7 @@ uvicorn scoring.fastapi_app:app --reload
 ```
 
 - View API data: [http://localhost:8000/customers](http://localhost:8000/customers)
-- Swagger docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+- Swagger docs when explicitly enabled: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ### 🔌 Endpoint
 
