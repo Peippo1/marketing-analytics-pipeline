@@ -20,12 +20,16 @@ Use this checklist before publishing or selling the repository as a downloadable
 - `make setup` works on a clean machine
 - `make demo` completes successfully
 - `demo_outputs/latest/` contains expected files
+- `demo_outputs/latest/genai/` contains brief, copy, prompts, and export artifacts
+- `demo_outputs/latest/genai/images/` contains generated concept assets when image generation runs
 - `make api` launches successfully
 - `make dashboard` launches successfully
 
 ## Documentation
 
 - README is up to date
+- `QA_CHECKLIST.md` is current
+- `RELEASE_NOTES.md` is current
 - `PRODUCT.md` clearly explains buyer-facing value
 - `DEPLOYMENT.md` reflects the current local and Docker setup
 - `PROJECT_OVERVIEW.md` is aligned with the README
@@ -38,6 +42,7 @@ Use this checklist before publishing or selling the repository as a downloadable
 - API screenshot or sample response is ready
 - Model training/evaluation output screenshot is ready
 - GenAI brief and image concept screenshots are ready
+- workflow review/export screenshot or GIF moment is ready
 - `docs/assets/` contains the final screenshots or a clear asset plan
 - Screenshots do not expose usernames, tokens, or local machine paths
 

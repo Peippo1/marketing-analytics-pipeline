@@ -6,28 +6,30 @@ Use this checklist when preparing a marketplace listing, portfolio post, or buye
 
 - Repository landing page with project title and badges visible
 - README top section showing the value proposition
-- Architecture diagram section
+- README workflow section showing `Brief -> Strategy -> Copy -> Image Concepts -> Review -> Export`
 
 ## Terminal / Execution
 
-- `make setup` success output
-- ETL run output
-- `make train` output with successful completion
-- `make evaluate` output with metrics visible
+- `make demo` success output
+- `demo_outputs/latest/` folder view
+- generated export ZIP visible in `demo_outputs/latest/genai/`
 
 ## API
 
 - FastAPI `/health` response
 - FastAPI `/customers` response
+- FastAPI `/genai/brief` response
+- FastAPI export endpoint returning a ZIP file
 - Optional `/docs` page if enabled locally for demo purposes
 
 ## Dashboard
 
 - Full dashboard landing screen with hero section visible
-- Metric cards row
-- Dataset preview section
+- Brief Copilot output section with angles visible
+- Campaign History panel with regeneration and export controls
+- Image Concepts section with generated mock visuals visible
+- Approved or rejected image status visible
 - CRM sync panel in dry-run mode
-- Dry-run result message after action
 
 ## Ops / Delivery
 
@@ -41,3 +43,20 @@ Use this checklist when preparing a marketplace listing, portfolio post, or buye
 - Keep terminal output clean by using a fresh shell session
 - Use dry-run modes for integrations so screens remain safe to share
 - Avoid including local usernames, tokens, or machine-specific paths
+
+## Best Screenshot Moments
+
+1. README hero plus workflow section
+2. `make demo` finished successfully with the output folder visible
+3. Brief Copilot results with angles and copy variants open
+4. Image Concepts gallery with at least one approved asset
+5. Campaign History panel with the export control visible
+6. FastAPI JSON response for `/genai/brief` or `/health`
+
+## GIF Recommendation
+
+- Capture one short 20-30 second GIF showing:
+  - selecting a saved campaign
+  - generating image concepts
+  - approving one concept
+  - building and downloading the export ZIP
