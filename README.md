@@ -251,7 +251,7 @@ python models/train_model.py
 ## 🐳 FastAPI Docker Usage
 
 To containerize the FastAPI app with the `Dockerfile.fastapi`, follow these steps:
-> 🔁 Note: FastAPI app entrypoint has been renamed to `scoring.main:app` to avoid conflicts with the Streamlit dashboard `main.py`.
+> 🔁 Note: the current FastAPI module path is `scoring.fastapi_app:app`.
 
 ### Build the FastAPI Docker Image
 
@@ -330,7 +330,7 @@ This project includes a FastAPI service that exposes customer data from MySQL.
 ### ▶️ Running the API Server
 
 ```bash
-uvicorn scoring.main:app --reload
+uvicorn scoring.fastapi_app:app --reload
 ```
 
 - View API data: [http://localhost:8000/customers](http://localhost:8000/customers)
@@ -355,7 +355,7 @@ chmod +x setup.sh
 ```
 
 This will:
-- Ensure Python 3.11.9 is available (via pyenv)
+- Ensure Python 3.11.11 is available (via pyenv)
 - Create a virtual environment
 - Install all project dependencies from `requirements.txt`
 - Warn you if the `.streamlit/secrets.toml` file is missing (needed for Google Sheets integration)
