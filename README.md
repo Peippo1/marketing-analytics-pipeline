@@ -140,6 +140,12 @@ pip install -r requirements-airflow.txt
 pip install -r requirements-streamlit.txt
 ```
 
+Or use the helper target:
+
+```bash
+make setup
+```
+
 ### 2. Run the ETL Process
 
 ```bash
@@ -205,6 +211,12 @@ From the project root, run:
 python -m pytest tests/
 ```
 
+Or:
+
+```bash
+make test
+```
+
 The repository currently targets Python `3.11.11` via `.python-version`, so make sure your local interpreter matches before running the suite.
 
 ## 🐳 Docker Usage
@@ -233,6 +245,8 @@ You can trigger model training manually using:
 ```bash
 python models/train_model.py
 ```
+
+Shortcut commands are also available via `make train`, `make evaluate`, `make api`, and `make dashboard`.
 
 ## 🐳 FastAPI Docker Usage
 
