@@ -102,6 +102,8 @@ Useful companion docs:
 - `docs/DEMO_SCRIPT.md` for a guided walkthrough
 - `docs/SCREENSHOT_CHECKLIST.md` for listing or portfolio prep
 - `docs/SAMPLE_OUTPUTS.md` for reusable output snippets
+- `docs/LISTING_COPY.md` for repo description and marketplace copy
+- `docs/ASSET_PREP.md` for screenshots, GIFs, and listing asset planning
 
 ## Project Structure
 
@@ -168,3 +170,4 @@ marketing-analytics-pipeline/
 - `streamlit_app.py` is the single supported dashboard entrypoint for demos and local runs.
 - Local secrets should be supplied through `.env` and `.streamlit/secrets.toml`; start from `.env.example` where applicable.
 - The public GitHub repository description should match this README positioning for consistency.
+- Sales assets can be organized under `docs/assets/` without changing the source layout.

@@ -37,6 +37,7 @@ Use this checklist before publishing or selling the repository as a downloadable
 - At least one strong dashboard screenshot is captured
 - API screenshot or sample response is ready
 - Model training/evaluation output screenshot is ready
+- `docs/assets/` contains the final screenshots or a clear asset plan
 - Screenshots do not expose usernames, tokens, or local machine paths
 
 ## Trust / Quality
@@ -51,4 +52,5 @@ Use this checklist before publishing or selling the repository as a downloadable
 - License is present
 - Downloaded archive opens with clean top-level structure
 - Key docs are visible at the top level
+- Listing copy and GitHub About text are aligned
 - Branch history is trimmed and merged before release

@@ -53,3 +53,12 @@ It is not positioned as a finished SaaS product or managed hosted service.
 - reproducible demo path
 - explicit deployment assets
 - test and CI coverage already present
+
+## Sales Support Material
+
+- `PROJECT_OVERVIEW.md` for a concise buyer summary
+- `FEATURES.md` for a truthful feature list
+- `DEPLOYMENT.md` for local and Docker setup
+- `RELEASE_CHECKLIST.md` for pre-sale quality control
+- `docs/LISTING_COPY.md` for listing text and GitHub About copy
+- `docs/ASSET_PREP.md` for screenshot and GIF planning
