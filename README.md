@@ -1,9 +1,55 @@
-# 📊 Marketing Analytics Pipeline
-
-
 [![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Dependency graph](https://img.shields.io/github/dependencies-analyzability/Peippo1/marketing-analytics-pipeline?label=dependency%20graph)](https://github.com/Peippo1/marketing-analytics-pipeline/network/dependencies)
+
+# 📊 Marketing Analytics Pipeline
+A sale-ready analytics engineering demo that packages ETL, model training, evaluation, API delivery, dashboard UX, and orchestration assets into one presentable repository.
+
+> 📁 Note: Dependencies are split for cleaner environments:
+> - `requirements.txt` → shared, security-reviewed pins used by CI
+> - `requirements-fastapi.txt` / `requirements-streamlit.txt` → service-specific
+> - `requirements-dev.txt` → local test tooling
+> - `airflow/requirements.txt` → extras used inside the Airflow image
+
+This project is designed to be easy to review, demo, and extend. It showcases a full marketing analytics workflow from raw data processing through model outputs and stakeholder-facing presentation layers.
+
+## ✨ At a Glance
+
+- End-to-end analytics demo: ETL, training, evaluation, API, dashboard, orchestration
+- Presentable deployment story with Docker, Kubernetes, and Airflow assets
+- Integration examples for CRM push and Google Sheets sync
+- GitHub Actions and tests for baseline engineering confidence
+
+## 📦 What's Included
+
+- Source-first repository with generated outputs removed from version control
+- Setup automation via `setup.sh` and `Makefile`
+- Buyer-facing notes in `PROJECT_OVERVIEW.md`
+- A simple walkthrough in `docs/DEMO_SCRIPT.md`
+- Screenshot guidance in `docs/SCREENSHOT_CHECKLIST.md`
+- Reusable output snippets in `docs/SAMPLE_OUTPUTS.md`
+
+## 🧭 Demo Walkthrough
+
+1. Set up the environment with `make setup`
+2. Run the ETL flow with `python etl/marketing_etl.py`
+3. Train a model with `make train`
+4. Evaluate the latest artifact with `make evaluate`
+5. Launch the API with `make api`
+6. Launch the dashboard with `make dashboard`
+7. Reference `PROJECT_OVERVIEW.md` for a buyer-facing summary
+8. Use `docs/DEMO_SCRIPT.md` as a guided sales/demo outline
+
+## 📸 Demo Positioning
+
+Recommended screenshots or recording moments for a listing:
+
+- Architecture and repository structure
+- Successful model training output
+- Evaluation metrics output
+- FastAPI `/health` and `/customers` endpoints
+- Streamlit dashboard landing view
+- CRM sync section in dry-run mode
 
 ## 🏗️ Architecture Diagram
 
@@ -40,17 +86,6 @@ flowchart TD
     J -->|Route traffic| I
 ```
 
-
-# 📊 Marketing Analytics Pipeline
-A modular ETL and Machine Learning pipeline for marketing analytics, built with Pandas, scikit-learn, and orchestrated with Airflow.
-
-> 📁 Note: Dependencies are split for cleaner environments:
-> - `requirements.txt` → shared, security-reviewed pins used by CI
-> - `requirements-fastapi.txt` / `requirements-streamlit.txt` → service-specific
-> - `airflow/requirements.txt` → extras used inside the Airflow image
-
-This project demonstrates a full end-to-end data engineering and ML workflow for a marketing analytics use case, including ETL, feature engineering, model training, and dashboarding.
-
 ## 🚀 Project Goals
 
 - Build a scalable ETL pipeline to clean and enrich marketing data
@@ -58,6 +93,14 @@ This project demonstrates a full end-to-end data engineering and ML workflow for
 - Train and evaluate machine learning models for lead scoring
 - Schedule ETL and model training pipelines with Airflow
 - Visualize insights interactively using Streamlit
+
+## 💼 Demo Value
+
+- End-to-end ETL, training, evaluation, API, and dashboard flow in one repository
+- Example integrations for CRM sync and Google Sheets export
+- Docker, Kubernetes, and Airflow assets for stronger deployment positioning
+- GitHub Actions workflows and tests for baseline delivery confidence
+- Lightweight enough to hand off, customize, or white-label
 
 ## 🧱 Tech Stack
 
@@ -132,6 +175,12 @@ pip install -r requirements-airflow.txt
 pip install -r requirements-streamlit.txt
 ```
 
+Or use the helper target:
+
+```bash
+make setup
+```
+
 ### 2. Run the ETL Process
 
 ```bash
@@ -197,7 +246,15 @@ From the project root, run:
 python -m pytest tests/
 ```
 
+Or:
+
+```bash
+make test
+```
+
 The repository currently targets Python `3.11.11` via `.python-version`, so make sure your local interpreter matches before running the suite.
+
+Generated outputs such as trained models, processed datasets, and runtime artifacts are intentionally gitignored so the repository stays source-focused.
 
 ## 🐳 Docker Usage
 
@@ -225,6 +282,8 @@ You can trigger model training manually using:
 ```bash
 python models/train_model.py
 ```
+
+Shortcut commands are also available via `make train`, `make evaluate`, `make api`, and `make dashboard`.
 
 ## 🐳 FastAPI Docker Usage
 
@@ -336,9 +395,11 @@ chmod +x setup.sh
 
 This will:
 - Ensure Python 3.11.11 is available (via pyenv)
-- Create a virtual environment
-- Install all project dependencies from `requirements.txt`
+- Create a local virtual environment in `.venv`
+- Install development dependencies from `requirements-dev.txt`
 - Warn you if the `.streamlit/secrets.toml` file is missing (needed for Google Sheets integration)
+
+If you need local credentials, start from `.env.example`.
 - Installs base dependencies only; Airflow and Streamlit now have their own environment files:
   - `requirements-airflow.txt`
   - `requirements-streamlit.txt`

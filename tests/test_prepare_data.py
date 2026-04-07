@@ -1,11 +1,12 @@
 import pandas as pd
 import pytest
+from pathlib import Path
 
 # Load the cleaned dataset once for all tests
 @pytest.fixture
 def cleaned_data():
-    # Load the preprocessed CSV from the processed data directory
-    return pd.read_csv("data/processed/clean_marketing.csv")
+    fixture_path = Path(__file__).resolve().parent / "fixtures" / "clean_marketing_sample.csv"
+    return pd.read_csv(fixture_path)
 
 # Ensure there are no missing values in the cleaned dataset
 def test_no_null_values(cleaned_data):

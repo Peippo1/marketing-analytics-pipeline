@@ -1,70 +1,84 @@
 """
-Evaluate a trained model on validation/test data.
+Evaluate the most recent trained model artifact against the processed dataset.
 """
 
-import pandas as pd
-import pickle
-import yaml
+from __future__ import annotations
+
 import json
-import os
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from pathlib import Path
 
-# 1. Define paths
-BASE_DIR = os.path.dirname(__file__)
-MODEL_PATH = os.path.join(BASE_DIR, "../artifacts/trained_model.pkl")
-DATA_PATH = os.path.join(BASE_DIR, "../data/processed/clean_marketing.csv")
-CONFIG_PATH = os.path.join(BASE_DIR, "../models/model_config.yaml")
-METRICS_PATH = os.path.join(BASE_DIR, "../data/metrics/metrics.json")
+import joblib
+import pandas as pd
+import yaml
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
-# 2. Load the trained model
-def load_model(model_path):
-    with open(model_path, "rb") as f:
-        model = pickle.load(f)
-    return model
 
-# 3. Load the data
-def load_data(data_path):
+BASE_DIR = Path(__file__).resolve().parent
+ARTIFACTS_DIR = BASE_DIR / "artifacts" / "models"
+DATA_PATH = BASE_DIR.parent / "data" / "processed" / "processed_marketing_data.csv"
+CONFIG_PATH = BASE_DIR / "model_config.yaml"
+METRICS_OUTPUT_DIR = BASE_DIR / "outputs"
+
+
+def resolve_latest_model_path(artifacts_dir: Path = ARTIFACTS_DIR) -> Path:
+    model_paths = sorted(artifacts_dir.glob("trained_model_*.pkl"))
+    if not model_paths:
+        raise FileNotFoundError(
+            f"No trained model artifacts found in {artifacts_dir}. Run models/train_model.py first."
+        )
+    return model_paths[-1]
+
+
+def load_model(model_path: Path):
+    return joblib.load(model_path)
+
+
+def load_data(data_path: Path) -> pd.DataFrame:
     return pd.read_csv(data_path)
 
-# 4. Load model config
-def load_config(config_path):
-    with open(config_path, "r") as f:
-        return yaml.safe_load(f)
 
-# 5. Evaluate model
-def evaluate(model, X, y):
-    preds = model.predict(X)
+def load_config(config_path: Path) -> dict:
+    with config_path.open("r") as file:
+        return yaml.safe_load(file)
+
+
+def evaluate(model, features: pd.DataFrame, target: pd.Series) -> dict:
+    predictions = model.predict(features)
     return {
-        "accuracy": accuracy_score(y, preds),
-        "precision": precision_score(y, preds),
-        "recall": recall_score(y, preds),
-        "f1": f1_score(y, preds),
+        "accuracy": accuracy_score(target, predictions),
+        "precision": precision_score(target, predictions, average="weighted"),
+        "recall": recall_score(target, predictions, average="weighted"),
+        "f1_score": f1_score(target, predictions, average="weighted"),
     }
 
-# 6. Main
+
+def write_metrics(metrics: dict, model_path: Path) -> Path:
+    METRICS_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    metrics_path = METRICS_OUTPUT_DIR / f"{model_path.stem}_evaluation.json"
+    with metrics_path.open("w") as file:
+        json.dump(metrics, file, indent=2)
+    return metrics_path
+
+
 def main():
-    model = load_model(MODEL_PATH)
-    df = load_data(DATA_PATH)
+    model_path = resolve_latest_model_path()
+    model = load_model(model_path)
+    dataset = load_data(DATA_PATH)
     config = load_config(CONFIG_PATH)
 
     target_column = config["data"]["target_column"]
+    features = dataset.drop(columns=[target_column]).astype("float64")
+    target = dataset[target_column].astype("float64")
 
-    X = df.drop(columns=[target_column])
-    y = df[target_column]
+    metrics = evaluate(model, features, target)
 
-    metrics = evaluate(model, X, y)
-
-    # Print metrics nicely
     print("\nModel Evaluation Metrics:")
     for key, value in metrics.items():
-        print(f"{key.capitalize()}: {value:.4f}")
+        print(f"{key.replace('_', ' ').title()}: {value:.4f}")
 
-    # Save metrics
-    os.makedirs(os.path.dirname(METRICS_PATH), exist_ok=True)
-    with open(METRICS_PATH, "w") as f:
-        json.dump(metrics, f, indent=4)
+    metrics_path = write_metrics(metrics, model_path)
+    print(f"\nEvaluation metrics saved to {metrics_path}")
 
-    print(f"\nEvaluation metrics saved to {METRICS_PATH}!")
 
 if __name__ == "__main__":
     main()
