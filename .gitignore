@@ -18,6 +18,7 @@ venv/
 env/
 streamlit_env/
 airflow_env/
+main_env/
 
 # Jupyter Notebooks
 .ipynb_checkpoints/
@@ -38,9 +39,16 @@ airflow_env/
 .pytest_cache/
 .coverage
 htmlcov/
+.mypy_cache/
+.ruff_cache/
 
 # VS Code
 .vscode/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Generated ML / pipeline outputs
+mlruns/
+models/artifacts/
+models/outputs/
