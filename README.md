@@ -126,6 +126,9 @@ pip install -r requirements.txt
 # For local development and tests:
 pip install -r requirements-dev.txt
 
+# For optional local MLflow tracking:
+pip install -r requirements-mlflow.txt
+
 # For Airflow-specific dependencies:
 pip install -r requirements-airflow.txt
 
@@ -152,6 +155,7 @@ This will train a logistic regression model based on configuration in `models/mo
 ### 3.5. Launch MLflow Tracking Server
 
 ```bash
+pip install -r requirements-mlflow.txt
 python run_mlflow_flask.py 5001
 ```
 This launches a local MLflow UI to track experiments and models at `http://localhost:5001`.
@@ -167,6 +171,8 @@ MLFLOW_HOST=0.0.0.0 MLFLOW_SERVER_ENABLE_JOB_EXECUTION=true python run_mlflow_fl
 ```
 
 Only use that override behind trusted network controls, because upstream has not published a patched MLflow release for this advisory yet.
+
+If `mlflow` is not installed, `python models/train_model.py` still works and simply skips experiment tracking.
 
 ### 4. Evaluate the Model
 
