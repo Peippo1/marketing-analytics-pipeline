@@ -3,7 +3,7 @@
 [![Dependency graph](https://img.shields.io/github/dependencies-analyzability/Peippo1/marketing-analytics-pipeline?label=dependency%20graph)](https://github.com/Peippo1/marketing-analytics-pipeline/network/dependencies)
 
 # 📊 Marketing Analytics Pipeline
-A modular ETL and machine learning demo for marketing analytics, built with Pandas, scikit-learn, FastAPI, Streamlit, and Airflow orchestration.
+A sale-ready analytics engineering demo that packages ETL, model training, evaluation, API delivery, dashboard UX, and orchestration assets into one presentable repository.
 
 > 📁 Note: Dependencies are split for cleaner environments:
 > - `requirements.txt` → shared, security-reviewed pins used by CI
@@ -11,7 +11,7 @@ A modular ETL and machine learning demo for marketing analytics, built with Pand
 > - `requirements-dev.txt` → local test tooling
 > - `airflow/requirements.txt` → extras used inside the Airflow image
 
-This project demonstrates a full end-to-end data engineering and ML workflow for a marketing analytics use case, including ETL, feature engineering, model training, and dashboarding.
+This project is designed to be easy to review, demo, and extend. It showcases a full marketing analytics workflow from raw data processing through model outputs and stakeholder-facing presentation layers.
 
 ## ✨ At a Glance
 
@@ -26,6 +26,8 @@ This project demonstrates a full end-to-end data engineering and ML workflow for
 - Setup automation via `setup.sh` and `Makefile`
 - Buyer-facing notes in `PROJECT_OVERVIEW.md`
 - A simple walkthrough in `docs/DEMO_SCRIPT.md`
+- Screenshot guidance in `docs/SCREENSHOT_CHECKLIST.md`
+- Reusable output snippets in `docs/SAMPLE_OUTPUTS.md`
 
 ## 🧭 Demo Walkthrough
 
@@ -94,10 +96,11 @@ flowchart TD
 
 ## 💼 Demo Value
 
-- End-to-end ETL, training, evaluation, API, and dashboard flow in one repo
+- End-to-end ETL, training, evaluation, API, and dashboard flow in one repository
 - Example integrations for CRM sync and Google Sheets export
-- Docker, Kubernetes, and Airflow assets for presentation-ready deployment stories
+- Docker, Kubernetes, and Airflow assets for stronger deployment positioning
 - GitHub Actions workflows and tests for baseline delivery confidence
+- Lightweight enough to hand off, customize, or white-label
 
 ## 🧱 Tech Stack
 

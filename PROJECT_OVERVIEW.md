@@ -46,6 +46,7 @@ It is not positioned as a finished SaaS product. Its value is in demonstrating a
 - Security-conscious defaults and reduced dependency risk
 - Test coverage and CI workflows already in place
 - Lightweight enough for handoff, extension, or white-label adaptation
+- Easy to demonstrate visually thanks to the dashboard and API entry points
 
 ## Contents To Highlight In A Listing
 
