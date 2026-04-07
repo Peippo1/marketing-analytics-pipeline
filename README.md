@@ -155,6 +155,16 @@ This launches a local MLflow UI to track experiments and models at `http://local
 
 Make sure to keep this terminal open while training models!
 
+Security note: the launcher now binds MLflow to `127.0.0.1` by default and sets `MLFLOW_SERVER_ENABLE_JOB_EXECUTION=false` unless you explicitly override it. This is a temporary hardening step for the open MLflow advisory covering unauthenticated `/ajax-api/3.0/jobs/*` endpoints when job execution is enabled.
+
+If you intentionally need remote access, you must opt in explicitly:
+
+```bash
+MLFLOW_HOST=0.0.0.0 MLFLOW_SERVER_ENABLE_JOB_EXECUTION=true python run_mlflow_flask.py 5001
+```
+
+Only use that override behind trusted network controls, because upstream has not published a patched MLflow release for this advisory yet.
+
 ### 4. Evaluate the Model
 
 ```bash
