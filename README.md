@@ -2,16 +2,17 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 # CampaignForge AI
-Turn raw campaign and customer data into model-backed marketing insights, API responses, and dashboard-ready outputs from one reusable codebase.
+Turn campaign briefs and customer data into reusable strategy, copy, API responses, and dashboard-ready outputs from one modular codebase.
 
-CampaignForge AI is a modular, production-style Python workflow for buyers who want a credible marketing intelligence demo or starter product. It packages ETL, lead-scoring style modeling, API delivery, dashboard presentation, and deployment assets into one reviewable repository. It is not positioned as a hosted SaaS product or a finished creative generation platform.
+CampaignForge AI is a production-style Python workflow for buyers who want a credible campaign intelligence demo or starter product. It packages ETL, lead-scoring style modeling, a GenAI brief copilot, API delivery, dashboard presentation, and deployment assets into one reviewable repository. It is not positioned as a hosted SaaS product or a finished image-generation platform.
 
 ## What It Does
 
 - Processes raw campaign and customer data into cleaned, analysis-ready datasets
 - Trains and evaluates a scikit-learn classification model for lead-scoring and campaign analytics style use cases
+- Generates campaign summaries, audience suggestions, copy variants, CTA variants, and image prompts from a structured brief
 - Exposes lightweight customer endpoints through FastAPI
-- Presents customer data, metrics, and CRM handoff workflows through Streamlit
+- Presents customer data, GenAI brief outputs, and CRM handoff workflows through Streamlit
 - Includes Airflow, Docker, and Kubernetes assets to support operational and deployment discussions
 
 ## Who It's For
@@ -25,6 +26,7 @@ CampaignForge AI is a modular, production-style Python workflow for buyers who w
 
 - Source-first repository with generated outputs removed from version control
 - ETL scripts, model training, and model evaluation workflow
+- GenAI brief copilot package with mock-first and API-key-gated live modes
 - FastAPI service and Streamlit dashboard
 - CRM integration examples for Salesforce and HubSpot
 - Google Sheets sync example
@@ -39,6 +41,7 @@ CampaignForge AI is a modular, production-style Python workflow for buyers who w
 ## What’s Included
 
 - Full Python source code for ETL, model training, evaluation, API delivery, and dashboard presentation
+- GenAI brief-to-copy workflow with saved JSON outputs under `data/generated/`
 - Demo data, predictable demo outputs, and Makefile shortcuts
 - FastAPI and Streamlit interfaces for technical and non-technical walkthroughs
 - Docker, Kubernetes, and Airflow assets for packaging and operations discussions
@@ -54,9 +57,9 @@ make demo
 
 What those commands do:
 
-- `make demo`: bootstraps the local environment if needed, then runs ETL, model training, and evaluation end-to-end using the included sample dataset
+- `make demo`: bootstraps the local environment if needed, then runs ETL, model training, evaluation, and the GenAI brief copilot end-to-end using the included sample inputs
 
-The bundled demo input is already included under `data/raw/`.
+The bundled demo inputs are included under `data/raw/` and `data/demo/`.
 
 After `make demo`, the most useful outputs are gathered in:
 
@@ -69,6 +72,7 @@ That folder contains:
 - the latest trained model artifact
 - the training metrics JSON
 - the evaluation metrics JSON
+- a `genai/` folder containing the latest saved campaign brief manifest and copy output
 - a small readme for quick inspection
 
 If you want to continue the full interactive walkthrough after the demo run:
@@ -100,8 +104,9 @@ Recommended buyer demo flow:
 
 1. Run `make demo`
 2. Open `demo_outputs/latest/` and review the generated outputs
-3. Launch the API with `make api`
-4. Launch the dashboard with `make dashboard`
+3. Review the generated campaign brief outputs under `demo_outputs/latest/genai/`
+4. Launch the API with `make api`
+5. Launch the dashboard with `make dashboard`
 
 Useful companion docs:
 
@@ -111,6 +116,7 @@ Useful companion docs:
 - `docs/SAMPLE_OUTPUTS.md` for reusable output snippets
 - `docs/LISTING_COPY.md` for repo description and marketplace copy
 - `docs/ASSET_PREP.md` for screenshots, GIFs, and listing asset planning
+- `docs/GENAI_ROADMAP.md` for the staged GenAI plan
 
 ## Project Structure
 
@@ -120,6 +126,7 @@ project-root/
 ├── data/raw/                 # Sample raw dataset and supporting assets
 ├── docs/                     # Demo, screenshot, and sales-support material
 ├── etl/                      # ETL pipeline scripts
+├── genai/                    # Brief copilot, prompt building, and output storage
 ├── k8s/                      # Kubernetes deployment manifests
 ├── models/                   # Training, evaluation, and artifact-related code
 ├── pipelines/                # Pipeline helper modules
@@ -139,6 +146,7 @@ project-root/
 | Language | Python 3.11 |
 | Data processing | Pandas |
 | ML | scikit-learn |
+| GenAI | Mock-first brief copilot with optional OpenAI-compatible mode |
 | API | FastAPI |
 | Dashboard | Streamlit |
 | Scheduling | Apache Airflow |
@@ -174,7 +182,9 @@ project-root/
 - The repository currently targets Python `3.11.11` via `.python-version`.
 - Generated outputs such as model artifacts, processed data, and local runtime files are intentionally gitignored.
 - Demo outputs are collected under `demo_outputs/latest/` for predictable review.
+- Generated GenAI artifacts are saved under `data/generated/` and copied into the demo output bundle.
 - `streamlit_app.py` is the single supported dashboard entrypoint for demos and local runs.
 - Local secrets should be supplied through `.env` and `.streamlit/secrets.toml`; start from `.env.example` where applicable.
+- Set `CAMPAIGNFORGE_LLM_PROVIDER=openai` and `OPENAI_API_KEY` only when you want live LLM output; the local default is mock mode.
 - The public GitHub repository description should match the CampaignForge AI positioning for consistency.
 - Sales assets can be organized under `docs/assets/` without changing the source layout.

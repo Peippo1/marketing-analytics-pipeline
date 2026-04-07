@@ -42,6 +42,24 @@ Evaluation metrics saved to models/outputs/trained_model_20260407_130000_evaluat
 ]
 ```
 
+## GenAI Brief Output
+
+```json
+{
+  "campaign_summary": "CampaignForge AI should position CampaignForge AI for agencies, freelancers, and startup marketing teams using reusable messaging angles and prompt-ready creative direction.",
+  "channel_recommendations": ["LinkedIn", "Email", "Landing Page"],
+  "tone_options": ["Confident", "Practical", "Forward-Looking"]
+}
+```
+
+```text
+Angle: Outcome-Driven Launch
+- 5 headline variants
+- 3 body copy variants
+- 3 CTA variants
+- 3 image prompts for the next generation stage
+```
+
 ## CRM Dry-Run Message
 
 ```text
@@ -53,5 +71,5 @@ Endpoint: https://example.my.salesforce.com/services/data/v60.0/composite/tree/L
 
 ```text
 Includes ETL, model training, evaluation, FastAPI service, Streamlit dashboard,
-Airflow DAGs, Docker assets, Kubernetes manifests, and CI workflows in one repository.
+GenAI brief generation, Airflow DAGs, Docker assets, Kubernetes manifests, and CI workflows in one repository.
 ```

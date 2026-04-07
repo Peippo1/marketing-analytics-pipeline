@@ -59,6 +59,13 @@ models/*.pkl
 models/*.json
 models/*.csv
 data/processed/
+data/generated/*
+!data/generated/copy/
+!data/generated/copy/.gitkeep
+!data/generated/images/
+!data/generated/images/.gitkeep
+!data/generated/manifests/
+!data/generated/manifests/.gitkeep
 airflow/data/processed/
 airflow/data/raw/
 demo_outputs/latest/

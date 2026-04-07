@@ -2,7 +2,7 @@
 
 ## What This Is
 
-`CampaignForge AI` is a downloadable developer asset that demonstrates a complete campaign intelligence workflow in one repository. It combines data preparation, model training, model evaluation, API delivery, dashboard presentation, and orchestration assets in a format that is easy to review and adapt.
+`CampaignForge AI` is a downloadable developer asset that demonstrates a complete campaign intelligence workflow in one repository. It combines data preparation, model training, a GenAI brief copilot, API delivery, dashboard presentation, and orchestration assets in a format that is easy to review and adapt.
 
 This product is best positioned as:
 
@@ -23,6 +23,7 @@ It is not positioned as a finished SaaS product or managed hosted service.
 
 - ETL pipeline for preparing marketing data
 - Scikit-learn training and evaluation flow
+- GenAI brief copilot for campaign summaries, personas, channel suggestions, copy variants, CTA variants, and image prompts
 - FastAPI application with lightweight customer endpoints
 - Streamlit dashboard for stakeholder-friendly presentation
 - CRM integration examples for Salesforce and HubSpot
@@ -51,6 +52,7 @@ It is not positioned as a finished SaaS product or managed hosted service.
 - source-first repository with generated artifacts removed from version control
 - clear local setup flow
 - reproducible demo path
+- mock-first GenAI mode for local demos without external keys
 - explicit deployment assets
 - test and CI coverage already present
 
