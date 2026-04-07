@@ -6,6 +6,23 @@ Turn campaign briefs and customer data into reusable strategy, copy, API respons
 
 CampaignForge AI is a production-style Python workflow for buyers who want a credible campaign intelligence demo or starter product. It packages ETL, lead-scoring style modeling, a GenAI brief copilot, API delivery, dashboard presentation, and deployment assets into one reviewable repository. It is not positioned as a hosted SaaS product or a finished image-generation platform.
 
+## Product Workflow
+
+CampaignForge AI is designed around a simple workflow:
+
+1. Brief
+   Capture a structured campaign brief with product, audience, channel, and tone inputs.
+2. Strategy
+   Generate a campaign summary, personas, channel recommendations, and campaign angles.
+3. Copy
+   Produce headline variants, body copy variants, CTA options, and prompt-ready messaging.
+4. Image Concepts
+   Turn saved prompts into mock-first concept images or live-provider outputs when configured.
+5. Review
+   Revisit saved campaigns, regenerate copy or prompts, and approve or reject generated images.
+6. Export
+   Download a ZIP bundle containing the brief, copy, prompts, manifests, and saved images.
+
 ## What It Does
 
 - Processes raw campaign and customer data into cleaned, analysis-ready datasets
@@ -120,6 +137,15 @@ Recommended buyer demo flow:
 6. Launch the API with `make api`
 7. Launch the dashboard with `make dashboard`
 
+Recommended public sale narrative:
+
+- Brief: enter a campaign concept and target market
+- Strategy: review the generated campaign summary and angle options
+- Copy: inspect headlines, body copy, CTAs, and saved prompts
+- Image Concepts: generate concept visuals from a selected angle
+- Review: approve or reject images, then regenerate where needed
+- Export: download the campaign ZIP bundle for handoff
+
 Useful companion docs:
 
 - `PROJECT_OVERVIEW.md` for a buyer-facing summary
@@ -129,6 +155,8 @@ Useful companion docs:
 - `docs/LISTING_COPY.md` for repo description and marketplace copy
 - `docs/ASSET_PREP.md` for screenshots, GIFs, and listing asset planning
 - `docs/GENAI_ROADMAP.md` for the staged GenAI plan
+- `QA_CHECKLIST.md` for launch verification
+- `RELEASE_NOTES.md` for the v1 sale-ready summary
 
 ## Project Structure
 

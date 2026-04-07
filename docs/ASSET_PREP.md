@@ -4,8 +4,10 @@ Use this folder guidance when preparing screenshots, a short GIF, or marketplace
 
 ## Recommended Asset Set
 
-- `docs/assets/dashboard-home.png`
-- `docs/assets/demo-outputs.png`
+- `docs/assets/readme-hero-workflow.png`
+- `docs/assets/brief-copilot-results.png`
+- `docs/assets/image-concepts-gallery.png`
+- `docs/assets/export-workflow.png`
 - `docs/assets/api-response.png`
 - `docs/assets/quickstart.gif`
 - `docs/assets/what-you-get.png`
@@ -20,8 +22,9 @@ Use this folder guidance when preparing screenshots, a short GIF, or marketplace
 
 ## Suggested Visual Story
 
-1. Dashboard hero and KPI area
-2. Demo outputs folder with model and metrics files
-3. FastAPI response example
-4. One-command demo run in the terminal
-5. A simple "what you get" summary image for listings
+1. README hero and workflow promise
+2. Brief Copilot results with copy and prompt output
+3. Image Concepts gallery with saved concepts
+4. Review and export controls in the Campaign History panel
+5. FastAPI response example
+6. A simple "what you get" summary image for listings
