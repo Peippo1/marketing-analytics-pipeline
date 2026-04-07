@@ -36,5 +36,12 @@ jobs:
 
       - name: Run Tests
         run: |
-          echo "✅ Test placeholder (add actual tests here)"
-          # pytest tests/   # Uncomment when tests are available
+          python -m pytest \
+            tests/test_fastapi.py \
+            tests/test_prepare_data.py \
+            tests/test_crm_clients.py \
+            tests/test_run_mlflow_flask.py \
+            tests/test_streamlit.py \
+            --maxfail=1 \
+            --disable-warnings \
+            -q
