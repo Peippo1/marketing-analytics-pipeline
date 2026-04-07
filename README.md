@@ -2,512 +2,165 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Dependency graph](https://img.shields.io/github/dependencies-analyzability/Peippo1/marketing-analytics-pipeline?label=dependency%20graph)](https://github.com/Peippo1/marketing-analytics-pipeline/network/dependencies)
 
-# 📊 Marketing Analytics Pipeline
-A sale-ready analytics engineering demo that packages ETL, model training, evaluation, API delivery, dashboard UX, and orchestration assets into one presentable repository.
+# Marketing Analytics Pipeline
+A sale-ready developer asset for demonstrating a complete marketing analytics workflow: ingest data, transform it, train a lead-scoring model, evaluate outputs, expose an API, and present results in a dashboard.
 
-> 📁 Note: Dependencies are split for cleaner environments:
-> - `requirements.txt` → shared, security-reviewed pins used by CI
-> - `requirements-fastapi.txt` / `requirements-streamlit.txt` → service-specific
-> - `requirements-dev.txt` → local test tooling
-> - `airflow/requirements.txt` → extras used inside the Airflow image
+This repository is positioned as a reusable code asset for buyers who want a credible analytics starter project, internal demo platform, or portfolio-grade Python data application. It is not marketed as a finished SaaS product.
 
-This project is designed to be easy to review, demo, and extend. It showcases a full marketing analytics workflow from raw data processing through model outputs and stakeholder-facing presentation layers.
+## What It Does
 
-## ✨ At a Glance
+- Processes raw marketing data into cleaned, analysis-ready datasets
+- Trains and evaluates a scikit-learn classification model for lead-scoring style use cases
+- Exposes lightweight customer endpoints through FastAPI
+- Presents customer data and CRM handoff workflows through Streamlit
+- Includes Airflow, Docker, and Kubernetes assets to support deployment and operations discussions
 
-- End-to-end analytics demo: ETL, training, evaluation, API, dashboard, orchestration
-- Presentable deployment story with Docker, Kubernetes, and Airflow assets
-- Integration examples for CRM push and Google Sheets sync
-- GitHub Actions and tests for baseline engineering confidence
+## Who It's For
 
-## 📦 What's Included
+- Buyers looking for a full-stack Python analytics demo they can adapt or white-label
+- Agencies or freelancers who need a credible starter codebase for internal analytics tooling
+- Founders or teams who want a presentable example of ETL, modeling, API delivery, and dashboard UX in one repo
+- Portfolio buyers who value engineering breadth, deployment readiness, and documented workflows
+
+## What’s Included
 
 - Source-first repository with generated outputs removed from version control
-- Setup automation via `setup.sh` and `Makefile`
-- Buyer-facing notes in `PROJECT_OVERVIEW.md`
-- A simple walkthrough in `docs/DEMO_SCRIPT.md`
-- Screenshot guidance in `docs/SCREENSHOT_CHECKLIST.md`
-- Reusable output snippets in `docs/SAMPLE_OUTPUTS.md`
+- ETL scripts, model training, and model evaluation workflow
+- FastAPI service and Streamlit dashboard
+- CRM integration examples for Salesforce and HubSpot
+- Google Sheets sync example
+- GitHub Actions workflows and automated tests
+- Dockerfiles, Kubernetes manifests, and Airflow DAGs
+- Supporting sale/demo docs:
+  - `PROJECT_OVERVIEW.md`
+  - `docs/DEMO_SCRIPT.md`
+  - `docs/SCREENSHOT_CHECKLIST.md`
+  - `docs/SAMPLE_OUTPUTS.md`
 
-## 🧭 Demo Walkthrough
+## Quickstart
 
-1. Set up the environment with `make setup`
-2. Run the ETL flow with `python etl/marketing_etl.py`
-3. Train a model with `make train`
-4. Evaluate the latest artifact with `make evaluate`
-5. Launch the API with `make api`
-6. Launch the dashboard with `make dashboard`
-7. Reference `PROJECT_OVERVIEW.md` for a buyer-facing summary
-8. Use `docs/DEMO_SCRIPT.md` as a guided sales/demo outline
-
-## 📸 Demo Positioning
-
-Recommended screenshots or recording moments for a listing:
-
-- Architecture and repository structure
-- Successful model training output
-- Evaluation metrics output
-- FastAPI `/health` and `/customers` endpoints
-- Streamlit dashboard landing view
-- CRM sync section in dry-run mode
-
-## 🏗️ Architecture Diagram
-
-```mermaid
-flowchart TD
-    A["Marketing Data Source"]
-    B["ETL Pipeline (Pandas)"]
-    C["Feature Engineering"]
-    D["Model Training & Evaluation (scikit-learn)"]
-    E["Model Artifacts Stored"]
-    F["Processed Data"]
-    G["Streamlit Dashboard"]
-    H["Google Sheets CRM Sync"]
-    I["FastAPI Service"]
-    J["NGINX Ingress Controller"]
-
-    A -->|Raw Data| B
-    B --> C
-    C --> D
-    D --> E
-    B --> F
-    E --> G
-    F --> G
-    G --> H
-    D --> I
-
-    subgraph Kubernetes Cluster
-        G
-        I
-        J
-    end
-
-    J -->|Route traffic| G
-    J -->|Route traffic| I
-```
-
-## 🚀 Project Goals
-
-- Build a scalable ETL pipeline to clean and enrich marketing data
-- Perform feature engineering for predictive modeling
-- Train and evaluate machine learning models for lead scoring
-- Schedule ETL and model training pipelines with Airflow
-- Visualize insights interactively using Streamlit
-
-## 💼 Demo Value
-
-- End-to-end ETL, training, evaluation, API, and dashboard flow in one repository
-- Example integrations for CRM sync and Google Sheets export
-- Docker, Kubernetes, and Airflow assets for stronger deployment positioning
-- GitHub Actions workflows and tests for baseline delivery confidence
-- Lightweight enough to hand off, customize, or white-label
-
-## 🧱 Tech Stack
-
-- **Language**: Python
-- **Data Processing**: Pandas
-- **ML/AI**: scikit-learn
-- **Scheduling**: Airflow (Docker Compose)
-- **Dashboarding**: Streamlit
-- **Database**: MySQL (optional, not required for core pipeline)
-- **Data Source**: [Kaggle Marketing Data](https://www.kaggle.com/datasets/jackdaoud/marketing-data)
-
-## 📁 Project Structure
-
-```
-marketing-analytics-pipeline/
-├── data/
-│   ├── raw/               # Raw zipped marketing data
-│   └── processed/         # Cleaned processed CSVs
-├── etl/
-│   └── marketing_etl.py   # ETL: unzip, clean, feature engineer, save processed data
-├── models/
-│   ├── artifacts/          # Saved trained models (timestamped .pkl)
-│   ├── versioning.py        # Model versioning utilities
-│   ├── train_model.py     # Model training script
-│   ├── evaluate_model.py  # Model evaluation script
-│   ├── model.py           # Model utilities
-│   └── model_config.yaml  # Model config file
-├── airflow/
-│   ├── dags/
-│   │   ├── marketing_etl_dag.py
-│   │   ├── train_model_dag.py
-│   │   └── model_evaluation_dag.py
-│   ├── scripts/
-│   │   ├── prepare_data.py
-│   │   └── convert_delta_to_csv.py
-│   └── docker-compose.yaml
-├── dashboard/
-│   └── streamlit_app.py    # Streamlit dashboard with model metrics and CRM sync
-├── requirements.txt
-└── README.md
-```
-
-## ▶️ Running the Pipeline Locally
-
-### 0. 📦 Build and Run with Docker (Airflow)
-
-From the `airflow/` directory, use Docker Compose to run the Airflow environment:
-
-```bash
-cd airflow
-docker compose down --volumes  # optional: clear volumes
-docker compose up --build
-```
-
-Then visit the Airflow UI at: [http://localhost:8081](http://localhost:8081)
-
-Ensure the DAGs appear in the UI and are switched ON.
-
-### 1. Set up the Environment
-
-```bash
-# For core libraries only:
-pip install -r requirements.txt
-
-# For local development and tests:
-pip install -r requirements-dev.txt
-
-# For Airflow-specific dependencies:
-pip install -r requirements-airflow.txt
-
-# For Streamlit-specific dependencies:
-pip install -r requirements-streamlit.txt
-```
-
-Or use the helper target:
+The fastest local setup path is:
 
 ```bash
 make setup
+make demo
 ```
 
-### 2. Run the ETL Process
+What those commands do:
+
+- `make setup`: creates a local environment and installs development dependencies
+- `make demo`: runs ETL, model training, and evaluation end-to-end using the included sample dataset
+
+The bundled demo input is already included under `data/raw/`.
+
+After `make demo`, the most useful outputs are gathered in:
+
+```text
+demo_outputs/latest/
+```
+
+That folder contains:
+
+- the latest trained model artifact
+- the training metrics JSON
+- the evaluation metrics JSON
+- a small readme for quick inspection
+
+If you want to continue the full interactive walkthrough after the demo run:
 
 ```bash
-python etl/marketing_etl.py
+make api
+make dashboard
 ```
 
-This will load the raw data from either a CSV (`ifood_df.csv`) or a ZIP file (`ifood_data.zip`), clean and enrich it, and save the processed data to `data/processed/processed_marketing_data.csv`.
-
-### 3. Train the Model
+If you prefer manual setup:
 
 ```bash
-python models/train_model.py
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+pip install -r requirements-airflow.txt
+pip install -r requirements-streamlit.txt
 ```
 
-This will train a logistic regression model based on configuration in `models/model_config.yaml` and save the model artifact in `models/`.
+## Demo
 
-### 4. Evaluate the Model
+Recommended buyer demo flow:
 
-```bash
-python models/evaluate_model.py
+1. Run `make setup`
+2. Run `make demo`
+3. Open `demo_outputs/latest/` and review the generated outputs
+4. Launch the API with `make api`
+5. Launch the dashboard with `make dashboard`
+
+Useful companion docs:
+
+- `PROJECT_OVERVIEW.md` for a buyer-facing summary
+- `docs/DEMO_SCRIPT.md` for a guided walkthrough
+- `docs/SCREENSHOT_CHECKLIST.md` for listing or portfolio prep
+- `docs/SAMPLE_OUTPUTS.md` for reusable output snippets
+
+## Project Structure
+
+```text
+marketing-analytics-pipeline/
+├── airflow/                  # Airflow DAGs, scripts, and container setup
+├── dashboard/                # Alternate dashboard module assets
+├── data/raw/                 # Sample raw dataset and supporting assets
+├── docs/                     # Demo, screenshot, and sales-support material
+├── etl/                      # ETL pipeline scripts
+├── k8s/                      # Kubernetes deployment manifests
+├── models/                   # Training, evaluation, and artifact-related code
+├── pipelines/                # Pipeline helper modules
+├── scoring/                  # FastAPI application
+├── tests/                    # Automated tests
+├── utils/                    # CRM and Google Sheets helpers
+├── streamlit_app.py          # Main Streamlit dashboard entrypoint
+├── Makefile                  # Common developer/demo commands
+├── setup.sh                  # Local setup helper
+└── README.md
 ```
 
-This will load the trained model and processed dataset, evaluate model performance (accuracy, precision, recall, F1 score), and print the results.
-
-### 5. Visualize with Streamlit (Optional)
-
-You can view the dashboard in your browser using one of two methods:
-
-**Option 1: Port Forwarding (Recommended for Local Testing)**
-```bash
-kubectl port-forward service/streamlit-service 8501:8501
-```
-Then visit: [http://localhost:8501](http://localhost:8501)
-
-**Option 2: Ingress with Custom DNS**
-This project also includes Kubernetes Ingress support to expose the dashboard at a friendly URL:
-
-1. Update `/etc/hosts` with:
-   ```
-   127.0.0.1 streamlit.local
-   ```
-
-2. Apply the ingress:
-   ```bash
-   kubectl apply -f k8s/ingress.yaml
-   ```
-
-3. Access the app via: [http://streamlit.local](http://streamlit.local)
-
-_Note: macOS users may need to flush DNS cache or use a `.test` domain instead of `.local`._
-
-Make sure you have a trained model saved (e.g. `lead_scoring_model_<timestamp>.pkl`) inside the `models/` directory to enable predictions inside the dashboard.
-
-## 🧪 Testing
-
-Unit tests are written using `pytest` and located in the `tests/` directory.
-
-### How to Run Tests
-
-From the project root, run:
-
-```bash
-python -m pytest tests/
-```
-
-Or:
-
-```bash
-make test
-```
-
-The repository currently targets Python `3.11.11` via `.python-version`, so make sure your local interpreter matches before running the suite.
-
-Generated outputs such as trained models, processed datasets, and runtime artifacts are intentionally gitignored so the repository stays source-focused.
-
-## 🐳 Docker Usage
-
-This project is fully containerized using Docker, supporting both the Streamlit dashboard and the FastAPI service. You can run the entire pipeline and dashboard in reproducible containerized environments, or deploy them on Kubernetes.
-
-Note that Streamlit and Airflow environments are built separately. The Airflow environment uses the `airflow/docker-compose.yml` file to manage the scheduler, webserver, and other components.
-
-### Build the Streamlit Docker Image
-
-```bash
-docker build -t marketing-analytics-app .
-```
-
-### Run the Streamlit App
-
-```bash
-docker run -p 8501:8501 marketing-analytics-app
-```
-
-Then open your browser and navigate to `http://localhost:8501`.
-
-Make sure you have a trained model saved (e.g. `lead_scoring_model_<timestamp>.pkl`) inside the `models/` directory to enable predictions inside the container.
-
-You can trigger model training manually using:
-```bash
-python models/train_model.py
-```
-
-Shortcut commands are also available via `make train`, `make evaluate`, `make api`, and `make dashboard`.
-
-## 🐳 FastAPI Docker Usage
-
-To containerize the FastAPI app with the `Dockerfile.fastapi`, follow these steps:
-> 🔁 Note: the current FastAPI module path is `scoring.fastapi_app:app`.
-
-### Build the FastAPI Docker Image
-
-```bash
-docker build -t fastapi-app:latest -f Dockerfile.fastapi .
-```
-
-### Run the FastAPI App
-
-```bash
-docker run -p 8000:8000 fastapi-app:latest
-```
-
-You can access the FastAPI server at `http://localhost:8000`.
-
-API documentation routes are disabled by default in the FastAPI app. If you need Swagger locally, start it with `FASTAPI_EXPOSE_DOCS=true`.
-
-## ☸️ Kubernetes Usage
-
-This project now supports Kubernetes deployment to manage the services for Streamlit and FastAPI.
-
-### 1. Set up Minikube and Kubernetes
-
-Start by setting up Minikube and Kubernetes if you haven’t already:
-
-```bash
-minikube start
-```
-
-Once Minikube is up, you can configure your Kubernetes cluster by running:
-
-```bash
-kubectl config use-context minikube
-```
-
-### 2. Deploy Services on Kubernetes
-
-After setting up Kubernetes, you can deploy both FastAPI and Streamlit services using the following commands:
-
-#### Deploy FastAPI
-
-```bash
-kubectl apply -f k8s/fastapi-deployment.yaml
-kubectl apply -f k8s/fastapi-service.yaml
-```
-
-#### Deploy Streamlit
-
-```bash
-kubectl apply -f k8s/streamlit-deployment.yaml
-kubectl apply -f k8s/streamlit-service.yaml
-```
-
-### 3. Set up Ingress Controller and Ingress
-
-Set up the NGINX Ingress Controller and Ingress to access the FastAPI and Streamlit services externally:
-
-```bash
-kubectl apply -f k8s/ingress.yaml
-```
-
-Ensure you have the correct entries in your `/etc/hosts` file to map to the services:
-
-```bash
-127.0.0.1   fastapi.local
-127.0.0.1   streamlit.local
-```
-
-You should now be able to access the services at:
-
-- **FastAPI**: `http://fastapi.local`
-- **Streamlit**: `http://streamlit.local`
-
-## 📡 FastAPI Customer Data API
-
-This project includes a FastAPI service that exposes customer data from MySQL.
-
-### ▶️ Running the API Server
-
-```bash
-uvicorn scoring.fastapi_app:app --reload
-```
-
-- View API data: [http://localhost:8000/customers](http://localhost:8000/customers)
-- Swagger docs when explicitly enabled: [http://localhost:8000/docs](http://localhost:8000/docs)
-
-### 🔌 Endpoint
-
-- `GET /customers` – Returns the full `customers_cleaned` table from the MySQL database as JSON.
-- Uses the same `.env` credentials for connecting to Railway-hosted MySQL.
-
-Includes basic feature engineering: creation of customer age, tenure, and aggregated spend categories.
-
-**Note:** The project now supports clean environment setup via the `setup.sh` script.
-
-## ⚙️ Environment Setup (New)
-
-To simplify setup on a new machine, this project includes a `setup.sh` script:
-
-```bash
-chmod +x setup.sh
-./setup.sh
-```
-
-This will:
-- Ensure Python 3.11.11 is available (via pyenv)
-- Create a local virtual environment in `.venv`
-- Install development dependencies from `requirements-dev.txt`
-- Warn you if the `.streamlit/secrets.toml` file is missing (needed for Google Sheets integration)
-
-If you need local credentials, start from `.env.example`.
-- Installs base dependencies only; Airflow and Streamlit now have their own environment files:
-  - `requirements-airflow.txt`
-  - `requirements-streamlit.txt`
-
-## 🧩 Google Sheets CRM Integration
-
-You can sync scored customer data directly to a Google Sheet from the dashboard.
-
-### 🔑 Setup Instructions
-
-1. Create a Google Cloud service account with Sheets API access
-2. Convert the key JSON to TOML format and save it to:
-```
-.streamlit/secrets.toml
-```
-(You can use Streamlit's secrets management with `.streamlit/secrets.toml`)
-3. Share the target Google Sheet with the service account email
-4. Use the "Sync to Google Sheets" button in the dashboard to send scored data
-
-The default sheet is named **Scored_Customers**.
-
-## 🔗 CRM Push (Salesforce / HubSpot)
-
-The Streamlit dashboard now supports pushing the top customers into Salesforce or HubSpot directly.
-
-### Setup
-
-- Salesforce: set `SALESFORCE_INSTANCE_URL` (e.g., `https://your-domain.my.salesforce.com`) and `SALESFORCE_ACCESS_TOKEN`. Optionally set `SALESFORCE_API_VERSION` (defaults to `v60.0`).
-- HubSpot: set `HUBSPOT_ACCESS_TOKEN`.
-
-### Usage
-
-1. Load the dashboard and ensure customer data is visible.
-2. Pick your CRM in the **CRM Sync** section.
-3. Leave **Dry run** checked to preview the payload without sending, or uncheck to push live.
-4. Click **Push 20 customers to CRM**.
-
-## 🔜 Next Steps
-
-- [x] Complete ETL pipeline and convert to reusable scripts
-- [x] Run exploratory analysis on customer behavior
-- [x] Build segmentation or response model
-- [x] Deploy dashboard for insights
-- [x] Add unit tests for pipeline components
-- [x] Containerize with Docker for local + cloud execution
-- [x] Schedule daily pipeline using Airflow (via docker-compose + DAG)
-- [x] Expand ETL script for dynamic raw data handling and basic feature engineering
-- [x] Automate model training pipeline
-- [x] Deploy Streamlit to Kubernetes with working port-forwarding and Ingress setup
-- [x] Add support for CRM push via Salesforce/HubSpot APIs
-- [ ] Add OpenTelemetry traces/export for FastAPI and Airflow
-
-## 👀 Observability (OpenTelemetry)
-
-We ship optional tracing for the FastAPI scoring service. Enable it by setting:
-
-```
-export OTEL_ENABLED=true
-export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces  # or your collector
-export OTEL_SERVICE_NAME=marketing-fastapi
-```
-
-When enabled, the app sends spans via OTLP/HTTP. Point the endpoint to your OTLP collector (e.g., OpenTelemetry Collector, Honeycomb, Datadog OTLP, New Relic).
-
-## 🛠️ Future Improvements
-
-- Add CI/CD pipeline for automatic deployment
-- Migrate to full PySpark processing
-- Incorporate model monitoring for trained artifacts
-- Expand customer segmentation modeling
-- Integrate a lightweight model deployment pipeline
-- Integrate webhook/CRM actions after model scoring
-
-## ⏰ Airflow DAG Scheduling
-
-This project includes Airflow DAGs to run the ETL and model training pipelines on a scheduled basis.
-
-### DAGs
-
-- `marketing_etl_dag.py`: Runs the ETL process.
-- `train_model_dag.py`: Runs model training using the processed dataset.
-- `model_evaluation_dag.py`: Runs model evaluation on the trained model.
-
-- Located in the `airflow/dags/` directory.
-- Runs the full ETL and model training processes using Pandas scripts.
-- Output is written as CSV files to the `data/processed/` directory.
-- Scripts used in the DAG are located in `airflow/scripts/`
-
-### Run with Docker Compose
-
-From the `airflow/` directory, start Airflow using:
-
-```bash
-docker compose up
-```
-
-Then visit the Airflow UI at [http://localhost:8080](http://localhost:8080).
-
-Ensure the DAGs are switched 'on' and manually trigger runs for testing.
-- You can also inspect the logs or run tasks manually using the CLI: `docker compose exec airflow-webserver airflow tasks list marketing_etl_dag`
-
-### Notes
-
-- Logs are available in the Airflow UI per task run.
-- If using multiple Airflow components, ensure all share the same `secret_key` under the `[webserver]` section of `airflow.cfg`.
-
-## ♻️ Housekeeping
-
-- Removed all `__pycache__/` directories to keep repo clean
-- `.gitignore` updated to exclude `__pycache__/` and `.DS_Store` files
-- for CI-CD testing
+## Tech Stack
+
+| Area | Tools |
+| --- | --- |
+| Language | Python 3.11 |
+| Data processing | Pandas |
+| ML | scikit-learn |
+| API | FastAPI |
+| Dashboard | Streamlit |
+| Scheduling | Apache Airflow |
+| Packaging | Docker |
+| Deployment assets | Kubernetes manifests |
+| Observability | OpenTelemetry hooks for FastAPI |
+| Integrations | Salesforce, HubSpot, Google Sheets |
+
+## Why This Is Useful
+
+- Shows an end-to-end analytics workflow in one reviewable repository
+- Gives buyers a realistic starting point rather than isolated notebooks or toy scripts
+- Demonstrates breadth across ETL, model training, API delivery, dashboard UX, and orchestration
+- Provides a stronger portfolio or resale asset than a single-purpose machine learning script
+- Includes deployment and CI assets that help the project feel operationally credible
+
+## Comparison
+
+| Capability | Included |
+| --- | --- |
+| Source code | Yes |
+| Local run path | Yes |
+| One-command demo | Yes |
+| Docker support | Yes |
+| Dashboard | Yes |
+| API | Yes |
+| Tests | Yes |
+| Airflow orchestration | Yes |
+| Kubernetes manifests | Yes |
+
+## Notes
+
+- The repository currently targets Python `3.11.11` via `.python-version`.
+- Generated outputs such as model artifacts, processed data, and local runtime files are intentionally gitignored.
+- Demo outputs are collected under `demo_outputs/latest/` for predictable review.
+- Local secrets should be supplied through `.env` and `.streamlit/secrets.toml`; start from `.env.example` where applicable.
+- The public GitHub repository description should match this README positioning for consistency.
