@@ -63,7 +63,12 @@ class SalesforceClient:
         endpoint = f"{self.instance_url}/services/data/{self.api_version}/composite/tree/Lead"
 
         if dry_run:
-            return {"sent": len(payload["records"]), "dry_run": True, "endpoint": endpoint, "payload": payload}
+            return {
+                "sent": len(payload["records"]),
+                "dry_run": True,
+                "endpoint": endpoint,
+                "payload": payload,
+            }
 
         if not self.instance_url or not self.access_token:
             raise RuntimeError("Salesforce credentials missing (SALESFORCE_INSTANCE_URL/SALESFORCE_ACCESS_TOKEN)")

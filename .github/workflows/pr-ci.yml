@@ -1,5 +1,4 @@
 
-
 name: PR Continuous Integration
 
 on:
@@ -7,19 +6,27 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 concurrency:
   group: pr-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  PYTHONDONTWRITEBYTECODE: "1"
+
 jobs:
   pr-checks:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: "pip"
@@ -32,25 +39,35 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements-dev.txt
+          python -m pip install -r requirements-dev.txt
 
       - name: Security audit (pip-audit)
-        run: |
-          pip install pip-audit
-          pip-audit -r requirements.txt
+        run: python -m pip_audit -r requirements.txt
 
       - name: Run Linting
         run: |
-          pip install flake8
-          flake8 .
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --max-complexity=10 --max-line-length=100 --statistics
+
+      - name: Run Bandit
+        run: |
+          bandit -q -r genai scoring utils etl models -x tests
 
       - name: Run Tests
         run: |
           python -m pytest \
             tests/test_fastapi.py \
+            tests/test_genai_service.py \
+            tests/test_genai_image_service.py \
+            tests/test_genai_workflow_service.py \
             tests/test_prepare_data.py \
             tests/test_crm_clients.py \
+            tests/test_sheets_sync.py \
             tests/test_streamlit.py \
             --maxfail=1 \
             --disable-warnings \
             -q
+
+      - name: Run Demo Smoke Check
+        run: |
+          ./run-demo.sh

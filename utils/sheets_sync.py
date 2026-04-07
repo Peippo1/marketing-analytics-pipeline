@@ -1,7 +1,9 @@
 import gspread
 from google.oauth2.service_account import Credentials
 
+
 def sync_to_google_sheets(df, sheet_name, credentials_dict):
+    """Sync a dataframe to a Google Sheet using a service account payload."""
     creds = Credentials.from_service_account_info(credentials_dict)
     client = gspread.authorize(creds)
 
