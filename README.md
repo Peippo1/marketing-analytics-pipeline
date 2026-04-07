@@ -20,6 +20,13 @@ This project demonstrates a full end-to-end data engineering and ML workflow for
 - Integration examples for CRM push and Google Sheets sync
 - GitHub Actions and tests for baseline engineering confidence
 
+## 📦 What's Included
+
+- Source-first repository with generated outputs removed from version control
+- Setup automation via `setup.sh` and `Makefile`
+- Buyer-facing notes in `PROJECT_OVERVIEW.md`
+- A simple walkthrough in `docs/DEMO_SCRIPT.md`
+
 ## 🧭 Demo Walkthrough
 
 1. Set up the environment with `make setup`
@@ -29,6 +36,7 @@ This project demonstrates a full end-to-end data engineering and ML workflow for
 5. Launch the API with `make api`
 6. Launch the dashboard with `make dashboard`
 7. Reference `PROJECT_OVERVIEW.md` for a buyer-facing summary
+8. Use `docs/DEMO_SCRIPT.md` as a guided sales/demo outline
 
 ## 📸 Demo Positioning
 
