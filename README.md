@@ -42,11 +42,12 @@ flowchart TD
 
 
 # 📊 Marketing Analytics Pipeline
-A modular ETL and Machine Learning pipeline for marketing analytics, built with Pandas, scikit-learn, and orchestrated with Airflow.
+A modular ETL and machine learning demo for marketing analytics, built with Pandas, scikit-learn, FastAPI, Streamlit, and Airflow orchestration.
 
 > 📁 Note: Dependencies are split for cleaner environments:
 > - `requirements.txt` → shared, security-reviewed pins used by CI
 > - `requirements-fastapi.txt` / `requirements-streamlit.txt` → service-specific
+> - `requirements-dev.txt` → local test tooling
 > - `airflow/requirements.txt` → extras used inside the Airflow image
 
 This project demonstrates a full end-to-end data engineering and ML workflow for a marketing analytics use case, including ETL, feature engineering, model training, and dashboarding.
@@ -58,6 +59,13 @@ This project demonstrates a full end-to-end data engineering and ML workflow for
 - Train and evaluate machine learning models for lead scoring
 - Schedule ETL and model training pipelines with Airflow
 - Visualize insights interactively using Streamlit
+
+## 💼 Demo Value
+
+- End-to-end ETL, training, evaluation, API, and dashboard flow in one repo
+- Example integrations for CRM sync and Google Sheets export
+- Docker, Kubernetes, and Airflow assets for presentation-ready deployment stories
+- GitHub Actions workflows and tests for baseline delivery confidence
 
 ## 🧱 Tech Stack
 
@@ -336,9 +344,11 @@ chmod +x setup.sh
 
 This will:
 - Ensure Python 3.11.11 is available (via pyenv)
-- Create a virtual environment
-- Install all project dependencies from `requirements.txt`
+- Create a local virtual environment in `.venv`
+- Install development dependencies from `requirements-dev.txt`
 - Warn you if the `.streamlit/secrets.toml` file is missing (needed for Google Sheets integration)
+
+If you need local credentials, start from `.env.example`.
 - Installs base dependencies only; Airflow and Streamlit now have their own environment files:
   - `requirements-airflow.txt`
   - `requirements-streamlit.txt`
