@@ -35,6 +35,7 @@ This runs:
 - model evaluation
 - GenAI brief generation from the bundled sample brief
 - optional concept image generation in mock mode for the saved sample campaign
+- campaign export ZIP generation for the latest saved campaign
 
 Demo outputs are collected under:
 
@@ -43,6 +44,7 @@ demo_outputs/latest/
 ```
 
 This bundle includes the latest model outputs plus the saved GenAI brief artifacts under `demo_outputs/latest/genai/`.
+It also includes the latest exported campaign ZIP for download or handoff.
 
 ## Local App Runs
 

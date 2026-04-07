@@ -13,12 +13,20 @@ from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
-from genai.schemas import CampaignBrief, CampaignManifest, ImageGenerationManifest, ImageGenerationRequest
-from genai.service import CampaignBriefService, CampaignImageService
+from genai.schemas import (
+    CampaignBrief,
+    CampaignManifest,
+    CampaignRegenerationRequest,
+    ImageGenerationManifest,
+    ImageGenerationRequest,
+    ImageReviewRequest,
+)
+from genai.service import CampaignBriefService, CampaignExportService, CampaignImageService
 
 DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "processed" / "clean_marketing.csv"
 campaign_brief_service = CampaignBriefService()
 campaign_image_service = CampaignImageService()
+campaign_export_service = CampaignExportService()
 
 
 def _docs_enabled() -> bool:
@@ -121,12 +129,28 @@ def generate_campaign_images(request: ImageGenerationRequest) -> ImageGeneration
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
+@app.post("/genai/campaigns/{campaign_id}/regenerate", response_model=CampaignManifest)
+def regenerate_campaign_output(campaign_id: str, request: CampaignRegenerationRequest) -> CampaignManifest:
+    try:
+        return campaign_brief_service.regenerate(campaign_id, request)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
 @app.get("/genai/campaigns/{campaign_id}/images", response_model=ImageGenerationManifest)
 def get_campaign_images(campaign_id: str) -> ImageGenerationManifest:
     manifest = campaign_image_service.load_manifest(campaign_id)
     if manifest is None:
         raise HTTPException(status_code=404, detail="Campaign image output not found")
     return manifest
+
+
+@app.post("/genai/campaigns/{campaign_id}/images/review", response_model=ImageGenerationManifest)
+def review_campaign_image(campaign_id: str, request: ImageReviewRequest) -> ImageGenerationManifest:
+    try:
+        return campaign_image_service.review_asset(campaign_id, request)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
 @app.get("/genai/assets/{campaign_id}/{filename}")
@@ -137,3 +161,12 @@ def get_campaign_image_asset(campaign_id: str, filename: str) -> FileResponse:
         raise HTTPException(status_code=404, detail="Image asset not found")
     media_type = "image/png" if asset_path.suffix.lower() == ".png" else "image/svg+xml"
     return FileResponse(asset_path, media_type=media_type)
+
+
+@app.get("/genai/campaigns/{campaign_id}/export")
+def export_campaign_bundle(campaign_id: str) -> FileResponse:
+    try:
+        export_path = campaign_export_service.export_campaign(campaign_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return FileResponse(export_path, media_type="application/zip", filename=export_path.name)

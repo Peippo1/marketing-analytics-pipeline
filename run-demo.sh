@@ -26,6 +26,7 @@ pushd "${ROOT_DIR}" >/dev/null
 "${PYTHON_BIN}" models/evaluate_model.py
 "${PYTHON_BIN}" -m genai.demo --input data/demo/campaign_brief.json
 "${PYTHON_BIN}" -m genai.image_demo --campaign-id "$(ls -1t data/generated/manifests/*.json | head -n 1 | xargs basename | sed 's/\.json$//')"
+"${PYTHON_BIN}" -m genai.export_demo --campaign-id "$(ls -1t data/generated/manifests/*.json | head -n 1 | xargs basename | sed 's/\.json$//')"
 
 LATEST_MODEL="$(ls -1t models/artifacts/models/trained_model_*.pkl | head -n 1)"
 LATEST_TRAIN_METRICS="$(ls -1t models/artifacts/models/trained_model_*_metrics.json | head -n 1)"
@@ -34,6 +35,7 @@ LATEST_GENAI_MANIFEST="$(ls -1t data/generated/manifests/*.json | head -n 1)"
 LATEST_GENAI_COPY="$(ls -1t data/generated/copy/*.json | head -n 1)"
 LATEST_GENAI_IMAGE_MANIFEST="$(ls -1t data/generated/images/*/manifest.json | head -n 1)"
 LATEST_GENAI_IMAGE_DIR="$(dirname "${LATEST_GENAI_IMAGE_MANIFEST}")"
+LATEST_GENAI_EXPORT="$(ls -1t data/generated/exports/*.zip | head -n 1)"
 
 cp "${LATEST_MODEL}" "${OUTPUT_DIR}/"
 cp "${LATEST_TRAIN_METRICS}" "${OUTPUT_DIR}/"
@@ -44,6 +46,7 @@ cp "${LATEST_GENAI_COPY}" "${OUTPUT_DIR}/genai/"
 mkdir -p "${OUTPUT_DIR}/genai/images"
 cp "${LATEST_GENAI_IMAGE_MANIFEST}" "${OUTPUT_DIR}/genai/images/"
 find "${LATEST_GENAI_IMAGE_DIR}" -maxdepth 1 \( -name '*.svg' -o -name '*.png' \) -exec cp {} "${OUTPUT_DIR}/genai/images/" \;
+cp "${LATEST_GENAI_EXPORT}" "${OUTPUT_DIR}/genai/"
 
 cat > "${OUTPUT_DIR}/README.txt" <<EOF
 CampaignForge AI Demo Output
@@ -58,13 +61,15 @@ Included files:
 - genai/$(basename "${LATEST_GENAI_COPY}")     saved campaign brief copy output
 - genai/images/$(basename "${LATEST_GENAI_IMAGE_MANIFEST}") latest image generation metadata
 - genai/images/*                                saved concept image assets
+- genai/$(basename "${LATEST_GENAI_EXPORT}")    exported campaign ZIP bundle
 
 Recommended next steps:
 1. Inspect the JSON metrics files in this folder.
 2. Inspect the generated campaign brief outputs in the genai/ folder.
 3. Inspect the saved image concepts in the genai/images/ folder.
-4. Run 'make api' to launch the FastAPI demo.
-5. Run 'make dashboard' to launch the Streamlit demo.
+4. Download or inspect the exported campaign ZIP in the genai/ folder.
+5. Run 'make api' to launch the FastAPI demo.
+6. Run 'make dashboard' to launch the Streamlit demo.
 EOF
 
 popd >/dev/null

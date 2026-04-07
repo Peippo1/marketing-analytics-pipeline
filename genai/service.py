@@ -1,11 +1,21 @@
 from __future__ import annotations
 
 from datetime import datetime, UTC
+import json
+from pathlib import Path
+import zipfile
 
 from genai.brief_parser import slugify_campaign_name
 from genai.copy_generator import MockCampaignGenerator, get_campaign_generator
 from genai.image_generator import MockImageGenerator, get_image_generator
-from genai.schemas import CampaignBrief, CampaignManifest, ImageGenerationManifest, ImageGenerationRequest
+from genai.schemas import (
+    CampaignBrief,
+    CampaignManifest,
+    CampaignRegenerationRequest,
+    ImageGenerationManifest,
+    ImageGenerationRequest,
+    ImageReviewRequest,
+)
 from genai.storage import CampaignStorage
 
 
@@ -35,6 +45,44 @@ class CampaignBriefService:
 
     def list_campaigns(self) -> list[CampaignManifest]:
         return self.storage.list_campaigns()
+
+    def regenerate(self, campaign_id: str, request: CampaignRegenerationRequest | None = None) -> CampaignManifest:
+        existing = self.storage.load(campaign_id)
+        if existing is None:
+            raise ValueError("Campaign output not found")
+
+        generator = get_campaign_generator()
+        try:
+            output = generator.generate(existing.brief)
+            provider_name = generator.provider_name
+            mode = generator.mode
+        except Exception:
+            fallback = MockCampaignGenerator()
+            output = fallback.generate(existing.brief)
+            provider_name = fallback.provider_name
+            mode = "fallback-mock"
+
+        scope = request.scope if request else "all"
+        if scope == "copy":
+            for old_angle, new_angle in zip(existing.output.angles, output.angles):
+                old_angle.headlines = new_angle.headlines
+                old_angle.body_copy = new_angle.body_copy
+                old_angle.ctas = new_angle.ctas
+                old_angle.summary = new_angle.summary
+            existing.output.campaign_summary = output.campaign_summary
+            existing.output.audience_suggestions = output.audience_suggestions
+            existing.output.channel_recommendations = output.channel_recommendations
+            existing.output.tone_options = output.tone_options
+        elif scope == "prompts":
+            for old_angle, new_angle in zip(existing.output.angles, output.angles):
+                old_angle.image_prompts = new_angle.image_prompts
+        else:
+            existing.output = output
+
+        existing.provider = provider_name
+        existing.mode = mode
+        existing.updated_at = datetime.now(UTC).isoformat()
+        return self.storage.overwrite_campaign(existing)
 
 
 class CampaignImageService:
@@ -101,3 +149,62 @@ class CampaignImageService:
 
     def load_manifest(self, campaign_id: str) -> ImageGenerationManifest | None:
         return self.storage.load_image_manifest(campaign_id)
+
+    def review_asset(self, campaign_id: str, request: ImageReviewRequest) -> ImageGenerationManifest:
+        manifest = self.storage.load_image_manifest(campaign_id)
+        if manifest is None:
+            raise ValueError("Campaign image output not found")
+
+        updated = False
+        for asset in manifest.assets:
+            if asset.image_id == request.image_id:
+                asset.approval_status = request.approval_status
+                updated = True
+                break
+        if not updated:
+            raise ValueError("Image asset not found")
+
+        manifest.updated_at = datetime.now(UTC).isoformat()
+        return self.storage.save_image_manifest(manifest)
+
+
+class CampaignExportService:
+    def __init__(self, storage: CampaignStorage | None = None):
+        self.storage = storage or CampaignStorage()
+
+    def export_campaign(self, campaign_id: str) -> Path:
+        campaign = self.storage.load(campaign_id)
+        if campaign is None:
+            raise ValueError("Campaign output not found")
+
+        image_manifest = self.storage.load_image_manifest(campaign_id)
+        export_path = self.storage.export_zip_path(campaign_id)
+        prompt_payload = {
+            "campaign_id": campaign_id,
+            "angles": [
+                {
+                    "angle_id": angle.angle_id,
+                    "title": angle.title,
+                    "image_prompts": angle.image_prompts,
+                }
+                for angle in campaign.output.angles
+            ],
+        }
+
+        with zipfile.ZipFile(export_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            archive.writestr("brief.json", campaign.brief.model_dump_json(indent=2))
+            archive.writestr("copy.json", json.dumps(campaign.output.model_dump(mode="json"), indent=2))
+            archive.writestr("prompts.json", json.dumps(prompt_payload, indent=2))
+            archive.writestr("manifest.json", campaign.model_dump_json(indent=2))
+
+            if image_manifest is not None:
+                archive.writestr("images/manifest.json", image_manifest.model_dump_json(indent=2))
+                for asset in image_manifest.assets:
+                    asset_path = self.storage.repo_root / asset.file_path
+                    if asset_path.exists():
+                        archive.write(asset_path, arcname=f"images/{asset_path.name}")
+
+        campaign.artifacts.export_zip_path = str(export_path.relative_to(self.storage.repo_root))
+        campaign.updated_at = datetime.now(UTC).isoformat()
+        self.storage.overwrite_campaign(campaign)
+        return export_path
