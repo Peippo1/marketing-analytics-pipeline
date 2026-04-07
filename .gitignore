@@ -52,3 +52,9 @@ htmlcov/
 mlruns/
 models/artifacts/
 models/outputs/
+models/*.pkl
+models/*.json
+models/*.csv
+data/processed/
+airflow/data/processed/
+airflow/data/raw/

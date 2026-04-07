@@ -1,9 +1,45 @@
-# 📊 Marketing Analytics Pipeline
-
-
 [![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Dependency graph](https://img.shields.io/github/dependencies-analyzability/Peippo1/marketing-analytics-pipeline?label=dependency%20graph)](https://github.com/Peippo1/marketing-analytics-pipeline/network/dependencies)
+
+# 📊 Marketing Analytics Pipeline
+A modular ETL and machine learning demo for marketing analytics, built with Pandas, scikit-learn, FastAPI, Streamlit, and Airflow orchestration.
+
+> 📁 Note: Dependencies are split for cleaner environments:
+> - `requirements.txt` → shared, security-reviewed pins used by CI
+> - `requirements-fastapi.txt` / `requirements-streamlit.txt` → service-specific
+> - `requirements-dev.txt` → local test tooling
+> - `airflow/requirements.txt` → extras used inside the Airflow image
+
+This project demonstrates a full end-to-end data engineering and ML workflow for a marketing analytics use case, including ETL, feature engineering, model training, and dashboarding.
+
+## ✨ At a Glance
+
+- End-to-end analytics demo: ETL, training, evaluation, API, dashboard, orchestration
+- Presentable deployment story with Docker, Kubernetes, and Airflow assets
+- Integration examples for CRM push and Google Sheets sync
+- GitHub Actions and tests for baseline engineering confidence
+
+## 🧭 Demo Walkthrough
+
+1. Set up the environment with `make setup`
+2. Run the ETL flow with `python etl/marketing_etl.py`
+3. Train a model with `make train`
+4. Evaluate the latest artifact with `make evaluate`
+5. Launch the API with `make api`
+6. Launch the dashboard with `make dashboard`
+7. Reference `PROJECT_OVERVIEW.md` for a buyer-facing summary
+
+## 📸 Demo Positioning
+
+Recommended screenshots or recording moments for a listing:
+
+- Architecture and repository structure
+- Successful model training output
+- Evaluation metrics output
+- FastAPI `/health` and `/customers` endpoints
+- Streamlit dashboard landing view
+- CRM sync section in dry-run mode
 
 ## 🏗️ Architecture Diagram
 
@@ -39,18 +75,6 @@ flowchart TD
     J -->|Route traffic| G
     J -->|Route traffic| I
 ```
-
-
-# 📊 Marketing Analytics Pipeline
-A modular ETL and machine learning demo for marketing analytics, built with Pandas, scikit-learn, FastAPI, Streamlit, and Airflow orchestration.
-
-> 📁 Note: Dependencies are split for cleaner environments:
-> - `requirements.txt` → shared, security-reviewed pins used by CI
-> - `requirements-fastapi.txt` / `requirements-streamlit.txt` → service-specific
-> - `requirements-dev.txt` → local test tooling
-> - `airflow/requirements.txt` → extras used inside the Airflow image
-
-This project demonstrates a full end-to-end data engineering and ML workflow for a marketing analytics use case, including ETL, feature engineering, model training, and dashboarding.
 
 ## 🚀 Project Goals
 
@@ -218,6 +242,8 @@ make test
 ```
 
 The repository currently targets Python `3.11.11` via `.python-version`, so make sure your local interpreter matches before running the suite.
+
+Generated outputs such as trained models, processed datasets, and runtime artifacts are intentionally gitignored so the repository stays source-focused.
 
 ## 🐳 Docker Usage
 
