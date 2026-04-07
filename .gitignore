@@ -12,6 +12,8 @@ dist/
 
 # Environment files
 .env
+.env.*
+!.env.example
 airflow/.env
 venv/
 .venv/
@@ -44,6 +46,7 @@ htmlcov/
 
 # VS Code
 .vscode/
+.idea/
 
 # Streamlit
 .streamlit/secrets.toml
@@ -58,3 +61,4 @@ models/*.csv
 data/processed/
 airflow/data/processed/
 airflow/data/raw/
+demo_outputs/latest/
