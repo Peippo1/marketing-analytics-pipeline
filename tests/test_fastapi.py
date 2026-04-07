@@ -43,3 +43,49 @@ def test_generate_campaign_brief():
 def test_get_missing_campaign_returns_404():
     response = client.get("/genai/campaigns/does-not-exist")
     assert response.status_code == 404
+
+
+def test_list_campaigns_endpoint():
+    response = client.get("/genai/campaigns")
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+
+
+def test_generate_campaign_images():
+    campaign_response = client.post(
+        "/genai/brief",
+        json={
+            "campaign_name": "Image API Launch",
+            "product_name": "CampaignForge AI",
+            "brief": "Generate campaign angles and image prompts for a polished product launch demo.",
+        },
+    )
+    campaign_id = campaign_response.json()["campaign_id"]
+    angle_id = campaign_response.json()["output"]["angles"][0]["angle_id"]
+
+    response = client.post(
+        "/genai/images",
+        json={
+            "campaign_id": campaign_id,
+            "angle_id": angle_id,
+            "style": "Campaign concept board",
+            "count": 2,
+        },
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["campaign_id"] == campaign_id
+    assert len(payload["assets"]) == 2
+
+    read_response = client.get(f"/genai/campaigns/{campaign_id}/images")
+    assert read_response.status_code == 200
+    filename = payload["assets"][0]["file_path"].split("/")[-1]
+
+    asset_response = client.get(f"/genai/assets/{campaign_id}/{filename}")
+    assert asset_response.status_code == 200
+    assert asset_response.headers["content-type"].startswith("image/")
+
+
+def test_get_campaign_images_returns_404_when_missing():
+    response = client.get("/genai/campaigns/does-not-exist/images")
+    assert response.status_code == 404

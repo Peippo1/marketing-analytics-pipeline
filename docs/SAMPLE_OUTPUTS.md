@@ -60,6 +60,19 @@ Angle: Outcome-Driven Launch
 - 3 image prompts for the next generation stage
 ```
 
+## Image Generation Output
+
+```text
+Generated image concepts for: campaignforge-product-launch-20260407143000
+Saved 2 assets in data/generated/images/campaignforge-product-launch-20260407143000/
+```
+
+```text
+- campaignforge-product-launch-campaign-concept-board-1-ab12cd34ef56.svg
+- campaignforge-product-launch-campaign-concept-board-2-de78fa90bc12.svg
+- manifest.json
+```
+
 ## CRM Dry-Run Message
 
 ```text

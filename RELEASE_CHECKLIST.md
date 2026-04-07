@@ -37,6 +37,7 @@ Use this checklist before publishing or selling the repository as a downloadable
 - At least one strong dashboard screenshot is captured
 - API screenshot or sample response is ready
 - Model training/evaluation output screenshot is ready
+- GenAI brief and image concept screenshots are ready
 - `docs/assets/` contains the final screenshots or a clear asset plan
 - Screenshots do not expose usernames, tokens, or local machine paths
 
