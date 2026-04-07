@@ -24,6 +24,7 @@ It is not positioned as a finished SaaS product or managed hosted service.
 - ETL pipeline for preparing marketing data
 - Scikit-learn training and evaluation flow
 - GenAI brief copilot for campaign summaries, personas, channel suggestions, copy variants, CTA variants, and image prompts
+- Optional image concept generation from saved prompts, with local mock mode for demos
 - FastAPI application with lightweight customer endpoints
 - Streamlit dashboard for stakeholder-friendly presentation
 - CRM integration examples for Salesforce and HubSpot

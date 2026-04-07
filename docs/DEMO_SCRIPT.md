@@ -59,6 +59,7 @@ Focus on:
 
 - hero/dashboard presentation
 - brief copilot output generation
+- image concept gallery for saved campaigns
 - sample customer dataset panel
 - CRM sync dry-run workflow
 

@@ -2,11 +2,12 @@
 
 ## Summary
 
-`CampaignForge AI` is a portfolio-ready marketing intelligence application that demonstrates an end-to-end workflow for campaign and customer data operations. It combines ETL, feature engineering, model training, evaluation, API delivery, dashboard presentation, and workflow orchestration in one repository.
+`CampaignForge AI` is a portfolio-ready marketing intelligence application that demonstrates an end-to-end workflow for campaign and customer data operations. It combines ETL, feature engineering, model training, a GenAI brief copilot, optional image concept generation, API delivery, dashboard presentation, and workflow orchestration in one repository.
 
 ## What A Buyer Gets
 
 - A Python marketing workflow codebase covering ingestion, transformation, modeling, and presentation
+- A GenAI layer that turns campaign briefs into structured copy outputs and concept-image prompts
 - A FastAPI service for exposing customer-facing or internal scoring endpoints
 - A Streamlit dashboard for stakeholder-friendly reporting and CRM workflow demos
 - Airflow DAGs, Dockerfiles, and Kubernetes manifests to support deployment conversations
@@ -17,6 +18,7 @@
 - ETL pipeline for cleaning and enriching campaign and customer datasets
 - Scikit-learn training flow for lead-scoring style classification
 - Model evaluation and artifact generation
+- Optional image concept generation with mock-first local mode
 - CRM export examples for Salesforce and HubSpot
 - Google Sheets synchronization example for lightweight ops workflows
 - Optional OpenTelemetry instrumentation for the FastAPI service

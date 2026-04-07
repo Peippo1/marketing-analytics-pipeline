@@ -19,12 +19,21 @@ The current implementation supports:
 
 ## Phase 2: Image Generation
 
-Planned next steps:
+CampaignForge AI now also includes:
 
-- add provider-swappable image generation
-- save image outputs and metadata under `data/generated/images/`
-- expose image generation in Streamlit and FastAPI
-- support regenerate and approve/reject flows
+- provider-swappable image generation
+- saved image outputs and metadata under `data/generated/images/<campaign_id>/`
+- FastAPI endpoints for image generation and retrieval
+- a Streamlit gallery flow for selecting campaigns, prompts, and saved concepts
+
+Current scope:
+
+- mock SVG generation by default for local demos
+- optional OpenAI-compatible live image generation when environment variables are configured
+
+Still planned:
+
+- regenerate and approve/reject flows
 
 ## Phase 3: Workflow Product Polish
 

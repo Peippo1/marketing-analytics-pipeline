@@ -34,6 +34,7 @@ This runs:
 - model training
 - model evaluation
 - GenAI brief generation from the bundled sample brief
+- optional concept image generation in mock mode for the saved sample campaign
 
 Demo outputs are collected under:
 
@@ -100,6 +101,7 @@ docker compose up --build
 - CRM and Google Sheets integrations require valid credentials before live use
 - GenAI runs in `mock` mode by default
 - Set `CAMPAIGNFORGE_LLM_PROVIDER=openai` and `OPENAI_API_KEY` to enable live LLM generation
+- Set `CAMPAIGNFORGE_IMAGE_PROVIDER=openai` and `OPENAI_API_KEY` to enable live image generation
 - `OPENAI_BASE_URL` and `OPENAI_MODEL` are optional overrides for compatible providers
 
 ## Intended Deployment Use

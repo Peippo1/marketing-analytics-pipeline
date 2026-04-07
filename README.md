@@ -11,6 +11,7 @@ CampaignForge AI is a production-style Python workflow for buyers who want a cre
 - Processes raw campaign and customer data into cleaned, analysis-ready datasets
 - Trains and evaluates a scikit-learn classification model for lead-scoring and campaign analytics style use cases
 - Generates campaign summaries, audience suggestions, copy variants, CTA variants, and image prompts from a structured brief
+- Generates optional concept images from saved campaign prompts with mock mode by default and live provider mode when configured
 - Exposes lightweight customer endpoints through FastAPI
 - Presents customer data, GenAI brief outputs, and CRM handoff workflows through Streamlit
 - Includes Airflow, Docker, and Kubernetes assets to support operational and deployment discussions
@@ -27,6 +28,7 @@ CampaignForge AI is a production-style Python workflow for buyers who want a cre
 - Source-first repository with generated outputs removed from version control
 - ETL scripts, model training, and model evaluation workflow
 - GenAI brief copilot package with mock-first and API-key-gated live modes
+- Optional image generation layer that saves assets and metadata per campaign
 - FastAPI service and Streamlit dashboard
 - CRM integration examples for Salesforce and HubSpot
 - Google Sheets sync example
@@ -42,6 +44,7 @@ CampaignForge AI is a production-style Python workflow for buyers who want a cre
 
 - Full Python source code for ETL, model training, evaluation, API delivery, and dashboard presentation
 - GenAI brief-to-copy workflow with saved JSON outputs under `data/generated/`
+- Structured image generation folders under `data/generated/images/<campaign_id>/`
 - Demo data, predictable demo outputs, and Makefile shortcuts
 - FastAPI and Streamlit interfaces for technical and non-technical walkthroughs
 - Docker, Kubernetes, and Airflow assets for packaging and operations discussions
@@ -58,6 +61,7 @@ make demo
 What those commands do:
 
 - `make demo`: bootstraps the local environment if needed, then runs ETL, model training, evaluation, and the GenAI brief copilot end-to-end using the included sample inputs
+- when dependencies are installed, `make demo` also generates saved concept images in mock mode for the latest campaign brief
 
 The bundled demo inputs are included under `data/raw/` and `data/demo/`.
 
@@ -73,6 +77,7 @@ That folder contains:
 - the training metrics JSON
 - the evaluation metrics JSON
 - a `genai/` folder containing the latest saved campaign brief manifest and copy output
+- saved image concept assets and metadata for the latest generated campaign
 - a small readme for quick inspection
 
 If you want to continue the full interactive walkthrough after the demo run:
@@ -105,8 +110,9 @@ Recommended buyer demo flow:
 1. Run `make demo`
 2. Open `demo_outputs/latest/` and review the generated outputs
 3. Review the generated campaign brief outputs under `demo_outputs/latest/genai/`
-4. Launch the API with `make api`
-5. Launch the dashboard with `make dashboard`
+4. Review the saved concept images under `demo_outputs/latest/genai/images/`
+5. Launch the API with `make api`
+6. Launch the dashboard with `make dashboard`
 
 Useful companion docs:
 
@@ -186,5 +192,6 @@ project-root/
 - `streamlit_app.py` is the single supported dashboard entrypoint for demos and local runs.
 - Local secrets should be supplied through `.env` and `.streamlit/secrets.toml`; start from `.env.example` where applicable.
 - Set `CAMPAIGNFORGE_LLM_PROVIDER=openai` and `OPENAI_API_KEY` only when you want live LLM output; the local default is mock mode.
+- Set `CAMPAIGNFORGE_IMAGE_PROVIDER=openai` together with `OPENAI_API_KEY` only when you want live image output; the local default is mock SVG concepts.
 - The public GitHub repository description should match the CampaignForge AI positioning for consistency.
 - Sales assets can be organized under `docs/assets/` without changing the source layout.

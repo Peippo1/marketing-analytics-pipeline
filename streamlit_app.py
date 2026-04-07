@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import sys
 
 # Add project root to sys.path for flexible imports
@@ -16,8 +17,8 @@ except ModuleNotFoundError:
     st.stop()
 
 from airflow.scripts.mysql_utils import get_customers_data
-from genai.schemas import CampaignBrief
-from genai.service import CampaignBriefService
+from genai.schemas import CampaignBrief, ImageGenerationRequest
+from genai.service import CampaignBriefService, CampaignImageService
 from utils.crm_clients import HubSpotClient, SalesforceClient
 
 
@@ -25,6 +26,7 @@ st.set_page_config(page_title="CampaignForge AI Dashboard", layout="wide")
 st.session_state["title_rendered"] = True
 st.session_state["sidebar_initialized"] = True
 campaign_brief_service = CampaignBriefService()
+campaign_image_service = CampaignImageService()
 
 
 def render_styles():
@@ -279,6 +281,69 @@ def render_genai_panel():
     )
 
 
+def render_image_generation_panel():
+    st.markdown("---")
+    st.markdown('<div class="section-label">Image Concepts</div>', unsafe_allow_html=True)
+    st.subheader("Generate concept images from saved campaign prompts")
+    campaigns = campaign_brief_service.list_campaigns()
+    if not campaigns:
+        st.info("Generate a campaign brief first so image prompts are available.")
+        return
+
+    campaign_options = {
+        f"{campaign.campaign_id} | {campaign.brief.campaign_name or campaign.brief.product_name or 'Untitled campaign'}": campaign
+        for campaign in campaigns
+    }
+    selected_campaign_label = st.selectbox("Saved campaign", list(campaign_options.keys()))
+    selected_campaign = campaign_options[selected_campaign_label]
+
+    angle_options = {f"{angle.angle_id} | {angle.title}": angle for angle in selected_campaign.output.angles}
+    selected_angle_label = st.selectbox("Campaign angle", list(angle_options.keys()))
+    selected_angle = angle_options[selected_angle_label]
+    prompt_options = selected_angle.image_prompts or ["No image prompts available"]
+    selected_prompt = st.selectbox("Image prompt", prompt_options)
+    style = st.text_input("Style direction", value="Campaign concept board")
+    count = st.slider("Number of concepts", min_value=1, max_value=4, value=2)
+
+    col1, col2 = st.columns([1, 1.6])
+    with col1:
+        if st.button("Generate concept images", type="primary"):
+            manifest = campaign_image_service.generate_and_save(
+                ImageGenerationRequest(
+                    campaign_id=selected_campaign.campaign_id,
+                    angle_id=selected_angle.angle_id,
+                    prompt=selected_prompt,
+                    style=style,
+                    count=count,
+                )
+            )
+            st.session_state["latest_image_manifest_id"] = manifest.campaign_id
+            st.success(f"Saved {len(manifest.assets)} image concepts for {manifest.campaign_id} ({manifest.mode}).")
+
+    latest_manifest = campaign_image_service.load_manifest(selected_campaign.campaign_id)
+    with col2:
+        st.caption("Mock SVG concepts are used locally by default. Set image provider environment variables later for live generation.")
+        st.caption(f"Selected angle: {selected_angle.title}")
+
+    if latest_manifest is None:
+        st.info("No saved image concepts yet for this campaign.")
+        return
+
+    st.markdown("**Saved image set**")
+    st.write(f"Style: {latest_manifest.style}")
+    st.write(f"Prompt: {latest_manifest.prompt}")
+
+    image_columns = st.columns(2)
+    for index, asset in enumerate(latest_manifest.assets):
+        image_path = Path(__file__).resolve().parent / asset.file_path
+        with image_columns[index % 2]:
+            if image_path.exists():
+                st.image(str(image_path), caption=f"{asset.style} ({asset.mode})", use_container_width=True)
+            else:
+                st.warning(f"Missing asset: {asset.file_path}")
+            st.code(asset.prompt, language="text")
+
+
 def main():
     render_styles()
     crm_provider, dry_run = render_sidebar()
@@ -286,6 +351,7 @@ def main():
     render_hero(dataframe)
     render_dataset_panel(dataframe, load_error)
     render_genai_panel()
+    render_image_generation_panel()
     render_crm_panel(dataframe, crm_provider, dry_run)
 
 

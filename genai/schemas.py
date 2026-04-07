@@ -59,3 +59,31 @@ class CampaignManifest(BaseModel):
     output: CampaignOutput
     artifacts: SavedArtifact
 
+
+class ImageGenerationRequest(BaseModel):
+    campaign_id: str
+    angle_id: Optional[str] = Field(default=None, max_length=120)
+    prompt: Optional[str] = Field(default=None, min_length=10, max_length=4000)
+    style: str = Field(default="Campaign concept", max_length=120)
+    count: int = Field(default=2, ge=1, le=4)
+
+
+class GeneratedImageAsset(BaseModel):
+    image_id: str
+    prompt: str
+    style: str
+    provider: str
+    mode: str
+    file_path: str
+    mime_type: str
+
+
+class ImageGenerationManifest(BaseModel):
+    campaign_id: str
+    angle_id: Optional[str] = None
+    created_at: str
+    provider: str
+    mode: str
+    style: str
+    prompt: str
+    assets: List[GeneratedImageAsset]

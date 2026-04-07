@@ -22,6 +22,7 @@ The repository includes data preparation scripts, scikit-learn training and eval
 - Scikit-learn training and evaluation flow
 - FastAPI service with lightweight customer endpoints
 - Streamlit dashboard for stakeholder-facing review
+- Optional concept image generation with mock-first demo mode
 - CRM examples for Salesforce and HubSpot
 - Google Sheets sync example
 - Airflow, Docker, and Kubernetes packaging assets
