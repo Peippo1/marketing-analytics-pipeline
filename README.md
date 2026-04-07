@@ -123,6 +123,9 @@ Ensure the DAGs appear in the UI and are switched ON.
 # For core libraries only:
 pip install -r requirements.txt
 
+# For local development and tests:
+pip install -r requirements-dev.txt
+
 # For Airflow-specific dependencies:
 pip install -r requirements-airflow.txt
 
@@ -213,8 +216,10 @@ Unit tests are written using `pytest` and located in the `tests/` directory.
 From the project root, run:
 
 ```bash
-pytest tests/
+python -m pytest tests/
 ```
+
+The repository currently targets Python `3.11.11` via `.python-version`, so make sure your local interpreter matches before running the suite.
 
 ## 🐳 Docker Usage
 
