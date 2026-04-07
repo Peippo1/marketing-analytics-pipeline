@@ -11,7 +11,7 @@ import streamlit as st
 try:
     import pymysql  # noqa: F401
 except ModuleNotFoundError:
-    st.set_page_config(page_title="Marketing Dashboard", layout="wide")
+    st.set_page_config(page_title="CampaignForge AI Dashboard", layout="wide")
     st.error("Required package 'pymysql' is not installed. Please check your environment.")
     st.stop()
 
@@ -19,7 +19,7 @@ from airflow.scripts.mysql_utils import get_customers_data
 from utils.crm_clients import HubSpotClient, SalesforceClient
 
 
-st.set_page_config(page_title="Marketing Dashboard", layout="wide")
+st.set_page_config(page_title="CampaignForge AI Dashboard", layout="wide")
 st.session_state["title_rendered"] = True
 st.session_state["sidebar_initialized"] = True
 
@@ -106,7 +106,7 @@ def build_crm_records(dataframe: pd.DataFrame):
 
 def render_sidebar():
     st.sidebar.title("Operator Controls")
-    st.sidebar.caption("Use this dashboard as a quick demo of data visibility and CRM handoff.")
+    st.sidebar.caption("Use this dashboard as a quick demo of campaign data visibility and CRM handoff.")
 
     crm_provider = st.sidebar.selectbox("CRM Provider", ["Salesforce", "HubSpot"])
     dry_run = st.sidebar.checkbox("Dry run only", value=True)
@@ -126,11 +126,11 @@ def render_hero(dataframe: pd.DataFrame | None):
     st.markdown(
         """
         <div class="hero-card">
-            <div class="hero-kicker">Portfolio Analytics Demo</div>
-            <div class="hero-title">Marketing Performance Dashboard</div>
+            <div class="hero-kicker">CampaignForge AI</div>
+            <div class="hero-title">Campaign Intelligence Dashboard</div>
             <div class="hero-copy">
-                A lightweight operations view for reviewing customer segments, surfacing sample lead-scoring inputs,
-                and demonstrating downstream CRM sync workflows from one interface.
+                A lightweight operations view for reviewing campaign and customer segments, surfacing
+                lead-scoring inputs, and demonstrating downstream CRM sync workflows from one interface.
             </div>
         </div>
         """,
@@ -162,7 +162,7 @@ def render_dataset_panel(dataframe: pd.DataFrame | None, load_error: Exception |
             <div class="info-card">
                 <strong>What this demonstrates</strong><br><br>
                 Cleaned customer records flowing into a buyer-friendly dashboard layer that can support
-                reporting, scoring demos, and lightweight operational actions.
+                reporting, campaign analytics demos, and lightweight operational actions.
             </div>
             """,
             unsafe_allow_html=True,

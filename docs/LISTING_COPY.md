@@ -4,15 +4,15 @@ Use this copy as a starting point for GitHub About text, marketplace listings, o
 
 ## Short Description
 
-Sale-ready marketing analytics developer asset with ETL, lead-scoring model training, FastAPI endpoints, Streamlit dashboard, Airflow orchestration examples, Docker packaging, and demo documentation.
+CampaignForge AI is a sale-ready campaign intelligence developer asset with ETL, lead-scoring model training, FastAPI endpoints, a Streamlit dashboard, Airflow orchestration examples, Docker packaging, and demo documentation.
 
 ## One-Sentence Pitch
 
-A reusable Python analytics codebase that turns raw marketing data into cleaned datasets, model outputs, API responses, and dashboard views in one reviewable repository.
+A reusable Python marketing workflow codebase that turns raw campaign and customer data into cleaned datasets, model outputs, API responses, and dashboard views in one reviewable repository.
 
 ## Marketplace Summary
 
-`marketing-analytics-pipeline` is a downloadable developer product for buyers who want a credible end-to-end analytics demo or starter codebase without assembling ETL, modeling, API, dashboard, and deployment assets from scratch.
+`CampaignForge AI` is a downloadable developer product for buyers who want a credible end-to-end campaign intelligence demo or starter codebase without assembling ETL, modeling, API, dashboard, and deployment assets from scratch.
 
 The repository includes data preparation scripts, scikit-learn training and evaluation workflows, FastAPI customer endpoints, a Streamlit dashboard, Airflow orchestration assets, Dockerfiles, Kubernetes manifests, tests, and buyer-friendly demo documentation. It is best suited for internal demos, portfolio use, agency customization, or white-label adaptation.
 
@@ -29,7 +29,7 @@ The repository includes data preparation scripts, scikit-learn training and eval
 
 ## Suggested GitHub About Text
 
-Marketing analytics demo asset with ETL, model training, FastAPI, Streamlit, Airflow, Docker, and deployment docs.
+Campaign intelligence demo asset with ETL, model training, FastAPI, Streamlit, Airflow, Docker, and deployment docs.
 
 ## Suggested Tags
 

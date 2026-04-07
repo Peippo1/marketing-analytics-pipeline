@@ -1,10 +1,10 @@
-# Feature List
+# CampaignForge AI Feature List
 
 This list reflects functionality that is already present in the repository.
 
 ## Core Features
 
-- Marketing data ETL pipeline
+- Campaign and customer data ETL pipeline
 - Feature engineering and cleaned dataset generation
 - Scikit-learn model training workflow
 - Model evaluation and metrics export

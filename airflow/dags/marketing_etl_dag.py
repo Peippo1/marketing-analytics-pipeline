@@ -17,7 +17,7 @@ default_args = {
 dag = DAG(
     'marketing_etl_dag',
     default_args=default_args,
-    description='Scheduled ETL DAG for marketing analytics pipeline',
+    description='Scheduled ETL DAG for CampaignForge AI',
     schedule_interval='@daily',  # You can change this as needed
     start_date=datetime(2024, 1, 1),
     catchup=False,
