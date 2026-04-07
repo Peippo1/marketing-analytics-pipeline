@@ -13,7 +13,6 @@ import os
 import pandas as pd
 import joblib
 import yaml
-from contextlib import nullcontext
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -29,19 +28,6 @@ OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "outputs")
 
 # Ensure output directory exists
 os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-
-def get_mlflow_client():
-    """
-    Load MLflow lazily so the core training path still works when the optional
-    experiment-tracking dependency is not installed.
-    """
-    try:
-        import mlflow
-        import mlflow.sklearn
-    except ImportError:
-        return None
-    return mlflow
 
 def load_config(config_path):
     """Load model configuration from a YAML file."""
@@ -100,79 +86,54 @@ def main():
         model = get_model(model_type, model_params)
         print(f"✅ Initialized {model_type} model with params: {model_params}")
 
-        mlflow_client = get_mlflow_client()
-        mlflow_enabled = mlflow_client is not None
+        model.fit(X_train, y_train)
+        print(f"✅ Model training completed.")
 
-        if mlflow_enabled:
-            mlflow_client.set_tracking_uri("http://127.0.0.1:5001")
-        else:
-            print("ℹ️ MLflow is not installed; continuing without experiment tracking.")
+        # Step 6: Evaluate the model
+        y_pred = model.predict(X_test)
+        accuracy = accuracy_score(y_test, y_pred)
+        print(f"Test Accuracy: {accuracy:.4f}")
 
-        with mlflow_client.start_run() if mlflow_enabled else nullcontext():
-            if mlflow_enabled:
-                mlflow_client.log_params(model_params)
-            model.fit(X_train, y_train)
-            print(f"✅ Model training completed.")
+        # Calculate additional evaluation metrics to get a well-rounded view of model performance
+        # Precision: proportion of positive identifications that were actually correct
+        # Recall: proportion of actual positives that were identified correctly
+        # F1 Score: harmonic mean of precision and recall, balances the two
+        precision = precision_score(y_test, y_pred, average="weighted")
+        recall = recall_score(y_test, y_pred, average="weighted")
+        f1 = f1_score(y_test, y_pred, average="weighted")
 
-            # Step 6: Evaluate the model
-            y_pred = model.predict(X_test)
-            input_example = X_test.iloc[:1].astype('float64')
-            accuracy = accuracy_score(y_test, y_pred)
-            print(f"Test Accuracy: {accuracy:.4f}")
+        # Print metrics for visibility and quick inspection
+        print(f"Test Precision: {precision:.4f}")
+        print(f"Test Recall: {recall:.4f}")
+        print(f"Test F1 Score: {f1:.4f}")
 
-            # Calculate additional evaluation metrics to get a well-rounded view of model performance
-            # Precision: proportion of positive identifications that were actually correct
-            # Recall: proportion of actual positives that were identified correctly
-            # F1 Score: harmonic mean of precision and recall, balances the two
-            precision = precision_score(y_test, y_pred, average="weighted")
-            recall = recall_score(y_test, y_pred, average="weighted")
-            f1 = f1_score(y_test, y_pred, average="weighted")
+        # Step 7: Save the trained model
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        model_filename = f"trained_model_{timestamp}.pkl"
+        model_output_path = os.path.join(os.path.dirname(__file__), "artifacts", "models", model_filename)
 
-            # Print metrics for visibility and quick inspection
-            print(f"Test Precision: {precision:.4f}")
-            print(f"Test Recall: {recall:.4f}")
-            print(f"Test F1 Score: {f1:.4f}")
+        os.makedirs(os.path.dirname(model_output_path), exist_ok=True)
 
-            # Log evaluation metrics to MLflow for experiment tracking and comparison
-            if mlflow_enabled:
-                mlflow_client.log_metrics({
-                    "accuracy": accuracy,
-                    "precision": precision,
-                    "recall": recall,
-                    "f1_score": f1
-                })
+        joblib.dump(model, model_output_path)
+        print(f"✅ Trained model saved successfully at: {model_output_path}")
 
-            # Step 7: Save the trained model
-            # Create a timestamp for the model filename
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            model_filename = f"trained_model_{timestamp}.pkl"
-            model_output_path = os.path.join(os.path.dirname(__file__), "artifacts", "models", model_filename)
+        # Save evaluation metrics as JSON alongside the model
+        import json
 
-            os.makedirs(os.path.dirname(model_output_path), exist_ok=True)
+        metrics_filename = f"trained_model_{timestamp}_metrics.json"
+        metrics_output_path = os.path.join(os.path.dirname(__file__), "artifacts", "models", metrics_filename)
 
-            joblib.dump(model, model_output_path)
-            print(f"✅ Trained model saved successfully at: {model_output_path}")
+        metrics_dict = {
+            "accuracy": accuracy,
+            "precision": precision,
+            "recall": recall,
+            "f1_score": f1
+        }
 
-            # Save evaluation metrics as JSON alongside the model
-            import json
+        with open(metrics_output_path, "w") as f:
+            json.dump(metrics_dict, f, indent=4)
 
-            metrics_filename = f"trained_model_{timestamp}_metrics.json"
-            metrics_output_path = os.path.join(os.path.dirname(__file__), "artifacts", "models", metrics_filename)
-
-            metrics_dict = {
-                "accuracy": accuracy,
-                "precision": precision,
-                "recall": recall,
-                "f1_score": f1
-            }
-
-            with open(metrics_output_path, "w") as f:
-                json.dump(metrics_dict, f, indent=4)
-
-            print(f"✅ Evaluation metrics saved successfully at: {metrics_output_path}")
-
-            if mlflow_enabled:
-                mlflow_client.sklearn.log_model(model, artifact_path="model", input_example=input_example)
+        print(f"✅ Evaluation metrics saved successfully at: {metrics_output_path}")
 
     except Exception as e:
         print(f"❌ An error occurred: {e}")

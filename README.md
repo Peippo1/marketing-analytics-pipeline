@@ -12,7 +12,7 @@ flowchart TD
     A["Marketing Data Source"]
     B["ETL Pipeline (Pandas)"]
     C["Feature Engineering"]
-    D["Model Training & Evaluation (scikit-learn, MLflow)"]
+    D["Model Training & Evaluation (scikit-learn)"]
     E["Model Artifacts Stored"]
     F["Processed Data"]
     G["Streamlit Dashboard"]
@@ -42,7 +42,7 @@ flowchart TD
 
 
 # 📊 Marketing Analytics Pipeline
-A modular ETL and Machine Learning pipeline for marketing analytics, built with Pandas, scikit-learn, MLflow, and orchestrated with Airflow.
+A modular ETL and Machine Learning pipeline for marketing analytics, built with Pandas, scikit-learn, and orchestrated with Airflow.
 
 > 📁 Note: Dependencies are split for cleaner environments:
 > - `requirements.txt` → shared, security-reviewed pins used by CI
@@ -63,7 +63,7 @@ This project demonstrates a full end-to-end data engineering and ML workflow for
 
 - **Language**: Python
 - **Data Processing**: Pandas
-- **ML/AI**: scikit-learn, MLflow
+- **ML/AI**: scikit-learn
 - **Scheduling**: Airflow (Docker Compose)
 - **Dashboarding**: Streamlit
 - **Database**: MySQL (optional, not required for core pipeline)
@@ -81,7 +81,6 @@ marketing-analytics-pipeline/
 ├── models/
 │   ├── artifacts/          # Saved trained models (timestamped .pkl)
 │   ├── versioning.py        # Model versioning utilities
-│   ├── run_mlflow_flask.py  # Local MLflow server launcher (Waitress)
 │   ├── train_model.py     # Model training script
 │   ├── evaluate_model.py  # Model evaluation script
 │   ├── model.py           # Model utilities
@@ -126,9 +125,6 @@ pip install -r requirements.txt
 # For local development and tests:
 pip install -r requirements-dev.txt
 
-# For optional local MLflow tracking:
-pip install -r requirements-mlflow.txt
-
 # For Airflow-specific dependencies:
 pip install -r requirements-airflow.txt
 
@@ -152,28 +148,6 @@ python models/train_model.py
 
 This will train a logistic regression model based on configuration in `models/model_config.yaml` and save the model artifact in `models/`.
 
-### 3.5. Launch MLflow Tracking Server
-
-```bash
-pip install -r requirements-mlflow.txt
-python run_mlflow_flask.py 5001
-```
-This launches a local MLflow UI to track experiments and models at `http://localhost:5001`.
-
-Make sure to keep this terminal open while training models!
-
-Security note: the launcher now binds MLflow to `127.0.0.1` by default and sets `MLFLOW_SERVER_ENABLE_JOB_EXECUTION=false` unless you explicitly override it. This is a temporary hardening step for the open MLflow advisory covering unauthenticated `/ajax-api/3.0/jobs/*` endpoints when job execution is enabled.
-
-If you intentionally need remote access, you must opt in explicitly:
-
-```bash
-MLFLOW_HOST=0.0.0.0 MLFLOW_SERVER_ENABLE_JOB_EXECUTION=true python run_mlflow_flask.py 5001
-```
-
-Only use that override behind trusted network controls, because upstream has not published a patched MLflow release for this advisory yet.
-
-If `mlflow` is not installed, `python models/train_model.py` still works and simply skips experiment tracking.
-
 ### 4. Evaluate the Model
 
 ```bash
@@ -181,8 +155,6 @@ python models/evaluate_model.py
 ```
 
 This will load the trained model and processed dataset, evaluate model performance (accuracy, precision, recall, F1 score), and print the results.
-
-Evaluation metrics are now also logged automatically into MLflow for experiment tracking.
 
 ### 5. Visualize with Streamlit (Optional)
 
@@ -435,9 +407,9 @@ When enabled, the app sends spans via OTLP/HTTP. Point the endpoint to your OTLP
 
 - Add CI/CD pipeline for automatic deployment
 - Migrate to full PySpark processing
-- Incorporate model monitoring with MLflow
+- Incorporate model monitoring for trained artifacts
 - Expand customer segmentation modeling
-- Integrate model deployment pipeline via MLflow Registry
+- Integrate a lightweight model deployment pipeline
 - Integrate webhook/CRM actions after model scoring
 
 ## ⏰ Airflow DAG Scheduling

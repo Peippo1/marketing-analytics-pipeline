@@ -78,7 +78,6 @@ jobs:
             tests/test_fastapi.py \
             tests/test_prepare_data.py \
             tests/test_crm_clients.py \
-            tests/test_run_mlflow_flask.py \
             --maxfail=1 \
             --disable-warnings \
             -q
