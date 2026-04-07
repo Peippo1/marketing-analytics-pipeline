@@ -104,7 +104,6 @@ Useful companion docs:
 ```text
 marketing-analytics-pipeline/
 ├── airflow/                  # Airflow DAGs, scripts, and container setup
-├── dashboard/                # Alternate dashboard module assets
 ├── data/raw/                 # Sample raw dataset and supporting assets
 ├── docs/                     # Demo, screenshot, and sales-support material
 ├── etl/                      # ETL pipeline scripts
@@ -114,7 +113,7 @@ marketing-analytics-pipeline/
 ├── scoring/                  # FastAPI application
 ├── tests/                    # Automated tests
 ├── utils/                    # CRM and Google Sheets helpers
-├── streamlit_app.py          # Main Streamlit dashboard entrypoint
+├── streamlit_app.py          # Canonical Streamlit dashboard entrypoint
 ├── Makefile                  # Common developer/demo commands
 ├── setup.sh                  # Local setup helper
 └── README.md
@@ -162,5 +161,6 @@ marketing-analytics-pipeline/
 - The repository currently targets Python `3.11.11` via `.python-version`.
 - Generated outputs such as model artifacts, processed data, and local runtime files are intentionally gitignored.
 - Demo outputs are collected under `demo_outputs/latest/` for predictable review.
+- `streamlit_app.py` is the single supported dashboard entrypoint for demos and local runs.
 - Local secrets should be supplied through `.env` and `.streamlit/secrets.toml`; start from `.env.example` where applicable.
 - The public GitHub repository description should match this README positioning for consistency.
