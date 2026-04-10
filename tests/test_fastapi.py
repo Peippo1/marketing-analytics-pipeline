@@ -29,7 +29,10 @@ def test_generate_campaign_brief():
         json={
             "campaign_name": "API Launch",
             "product_name": "CampaignForge AI",
-            "brief": "Launch CampaignForge AI to teams that need reusable campaign messaging and prompt-ready planning outputs.",
+            "brief": (
+                "Launch CampaignForge AI to teams that need reusable campaign "
+                "messaging and prompt-ready planning outputs."
+            ),
             "target_market": "startup marketing teams",
             "channels": ["LinkedIn", "Email"],
         },
@@ -57,7 +60,10 @@ def test_generate_campaign_images():
         json={
             "campaign_name": "Image API Launch",
             "product_name": "CampaignForge AI",
-            "brief": "Generate campaign angles and image prompts for a polished product launch demo.",
+            "brief": (
+                "Generate campaign angles and image prompts for a polished "
+                "product launch demo."
+            ),
         },
     )
     campaign_id = campaign_response.json()["campaign_id"]
@@ -97,7 +103,10 @@ def test_review_and_export_campaign_workflow():
         json={
             "campaign_name": "Workflow API Launch",
             "product_name": "CampaignForge AI",
-            "brief": "Create a workflow-ready campaign with approval and export support.",
+            "brief": (
+                "Create a workflow-ready campaign with approval and export "
+                "support."
+            ),
         },
     )
     campaign_id = campaign_response.json()["campaign_id"]

@@ -59,7 +59,7 @@ def build_campaign_summary(brief: CampaignBrief) -> str:
     return (
         f"CampaignForge AI should position {product_name} for {target_market}, "
         f"using a concise campaign story focused on {goals}. The brief should translate "
-        f"into reusable messaging angles, channel-specific copy, and prompt-ready creative direction."
+        "into reusable messaging angles, channel-specific copy, and prompt-ready creative direction."
     )
 
 
@@ -86,4 +86,3 @@ def build_persona_suggestions(brief: CampaignBrief) -> list[PersonaSuggestion]:
             pain_points=["Vague AI promises", "Thin demo experiences", "Lack of exportable outputs"],
         ),
     ]
-
