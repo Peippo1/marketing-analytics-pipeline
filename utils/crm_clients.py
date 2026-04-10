@@ -53,14 +53,20 @@ class SalesforceClient:
             )
         return {"records": processed}
 
-    def push_leads(self, rows: Sequence[MutableMapping] | pd.DataFrame, dry_run: bool = True) -> dict:
+    def push_leads(
+        self,
+        rows: Sequence[MutableMapping] | pd.DataFrame,
+        dry_run: bool = True,
+    ) -> dict:
         """Push leads via composite tree API. Returns response metadata or payload when dry_run."""
         records = _to_records(rows)
         if not records:
             return {"sent": 0, "dry_run": dry_run}
 
         payload = self._build_payload(records)
-        endpoint = f"{self.instance_url}/services/data/{self.api_version}/composite/tree/Lead"
+        endpoint = (
+            f"{self.instance_url}/services/data/{self.api_version}/composite/tree/Lead"
+        )
 
         if dry_run:
             return {
@@ -71,7 +77,10 @@ class SalesforceClient:
             }
 
         if not self.instance_url or not self.access_token:
-            raise RuntimeError("Salesforce credentials missing (SALESFORCE_INSTANCE_URL/SALESFORCE_ACCESS_TOKEN)")
+            raise RuntimeError(
+                "Salesforce credentials missing "
+                "(SALESFORCE_INSTANCE_URL/SALESFORCE_ACCESS_TOKEN)"
+            )
 
         resp = self.http_client.post(
             endpoint,
@@ -99,7 +108,11 @@ class HubSpotClient:
             processed.append({"properties": properties})
         return {"inputs": processed}
 
-    def push_contacts(self, rows: Sequence[MutableMapping] | pd.DataFrame, dry_run: bool = True) -> dict:
+    def push_contacts(
+        self,
+        rows: Sequence[MutableMapping] | pd.DataFrame,
+        dry_run: bool = True,
+    ) -> dict:
         """Push contacts in batch. Returns response metadata or payload when dry_run."""
         records = _to_records(rows)
         if not records:
@@ -109,7 +122,12 @@ class HubSpotClient:
         endpoint = "https://api.hubapi.com/crm/v3/objects/contacts/batch/create"
 
         if dry_run:
-            return {"sent": len(payload["inputs"]), "dry_run": True, "endpoint": endpoint, "payload": payload}
+            return {
+                "sent": len(payload["inputs"]),
+                "dry_run": True,
+                "endpoint": endpoint,
+                "payload": payload,
+            }
 
         if not self.access_token:
             raise RuntimeError("HubSpot credentials missing (HUBSPOT_ACCESS_TOKEN)")

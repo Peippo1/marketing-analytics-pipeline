@@ -20,7 +20,10 @@ class StubHttp:
 
 
 def test_salesforce_dry_run_builds_payload_without_http():
-    client = SalesforceClient(instance_url="https://example.my.salesforce.com", http_client=StubHttp())
+    client = SalesforceClient(
+        instance_url="https://example.my.salesforce.com",
+        http_client=StubHttp(),
+    )
     rows = [
         {"LastName": "Doe", "Company": "ACME", "Email": "jane@example.com"},
         {"LastName": "Smith", "Company": "Beta", "Email": "john@example.com"},

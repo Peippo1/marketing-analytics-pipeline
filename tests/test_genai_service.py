@@ -11,7 +11,10 @@ def test_generate_and_save_campaign_brief(tmp_path: Path):
         CampaignBrief(
             campaign_name="Demo Launch",
             product_name="CampaignForge AI",
-            brief="Launch CampaignForge AI to modern marketing teams that need structured messaging and prompt-ready outputs.",
+            brief=(
+                "Launch CampaignForge AI to modern marketing teams that need "
+                "structured messaging and prompt-ready outputs."
+            ),
             target_market="modern marketing teams",
             channels=["LinkedIn", "Email"],
         )
@@ -22,4 +25,3 @@ def test_generate_and_save_campaign_brief(tmp_path: Path):
     assert len(manifest.output.angles[0].headlines) == 5
     assert (tmp_path / "generated" / "manifests" / f"{manifest.campaign_id}.json").exists()
     assert (tmp_path / "generated" / "copy" / f"{manifest.campaign_id}.json").exists()
-

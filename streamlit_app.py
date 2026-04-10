@@ -18,7 +18,12 @@ except ModuleNotFoundError:
     st.stop()
 
 from airflow.scripts.mysql_utils import get_customers_data
-from genai.schemas import CampaignBrief, CampaignRegenerationRequest, ImageGenerationRequest, ImageReviewRequest
+from genai.schemas import (
+    CampaignBrief,
+    CampaignRegenerationRequest,
+    ImageGenerationRequest,
+    ImageReviewRequest,
+)
 from genai.service import CampaignBriefService, CampaignExportService, CampaignImageService
 from utils.crm_clients import HubSpotClient, SalesforceClient
 
@@ -96,6 +101,17 @@ def load_customer_data():
         return None, exc
 
 
+def campaign_history_label(campaign) -> str:
+    campaign_name = (
+        campaign.brief.campaign_name or campaign.brief.product_name or "Untitled campaign"
+    )
+    return f"{campaign.campaign_id} | {campaign_name}"
+
+
+def angle_option_label(angle) -> str:
+    return f"{angle.angle_id} | {angle.title}"
+
+
 def build_crm_records(dataframe: pd.DataFrame):
     records = []
     for idx, _ in dataframe.head(20).iterrows():
@@ -143,7 +159,9 @@ def display_campaign_details(manifest):
 
 def render_sidebar():
     st.sidebar.title("Operator Controls")
-    st.sidebar.caption("Use this dashboard as a quick demo of campaign data visibility and CRM handoff.")
+    st.sidebar.caption(
+        "Use this dashboard as a quick demo of campaign data visibility and CRM handoff."
+    )
 
     crm_provider = st.sidebar.selectbox("CRM Provider", ["Salesforce", "HubSpot"])
     dry_run = st.sidebar.checkbox("Dry run only", value=True)
@@ -157,8 +175,10 @@ def render_sidebar():
 
 def render_hero(dataframe: pd.DataFrame | None):
     row_count = int(len(dataframe)) if dataframe is not None else 0
-    avg_income = float(dataframe["Income"].mean()) if dataframe is not None and "Income" in dataframe else 0.0
-    avg_recency = float(dataframe["Recency"].mean()) if dataframe is not None and "Recency" in dataframe else 0.0
+    has_income = dataframe is not None and "Income" in dataframe
+    has_recency = dataframe is not None and "Recency" in dataframe
+    avg_income = float(dataframe["Income"].mean()) if has_income else 0.0
+    avg_recency = float(dataframe["Recency"].mean()) if has_recency else 0.0
 
     st.markdown(
         """
@@ -166,8 +186,9 @@ def render_hero(dataframe: pd.DataFrame | None):
             <div class="hero-kicker">CampaignForge AI</div>
             <div class="hero-title">Campaign Intelligence Dashboard</div>
             <div class="hero-copy">
-                A lightweight operations view for reviewing campaign and customer segments, surfacing
-                lead-scoring inputs, and demonstrating downstream CRM sync workflows from one interface.
+                A lightweight operations view for reviewing campaign and customer segments,
+                surfacing lead-scoring inputs, and demonstrating downstream CRM sync
+                workflows from one interface.
             </div>
         </div>
         """,
@@ -198,8 +219,8 @@ def render_dataset_panel(dataframe: pd.DataFrame | None, load_error: Exception |
             """
             <div class="info-card">
                 <strong>What this demonstrates</strong><br><br>
-                Cleaned customer records flowing into a buyer-friendly dashboard layer that can support
-                reporting, campaign analytics demos, and lightweight operational actions.
+                Cleaned customer records flowing into a buyer-friendly dashboard layer that can
+                support reporting, campaign analytics demos, and lightweight operational actions.
             </div>
             """,
             unsafe_allow_html=True,
@@ -210,7 +231,10 @@ def render_crm_panel(dataframe: pd.DataFrame | None, crm_provider: str, dry_run:
     st.markdown("---")
     st.markdown('<div class="section-label">CRM Sync Demo</div>', unsafe_allow_html=True)
     st.subheader("Push a sample customer batch to Salesforce or HubSpot")
-    st.caption("Use dry-run mode for demos so you can show the integration flow without sending live records.")
+    st.caption(
+        "Use dry-run mode for demos so you can show the integration flow without "
+        "sending live records."
+    )
 
     if st.button("Push 20 customers to CRM", type="primary"):
         if dataframe is None or dataframe.empty:
@@ -228,8 +252,8 @@ def render_crm_panel(dataframe: pd.DataFrame | None, crm_provider: str, dry_run:
 
             if result.get("dry_run"):
                 st.info(
-                    f"Dry run complete: prepared {result.get('sent', 0)} records for {crm_provider}. "
-                    f"Endpoint: {result.get('endpoint')}"
+                    f"Dry run complete: prepared {result.get('sent', 0)} records "
+                    f"for {crm_provider}. Endpoint: {result.get('endpoint')}"
                 )
             else:
                 st.success(
@@ -244,23 +268,41 @@ def render_genai_panel():
     st.markdown("---")
     st.markdown('<div class="section-label">Brief Copilot</div>', unsafe_allow_html=True)
     st.subheader("Generate campaign angles, copy variants, and image prompts from a brief")
-    st.caption("This feature runs in mock mode by default for local demos. Set provider environment variables later for live LLM usage.")
+    st.caption(
+        "This feature runs in mock mode by default for local demos. Set provider "
+        "environment variables later for live LLM usage."
+    )
 
     with st.form("genai-brief-form"):
         campaign_name = st.text_input("Campaign name", value="CampaignForge Product Launch")
         product_name = st.text_input("Product name", value="CampaignForge AI")
-        target_market = st.text_input("Target market", value="Agencies, freelancers, and startup marketing teams")
+        target_market = st.text_input(
+            "Target market",
+            value="Agencies, freelancers, and startup marketing teams",
+        )
         brief = st.text_area(
             "Campaign brief",
             value=(
-                "Launch CampaignForge AI to teams that want a faster way to turn campaign ideas into "
-                "structured messaging, reviewable outputs, and reusable campaign assets."
+                "Launch CampaignForge AI to teams that want a faster way to turn "
+                "campaign ideas into structured messaging, reviewable outputs, and "
+                "reusable campaign assets."
             ),
             height=160,
         )
-        channels = st.multiselect("Channels", ["LinkedIn", "Instagram", "Meta Ads", "Email", "Landing Page"], default=["LinkedIn", "Email", "Landing Page"])
-        tones = st.multiselect("Tone options", ["Confident", "Practical", "Supportive", "Forward-Looking", "Direct"], default=["Confident", "Practical", "Forward-Looking"])
-        brand_keywords = st.text_input("Brand keywords", value="modern, clean, structured, commercial")
+        channels = st.multiselect(
+            "Channels",
+            ["LinkedIn", "Instagram", "Meta Ads", "Email", "Landing Page"],
+            default=["LinkedIn", "Email", "Landing Page"],
+        )
+        tones = st.multiselect(
+            "Tone options",
+            ["Confident", "Practical", "Supportive", "Forward-Looking", "Direct"],
+            default=["Confident", "Practical", "Forward-Looking"],
+        )
+        brand_keywords = st.text_input(
+            "Brand keywords",
+            value="modern, clean, structured, commercial",
+        )
         submitted = st.form_submit_button("Generate campaign brief outputs", type="primary")
 
     if not submitted:
@@ -274,8 +316,12 @@ def render_genai_panel():
         goals=["generate qualified interest", "show a polished end-to-end workflow"],
         channels=channels,
         tones=tones,
-        brand_keywords=[keyword.strip() for keyword in brand_keywords.split(",") if keyword.strip()],
-        compliance_notes=["avoid hard performance promises and misleading before-and-after language"],
+        brand_keywords=[
+            keyword.strip() for keyword in brand_keywords.split(",") if keyword.strip()
+        ],
+        compliance_notes=[
+            "avoid hard performance promises and misleading before-and-after language"
+        ],
     )
     manifest = campaign_brief_service.generate_and_save(brief_model)
     st.success(f"Generated campaign output: {manifest.campaign_id} ({manifest.mode})")
@@ -283,7 +329,9 @@ def render_genai_panel():
     display_campaign_details(manifest)
 
     st.caption(
-        f"Saved manifest to {manifest.artifacts.manifest_path} and copy output to {manifest.artifacts.copy_output_path}."
+        "Saved manifest to "
+        f"{manifest.artifacts.manifest_path} and copy output to "
+        f"{manifest.artifacts.copy_output_path}."
     )
 
 
@@ -297,8 +345,7 @@ def render_campaign_history_panel() -> Optional[object]:
         return None
 
     campaign_options = {
-        f"{campaign.campaign_id} | {campaign.brief.campaign_name or campaign.brief.product_name or 'Untitled campaign'}": campaign
-        for campaign in campaigns
+        campaign_history_label(campaign): campaign for campaign in campaigns
     }
     selected_label = st.selectbox("Saved campaign history", list(campaign_options.keys()))
     selected_campaign = campaign_options[selected_label]
@@ -354,13 +401,15 @@ def render_image_generation_panel():
         return
 
     campaign_options = {
-        f"{campaign.campaign_id} | {campaign.brief.campaign_name or campaign.brief.product_name or 'Untitled campaign'}": campaign
-        for campaign in campaigns
+        campaign_history_label(campaign): campaign for campaign in campaigns
     }
     selected_campaign_label = st.selectbox("Saved campaign", list(campaign_options.keys()))
     selected_campaign = campaign_options[selected_campaign_label]
 
-    angle_options = {f"{angle.angle_id} | {angle.title}": angle for angle in selected_campaign.output.angles}
+    angle_options = {
+        angle_option_label(angle): angle
+        for angle in selected_campaign.output.angles
+    }
     selected_angle_label = st.selectbox("Campaign angle", list(angle_options.keys()))
     selected_angle = angle_options[selected_angle_label]
     prompt_options = selected_angle.image_prompts or ["No image prompts available"]
@@ -381,11 +430,17 @@ def render_image_generation_panel():
                 )
             )
             st.session_state["latest_image_manifest_id"] = manifest.campaign_id
-            st.success(f"Saved {len(manifest.assets)} image concepts for {manifest.campaign_id} ({manifest.mode}).")
+            st.success(
+                f"Saved {len(manifest.assets)} image concepts for "
+                f"{manifest.campaign_id} ({manifest.mode})."
+            )
 
     latest_manifest = campaign_image_service.load_manifest(selected_campaign.campaign_id)
     with col2:
-        st.caption("Mock SVG concepts are used locally by default. Set image provider environment variables later for live generation.")
+        st.caption(
+            "Mock SVG concepts are used locally by default. Set image provider "
+            "environment variables later for live generation."
+        )
         st.caption(f"Selected angle: {selected_angle.title}")
 
     if latest_manifest is None:
@@ -401,7 +456,11 @@ def render_image_generation_panel():
         image_path = Path(__file__).resolve().parent / asset.file_path
         with image_columns[index % 2]:
             if image_path.exists():
-                st.image(str(image_path), caption=f"{asset.style} ({asset.mode})", use_container_width=True)
+                st.image(
+                    str(image_path),
+                    caption=f"{asset.style} ({asset.mode})",
+                    use_container_width=True,
+                )
             else:
                 st.warning(f"Missing asset: {asset.file_path}")
             st.code(asset.prompt, language="text")

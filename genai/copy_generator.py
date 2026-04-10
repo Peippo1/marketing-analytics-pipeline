@@ -54,10 +54,10 @@ class MockCampaignGenerator:
             angle_channels = channels[:2] if idx < 2 else channels[1:3] or channels[:2]
             headlines = [
                 f"{product_name} helps teams move from brief to launch faster",
-                f"Turn campaign planning into a repeatable growth workflow",
-                f"Build credible campaign momentum without extra complexity",
-                f"Give your team a clearer path from strategy to execution",
-                f"Create campaign-ready outputs with less manual back-and-forth",
+                "Turn campaign planning into a repeatable growth workflow",
+                "Build credible campaign momentum without extra complexity",
+                "Give your team a clearer path from strategy to execution",
+                "Create campaign-ready outputs with less manual back-and-forth",
             ]
             body_copy = [
                 f"{product_name} gives teams a structured way to translate campaign ideas into reusable messaging and campaign assets, making it easier to {primary_goal}.",
@@ -142,4 +142,3 @@ def get_campaign_generator() -> CampaignGenerator:
     if provider == "openai":
         return OpenAICampaignGenerator()
     return MockCampaignGenerator()
-

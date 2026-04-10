@@ -14,7 +14,10 @@ def test_generate_and_save_campaign_images(tmp_path: Path):
         CampaignBrief(
             campaign_name="Image Demo",
             product_name="CampaignForge AI",
-            brief="Create a campaign concept workflow for teams that need messaging and visual prompts.",
+            brief=(
+                "Create a campaign concept workflow for teams that need "
+                "messaging and visual prompts."
+            ),
             channels=["LinkedIn", "Email"],
         )
     )
@@ -34,4 +37,3 @@ def test_generate_and_save_campaign_images(tmp_path: Path):
     image_dir = tmp_path / "data" / "generated" / "images" / campaign.campaign_id
     assert (image_dir / "manifest.json").exists()
     assert list(image_dir.glob("*.svg"))
-

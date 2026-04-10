@@ -1,6 +1,11 @@
 from pathlib import Path
 
-from genai.schemas import CampaignBrief, CampaignRegenerationRequest, ImageGenerationRequest, ImageReviewRequest
+from genai.schemas import (
+    CampaignBrief,
+    CampaignRegenerationRequest,
+    ImageGenerationRequest,
+    ImageReviewRequest,
+)
 from genai.service import CampaignBriefService, CampaignExportService, CampaignImageService
 from genai.storage import CampaignStorage
 
@@ -15,11 +20,17 @@ def test_campaign_regeneration_and_export(tmp_path: Path):
         CampaignBrief(
             campaign_name="Workflow Demo",
             product_name="CampaignForge AI",
-            brief="Create a reusable campaign workflow with copy, prompts, concept images, and export support.",
+            brief=(
+                "Create a reusable campaign workflow with copy, prompts, "
+                "concept images, and export support."
+            ),
         )
     )
 
-    regenerated = brief_service.regenerate(campaign.campaign_id, CampaignRegenerationRequest(scope="copy"))
+    regenerated = brief_service.regenerate(
+        campaign.campaign_id,
+        CampaignRegenerationRequest(scope="copy"),
+    )
     assert regenerated.updated_at is not None
 
     image_manifest = image_service.generate_and_save(
@@ -38,4 +49,3 @@ def test_campaign_regeneration_and_export(tmp_path: Path):
     export_path = export_service.export_campaign(campaign.campaign_id)
     assert export_path.exists()
     assert export_path.suffix == ".zip"
-
